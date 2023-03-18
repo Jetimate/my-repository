@@ -10,293 +10,219 @@ canvas {
 </style>
 </head>
 <body onload="startGame()">
-<script>
-function startGame() {	
-    myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
-	mobArray.push(new Mob(200, 200, 30, "red", 500, 1));
-	myGameArea.start();
-	myGameCharacter.update();
-	mobArray.forEach(item => {
-		item.update();
-	});
-	spellBooksKeeper();
-}
+	<script type="text/javascript" src="js/mob.js"></script>
+	<script type="text/javascript" src="js/playable-character.js"></script>
+	<script type="text/javascript" src="js/spellbook.js"></script>
 
-var myGameArea = {
-	activeKeys: [],
-	validKeys: [37, 38, 39, 40, 65, 68, 83, 87, 97, 100, 119, 115],
-    canvas : document.createElement("canvas"),
-    start : function() {
+	<script>
+		function startGame() {
+			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
+			mobArray.push(new Mob(200, 200, 30, "red", 500, 1));
+			myGameArea.start();
+			myGameCharacter.update();
+			mobArray.forEach(item => {
+				item.update();
+			});
+			spellBooksKeeper();
+		}
 
-		this.canvas.width = 1265;
-		this.canvas.height = 698;
-		this.context = this.canvas.getContext("2d");
-		
-		document.body.insertBefore(this.canvas, document.body.childNodes[0]);  
-		this.interval = setInterval(updateGameArea, 20);	
-		window.addEventListener('keydown', function (e) {
-			var isKeyActive = myGameArea.activeKeys.indexOf(e.keyCode) >= 0;
-			if (!isKeyActive) {
-				var isValidKey = myGameArea.validKeys.indexOf(e.keyCode) >= 0;
-				if (isValidKey) {
-					myGameArea.activeKeys.push(e.keyCode);
+		var myGameArea = {
+			activeKeys: [],
+			validKeys: [37, 38, 39, 40, 65, 68, 83, 87, 97, 100, 119, 115],
+			canvas : document.createElement("canvas"),
+			start : function() {
+
+				this.canvas.width = 1265;
+				this.canvas.height = 698;
+				this.context = this.canvas.getContext("2d");
+
+				document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+				this.interval = setInterval(updateGameArea, 20);
+				window.addEventListener('keydown', function (e) {
+					var isKeyActive = myGameArea.activeKeys.indexOf(e.keyCode) >= 0;
+					if (!isKeyActive) {
+						var isValidKey = myGameArea.validKeys.indexOf(e.keyCode) >= 0;
+						if (isValidKey) {
+							myGameArea.activeKeys.push(e.keyCode);
+						}
+					}
+					console.log(myGameArea.activeKeys);
+					console.log("keydown");
+				});
+				window.addEventListener('keyup', function (e) {
+					var keyIndex = myGameArea.activeKeys.indexOf(e.keyCode);
+					var isKeyActive = keyIndex >= 0;
+					if (isKeyActive)
+						myGameArea.activeKeys.splice(keyIndex, 1)	;
+
+					console.log(myGameArea.activeKeys);
+					console.log("keyup");
+				});
+			},
+			clear : function(){
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			},
+			stop : function() {
+				clearInterval(this.interval);
+			}
+		}
+
+		let mobArray = [];
+		let spellBooks;
+		var pi = 3.14159;
+		function spellBooksKeeper() {
+		//	var rock = spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'red', 45));
+			spellBooks = [];
+		//	rock;
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
+		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
+
+			for (var i = 0; i< spellBooks.length; i++) {
+				if (i>0)
+					spellBooks[i].radian = ((i * pi) / (spellBooks.length)) *2;
+			}
+		}
+		function spellBooksUpdater() {
+			spellBooks.forEach(spellBook => {
+				spellBook.startingPos = {
+					x: myGameCharacter.x,
+					y: myGameCharacter.y
+				}
+				spellBook.update();
+			});
+		}
+		function updateGameArea() {
+
+			if (crashWith(myGameCharacter, mobArray)) {
+				myGameArea.activeKeys = [];
+				alert("game over");
+				myGameArea.stop();
+				startGame();
+			}
+
+			else if (crashWithSpellBook(spellBooks, mobArray)) {
+				myGameArea.clear();
+				myGameCharacter.x += myGameCharacter.speedX;
+				myGameCharacter.y += myGameCharacter.speedY;
+				spellBooksUpdater();
+				myGameCharacter.update();
+				mobArray.forEach(mob => {
+		//			mob.color = "red";
+					mob.update();
+				});
+			}
+			else if (myGameArea.activeKeys.length == 0) {
+				myGameArea.clear();
+				spellBooksUpdater();
+				myGameCharacter.update();
+
+				mobArray.forEach(mob => {
+		//			mob.color = "red";
+					mob.update();
+				});
+
+				return;
+			}
+			else {
+				myGameArea.clear();
+				myGameCharacter.x += myGameCharacter.speedX;
+				myGameCharacter.y += myGameCharacter.speedY;
+				spellBooksUpdater();
+				myGameCharacter.update();
+
+				mobArray.forEach(mob => {
+		//			mob.color = "red";
+					mob.update();
+				});
+			}
+
+			myGameCharacter.speedX = 0;
+			myGameCharacter.speedY = 0;
+
+			var gameSpeed = myGameCharacter.speed;
+
+			for (var i = 0; i < myGameArea.activeKeys.length; i++) {
+				var key = myGameArea.activeKeys[i];
+
+				if ((key == 37 || key == 65 || key == 97) && (myGameCharacter.speedX > -gameSpeed)) {
+					myGameCharacter.speedX-=gameSpeed;
+				}
+				if ((key == 39 || key == 68 || key == 100) && (myGameCharacter.speedX < gameSpeed)) {
+					myGameCharacter.speedX+=gameSpeed;
+				}
+				if ((key == 38 || key == 87 || key == 119) && (myGameCharacter.speedY > -gameSpeed)) {
+					myGameCharacter.speedY-=gameSpeed;
+				}
+				if ((key == 40 || key == 83 || key == 115) && (myGameCharacter.speedY < gameSpeed)){
+					myGameCharacter.speedY+=gameSpeed;
 				}
 			}
-			console.log(myGameArea.activeKeys);
-			console.log("keydown");
-		});
-		window.addEventListener('keyup', function (e) {
-			var keyIndex = myGameArea.activeKeys.indexOf(e.keyCode);
-			var isKeyActive = keyIndex >= 0;
-			if (isKeyActive)
-				myGameArea.activeKeys.splice(keyIndex, 1)	;			
-				
-			console.log(myGameArea.activeKeys);
-			console.log("keyup");
-		});
-    },
-    clear : function(){
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    },
-    stop : function() {
-        clearInterval(this.interval);
-    }
-}
-
-
-class Mob {
-	constructor(x, y, radius, color, health, damage) {
-	this.speedX = 0;
-    this.speedY = 0;
-	this.speed = 2;
-    this.radius = radius;
-	this.color = color;  
-	this.health = health;
-	this.damage = damage;
-    this.x = x;
-    this.y = y;   
-		this.startingPos = {
-		x,y
-		}	
-	}		
-    update() {
-		var ctx = myGameArea.context;
-		ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-		ctx.fill();
-//		ctx.lineWidth = 1;
-//		ctx.strokeStyle = "#000000";
-//      ctx.stroke();
-        ctx.closePath();
-    }      
-}
-class PlayableCharacter extends Mob {
-	constructor(x, y, radius, color, health, damage) {
-    super(x, y, radius, color, health, damage);
-		this.startingPos = {
-		x,y
 		}
-	this.speedX = 0;
-    this.speedY = 0;
-	this.speed = 2;		
-	}		
-}
+		function crashWith(spellBook, mobs) {
+			let result = false;
+			mobs.forEach(mob => {
+				let radii = spellBook.radius + mob.radius;
+				let distance = getDistance(spellBook, mob);
 
-class SpellBook {
-    constructor(x, y, radius, color, orbitRadius, health, damage, respawnTime) {
-		this.radian = 0;
-		this.velocity = 0.05;
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.color = color;
-        this.orbitRadius = orbitRadius;
-		this.health = health;
-		this.damage = damage;
-		this.respawnTime = respawnTime;
-		this.startingPos = {
-			x,
-			y
-		}	
-    }
-
-    draw() {
-	var ctx = myGameArea.context;
-        ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);		
-		ctx.fillStyle = this.color;
-		ctx.fill();
-//		ctx.lineWidth = 1;
-//		ctx.strokeStyle = "#000000";
-//        ctx.stroke();
-        ctx.closePath();
-    }
-	update() {		
-		this.draw();
-		this.x += this.velocity;
-		this.y += this.velocity;
-		this.radian += this.velocity; 
-		this.x = this.startingPos.x + Math.cos(this.radian) * this.orbitRadius;
-		this.y = this.startingPos.y + Math.sin(this.radian) * this.orbitRadius;
-	}
-}
-let mobArray = [];
-let spellBooks;
-var pi = 3.14159;
-function spellBooksKeeper() {
-//	var rock = spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'red', 45));
-    spellBooks = [];
-//	rock;
-	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
-//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
-	
-	for (var i = 0; i< spellBooks.length; i++) {		
-		if (i>0)
-			spellBooks[i].radian = ((i * pi) / (spellBooks.length)) *2;
-	}	
-}
-function spellBooksUpdater() {	
-	spellBooks.forEach(spellBook => {
-		spellBook.startingPos = {
-			x: myGameCharacter.x,
-			y: myGameCharacter.y
-		}	
-		spellBook.update();
-	});
-}
-function updateGameArea() {
-			
-	if (crashWith(myGameCharacter, mobArray)) {  
-		myGameArea.activeKeys = [];   
-		alert("game over");	
-		myGameArea.stop(); 
-		startGame();
-	}	
-	
-	else if (crashWithSpellBook(spellBooks, mobArray)) { 		
-		myGameArea.clear();
-        myGameCharacter.x += myGameCharacter.speedX;
-        myGameCharacter.y += myGameCharacter.speedY;  				
-		spellBooksUpdater();
-		myGameCharacter.update();
-		mobArray.forEach(mob => {
-//			mob.color = "red";
-			mob.update();
-		});
-	}
-	else if (myGameArea.activeKeys.length == 0) {
-		myGameArea.clear();
-		spellBooksUpdater();
-		myGameCharacter.update();
-		
-		mobArray.forEach(mob => {
-//			mob.color = "red";
-			mob.update();
-		});
-		
-		return;
-	}
-    else {
-        myGameArea.clear();
-        myGameCharacter.x += myGameCharacter.speedX;
-        myGameCharacter.y += myGameCharacter.speedY;  				
-		spellBooksUpdater();
-		myGameCharacter.update();
-		
-		mobArray.forEach(mob => {
-//			mob.color = "red";
-			mob.update();
-		});	
-	}	
-	
-	myGameCharacter.speedX = 0; 
-	myGameCharacter.speedY = 0; 
-	
-	var gameSpeed = myGameCharacter.speed;
-
-	for (var i = 0; i < myGameArea.activeKeys.length; i++) { 
-		var key = myGameArea.activeKeys[i];
-		
-		if ((key == 37 || key == 65 || key == 97) && (myGameCharacter.speedX > -gameSpeed)) {			
-			myGameCharacter.speedX-=gameSpeed; 
-		}
-		if ((key == 39 || key == 68 || key == 100) && (myGameCharacter.speedX < gameSpeed)) {		
-			myGameCharacter.speedX+=gameSpeed; 
-		}
-	    if ((key == 38 || key == 87 || key == 119) && (myGameCharacter.speedY > -gameSpeed)) {	
-			myGameCharacter.speedY-=gameSpeed; 
-		}
-		if ((key == 40 || key == 83 || key == 115) && (myGameCharacter.speedY < gameSpeed)){	
-			myGameCharacter.speedY+=gameSpeed; 
-		}   
-	}
-}
-function crashWith(spellBook, mobs) {
-	let result = false;
-	mobs.forEach(mob => {		
-		let radii = spellBook.radius + mob.radius;
-		let distance = getDistance(spellBook, mob);
-		
-		let hasCrashed = distance < radii;
-		if (hasCrashed) {
-			result = hasCrashed;
-		}
-	});
-	return result;
-}	
-function crashWithSpellBook(spellBooks, mobs) {
-	let result = false;
-	spellBooks.forEach(spellBook => {
-		var mobIndex = 0;
-		mobs.forEach(mob => {
-			
-			let radii = spellBook.radius + mob.radius;
-			let distance = getDistance(spellBook, mob);
-			
-			let hasCrashed = distance < radii;
-			if (hasCrashed) {
-				result = hasCrashed;
-				mob.health -= spellBook.damage;
-				spellBook.health -= mob.damage
-				
-				if (mob.health <= 0) {
-					mobs.splice(mobIndex, 1);
+				let hasCrashed = distance < radii;
+				if (hasCrashed) {
+					result = hasCrashed;
 				}
-				else if (spellBook.health = 0) {
-					spellBook.splice();
-					setInterval(function() {
-//						spellBook.health = 1;
-							spellBook.color = "gray";
-							spellBook.damage = 1;
-//							mob.damage = 1;
-//							console.log("d" + spellBook.damage);
-//							console.log(`Respawn Time: ${spellBook.respawnTime}`);
-						}, 
-						spellBook.respawnTime
-					);
-				}
-				mob.update();
-			}
-			mobIndex++;
-		});
-		
-	});
-	
-	return result;
-}	
-function getDistance(circle1, circle2) {
-	let a = circle2.y - circle1.y;
-	let b = circle2.x - circle1.x;
-	return Math.sqrt( Math.pow(a,2) + Math.pow(b,2));
-}
-/*	task of the day:
-1). add damage, health and reload to petals and mobs
-2). make it easier to add petals / make a shortcut for adding petals
-*/
-</script>
+			});
+			return result;
+		}
+		function crashWithSpellBook(spellBooks, mobs) {
+			let result = false;
+			spellBooks.forEach(spellBook => {
+				var mobIndex = 0;
+				mobs.forEach(mob => {
+
+					let radii = spellBook.radius + mob.radius;
+					let distance = getDistance(spellBook, mob);
+
+					let hasCrashed = distance < radii;
+					if (hasCrashed) {
+						result = hasCrashed;
+						mob.health -= spellBook.damage;
+						spellBook.health -= mob.damage
+
+						if (mob.health <= 0) {
+							mobs.splice(mobIndex, 1);
+						}
+						else if (spellBook.health = 0) {
+							spellBook.splice();
+							setInterval(function() {
+		//						spellBook.health = 1;
+									spellBook.color = "gray";
+									spellBook.damage = 1;
+		//							mob.damage = 1;
+		//							console.log("d" + spellBook.damage);
+		//							console.log(`Respawn Time: ${spellBook.respawnTime}`);
+								},
+								spellBook.respawnTime
+							);
+						}
+						mob.update();
+					}
+					mobIndex++;
+				});
+
+			});
+
+			return result;
+		}
+		function getDistance(circle1, circle2) {
+			let a = circle2.y - circle1.y;
+			let b = circle2.x - circle1.x;
+			return Math.sqrt( Math.pow(a,2) + Math.pow(b,2));
+		}
+		/*	task of the day:
+		1). add damage, health and reload to petals and mobs
+		2). make it easier to add petals / make a shortcut for adding petals
+		*/
+	</script>
 </body>
 </html>
