@@ -77,13 +77,20 @@ canvas {
 			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
-		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1.5));
-
+		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+		
 			for (var i = 0; i< spellBooks.length; i++) {
 				if (i>0)
-					spellBooks[i].radian = ((i * pi) / (spellBooks.length)) *2;
+					spellBooks[i].radian = ((i * pi) / (spellBooks.length)) * 2;					
 			}
+			console.log(spellBooks[0].radian);
+			console.log(spellBooks[1].radian);
+			console.log(spellBooks[2].radian);
+//          console.log(spellBooks[3].radian);
+//			console.log(spellBooks[4].radian);
+//          console.log(spellBooks[5].radian);
 		}
 		function spellBooksUpdater() {
 			spellBooks.forEach(spellBook => {
@@ -91,6 +98,9 @@ canvas {
 					x: myGameCharacter.x,
 					y: myGameCharacter.y
 				}
+                if (spellBook.orbitRadius < spellBook.normalOrbitRadius) {
+                    spellBook.orbitRadius += 1;
+                }
 				spellBook.update();
 			});
 		}
@@ -109,18 +119,17 @@ canvas {
 				myGameCharacter.y += myGameCharacter.speedY;
 				spellBooksUpdater();
 				myGameCharacter.update();
+
 				mobArray.forEach(mob => {
-		//			mob.color = "red";
 					mob.update();
 				});
 			}
 			else if (myGameArea.activeKeys.length == 0) {
 				myGameArea.clear();
 				spellBooksUpdater();
-				myGameCharacter.update();
-
+				myGameCharacter.update();  
+				
 				mobArray.forEach(mob => {
-		//			mob.color = "red";
 					mob.update();
 				});
 
@@ -134,7 +143,6 @@ canvas {
 				myGameCharacter.update();
 
 				mobArray.forEach(mob => {
-		//			mob.color = "red";
 					mob.update();
 				});
 			}
@@ -188,23 +196,24 @@ canvas {
 						result = hasCrashed;
 						mob.health -= spellBook.damage;
 						spellBook.health -= mob.damage
+						console.log(mob.health);
 
 						if (mob.health <= 0) {
 							mobs.splice(mobIndex, 1);
 						}
-						else if (spellBook.health = 0) {
-							spellBook.splice();
-							setInterval(function() {
-		//						spellBook.health = 1;
-									spellBook.color = "gray";
-									spellBook.damage = 1;
-		//							mob.damage = 1;
-		//							console.log("d" + spellBook.damage);
-		//							console.log(`Respawn Time: ${spellBook.respawnTime}`);
-								},
-								spellBook.respawnTime
-							);
-						}
+						else if (spellBook.health <= 0) {
+							var spellBookIndex = spellBooks.indexOf(spellBook);
+							spellBook.health++;
+							spellBooks.splice(spellBookIndex, 1);
+                            if (spellBooks.length < 3) {
+                                setInterval(function () {
+                                    spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+                                    console.log("d" + spellBook.health);
+                                },
+                                    spellBook.respawnTime
+                                );
+                            }
+						}						
 						mob.update();
 					}
 					mobIndex++;
@@ -218,8 +227,8 @@ canvas {
 			let a = circle2.y - circle1.y;
 			let b = circle2.x - circle1.x;
 			return Math.sqrt( Math.pow(a,2) + Math.pow(b,2));
-		}
-		/*	task of the day:
+        }
+		/*	task of the week:
 		1). add damage, health and reload to petals and mobs
 		2). make it easier to add petals / make a shortcut for adding petals
 		*/
