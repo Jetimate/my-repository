@@ -28,12 +28,12 @@ class SpellBook {
 //        ctx.stroke();
         ctx.closePath();
     }
-	update() {		
+	update() {
 		this.draw();
 		this.x += this.velocity;
 		this.y += this.velocity;
-		this.radian += this.velocity; 
+		this.radian += this.velocity;
 		this.x = this.startingPos.x + Math.cos(this.radian) * this.orbitRadius;
 		this.y = this.startingPos.y + Math.sin(this.radian) * this.orbitRadius;
-	}
+	}		
 }

@@ -17,7 +17,7 @@ canvas {
 	<script>
 		function startGame() {
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
-			mobArray.push(new Mob(200, 200, 30, "red", 500, 1));
+			mobArray.push(new Mob(200, 200, 30, "red", 30, 1));
 			myGameArea.start();
 			myGameCharacter.update();
 			mobArray.forEach(item => {
@@ -71,18 +71,16 @@ canvas {
 		let spellBooks;
 		var pi = 3.14159;
 		function spellBooksKeeper() {
-		//	var rock = spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'red', 45));
 			spellBooks = [];
-		//	rock;
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
+            spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'red', 45, 1, 1, 1500));
+            spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'blue', 45, 1, 1, 1500));
+            spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 		//	spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));
 			for (var i = 0; i< spellBooks.length; i++) {
 				if (i>0)
-					spellBooks[i].radian = ((i * pi) / (spellBooks.length)) * 2;					
+                    spellBooks[i].radian = ((i * pi) / (spellBooks.length)) * 2;					
 			}
 			console.log(spellBooks[0].radian);
 			console.log(spellBooks[1].radian);
@@ -194,6 +192,7 @@ canvas {
 					if (hasCrashed) {
 						result = hasCrashed;
 						mob.health -= spellBook.damage;
+						mob.radius -= spellBook.damage;
 						spellBook.health -= mob.damage
 						console.log(mob.health);
 
@@ -203,11 +202,26 @@ canvas {
 						else if (spellBook.health <= 0) {
 							var spellBookIndex = spellBooks.indexOf(spellBook);
 							spellBooks.splice(spellBookIndex, 1);
-                            console.log("spellBooks health: " + spellBook.health);
-                            console.log("spellBooks count: " + spellBooks.length);
+							console.log("radian: " + spellBook.radian);
+//                          console.log("spellBooks health: " + spellBook.health);
+//                          console.log("spellBooks count: " + spellBooks.length);
                             if (spellBooks.length < 3) {
 								setTimeout(function () {
-                                    spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500));								
+									let spellBook1Radian = 0;
+									if (spellBooks.length > 0) {
+										spellBook1Radian = spellBooks[0].radian;
+									}
+									let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500);
+         //                           newSpellBook.radian = ((spellBookIndex) * pi) / (spellBooks.length + 1);
+									//newSpellBook.radian = (spellBook1Radian / newSpellBook.radian) * pi;
+									if (spellBooks.length > 0 && spellBooks[3].health <= 0)
+                                        newSpellBook.radian = spellBook1Radian + 4.188786666666666;
+									else
+										newSpellBook.radian = 0;
+
+									console.log("radian1: " + spellBook1Radian + " radian2: " + newSpellBook.radian);
+
+									spellBooks.push(newSpellBook);
                                 },
                                     spellBook.respawnTime
                                 );
@@ -228,8 +242,10 @@ canvas {
 			return Math.sqrt( Math.pow(a,2) + Math.pow(b,2));
         }
 		/*	task of the week:
-		1). add damage, health and reload to petals and mobs
-		2). make it easier to add petals / make a shortcut for adding petals
+		1). fix radian reload of petals
+		2). fix player death update
+		3). fix deprecated keycode
+		4). make it easier to add petals / make a shortcut for adding petals
 		*/
 	</script>
 </body>
