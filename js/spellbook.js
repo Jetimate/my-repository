@@ -14,7 +14,7 @@ class SpellBook {
 		this.startingPos = {
 			x,
 			y
-		}	
+		};	
     }
 
     draw() {

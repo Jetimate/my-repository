@@ -117,8 +117,7 @@ canvas {
 			else if (myGameArea.activeKeys.length == 0) {
 				myGameArea.clear();
 				spellBooksUpdater();
-				myGameCharacter.update();  
-				
+				myGameCharacter.update();  				
 				mobArray.forEach(mob => {
 					mob.update();
 				});
@@ -164,7 +163,6 @@ canvas {
 			mobs.forEach(mob => {
 				let radii = spellBook.radius + mob.radius;
 				let distance = getDistance(spellBook, mob);
-
 				let hasCrashed = distance < radii;
 				if (hasCrashed) {
 					result = hasCrashed;
@@ -193,33 +191,39 @@ canvas {
 							mobs.splice(mobIndex, 1);
 						}
 						else if (spellBook.health <= 0) {
-							var spellBookIndex = spellBooks.indexOf(spellBook);
-							spellBooks.splice(spellBookIndex, 1);
-							console.log("radian: " + spellBook.radian);
+							spellBook.orbitRadius = 10;
+							spellBook.radius = 0;
+//							var spellBookIndex = spellBooks.indexOf(spellBook);
+//							spellBooks.splice(spellBookIndex, 1);
+//							console.log("radian: " + spellBook.radian);
 //                          console.log("spellBooks health: " + spellBook.health);
 //                          console.log("spellBooks count: " + spellBooks.length);                         
-								setTimeout(function () {
-									let spellBook1Radian = 0;
-									if (spellBooks.length > 0) {
-										spellBook1Radian = spellBooks[0].radian;
-									}
-									let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500);
-         //                           newSpellBook.radian = ((spellBookIndex) * pi) / (spellBooks.length + 1);
-									//newSpellBook.radian = (spellBook1Radian / newSpellBook.radian) * pi;
-                                    let radianMultiplier = (pi / maxSpellBooks) * 2;
-									console.log("radianMultiplier: " + radianMultiplier);
+							setTimeout(function () {
+                                spellBook.radius = 10;
+                                spellBook.orbitRadius = 10;
+								console.log(spellBook.radian);
+								spellBooksUpdater()												
+//									let spellBook1Radian = 0;
+//									if (spellBooks.length > 0) {
+//										spellBook1Radian = spellBooks[0].radian;
+//									}
+//									let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 1, 1, 1500);
+//				                    newSpellBook.radian = ((spellBookIndex) * pi) / (spellBooks.length + 1);
+//									newSpellBook.radian = (spellBook1Radian / newSpellBook.radian) * pi;
+//                                  let radianMultiplier = (pi / maxSpellBooks) * 2;
+//									console.log("radianMultiplier: " + radianMultiplier);
 
-									if (spellBooks.length > 0)
-                                        newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
-									else
-										newSpellBook.radian = 0;
+//									if (spellBooks.length > 0)
+//                                      newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
+//									else
+//										newSpellBook.radian = 0;
 
-									console.log("radian1: " + spellBook1Radian + " radian2: " + newSpellBook.radian);
+//									console.log("radian1: " + spellBook1Radian + " radian2: " + newSpellBook.radian);
 
-									spellBooks.push(newSpellBook);
-                                },
-                                    spellBook.respawnTime
-                                );                           
+//									spellBooks.push(newSpellBook);
+								},
+								spellBook.respawnTime							
+                            );                           
 						}						
 						mob.update();
 					}
