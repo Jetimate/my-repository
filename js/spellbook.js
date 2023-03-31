@@ -1,8 +1,10 @@
 class SpellBook {
-    constructor(x, y, radius, color, normalOrbitRadius, health, damage, respawnTime) {
+	constructor(x, y, radius, color, normalOrbitRadius, defendOrbitRadius, attackOrbitRadius, health, damage, respawnTime) {
 		this.radian = 0;
 		this.velocity = 0.05;
 		this.normalOrbitRadius = normalOrbitRadius;
+		this.defendOrbitRadius = defendOrbitRadius;
+		this.attackOrbitRadius = attackOrbitRadius;
         this.x = x;
         this.y = y;
         this.radius = radius;
