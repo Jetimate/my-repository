@@ -14,9 +14,7 @@ button {
 </style>
 </head>
 <body onload="startGame()">
-	<button>button 1</button>
-	<button>button 2</button>
-	<button>button 3</button>
+	<canvas id="mycanvas"></canvas>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playable-character.js"></script>
 	<script type="text/javascript" src="js/spellbook.js"></script>
@@ -33,18 +31,13 @@ button {
 			});
 			spellBooksKeeper();
 		}
-
+//        width = "1000" height = "600"
 		var myGameArea = {
 			activeKeys: [],
 			validKeys: [37, 38, 39, 40, 65, 68, 83, 87, 97, 100, 119, 115, 32, 16],
-			canvas: document.createElement("canvas"),
-			start: function () {
-
-				this.canvas.width = 1265;
-				this.canvas.height = 698;
-				this.context = this.canvas.getContext("2d");
-
-				document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+			canvas: document.getElementById("mycanvas"),
+			start: function () {               
+				this.context = this.canvas.getContext("2d");                
 				this.interval = setInterval(updateGameArea, 20);
 				window.addEventListener('keydown', function (e) {
 					var isKeyActive = myGameArea.activeKeys.indexOf(e.keyCode) >= 0;
@@ -131,13 +124,14 @@ button {
 				});
 			}
 			else if (myGameArea.activeKeys.length == 0) {
-				myGameArea.clear();
+                myGameArea.context.canvas.width = window.innerWidth - 25;
+                myGameArea.context.canvas.height = window.innerHeight - 25;
+			   	myGameArea.clear();
 				spellBooksUpdater();
 				myGameCharacter.update();
 				mobArray.forEach(mob => {
 					mob.update();
-				});
-
+				});             
 				return;
 			}
 			else {
@@ -189,18 +183,18 @@ button {
 				}
 			}
 		}
-//        function getMousePosition(canvas, event) {
-//            let rect = canvas.getBoundingClientRect();
-//            let x = event.clientX - rect.left;
- //           let y = event.clientY - rect.top;
-//            console.log("Coordinate x: " + x);
-//            console.log("Coordinate y: " + y);
-//            console.log(" ");
-//        }
-//        let canvasElem = document.querySelector("canvas");
-//        canvasElem.addEventListener("mousedown", function (e) {
-//            getMousePosition(canvasElem, e);
-//		});
+        function getMousePosition(canvas, event) {
+	        let rect = canvas.getBoundingClientRect();
+	        let x = event.clientX - rect.left;
+		    let y = event.clientY - rect.top;
+		    console.log("Coordinate x: " + x);
+		    console.log("Coordinate y: " + y);
+		    console.log(" ");
+		    }
+		    let canvasElem = document.querySelector("canvas");
+		    canvasElem.addEventListener("mousedown", function (e) {
+		        getMousePosition(canvasElem, e);
+			});
 
 		function crashWith(spellBook, mobs) {
 			let result = false;
@@ -275,12 +269,12 @@ button {
 			let b = circle2.x - circle1.x;
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
-			/*	task of the week:
-		1). fix radian reload of petals
-		2). fix player death update
-		3). fix deprecated keycode
-		4). make it easier to add petals / make a shortcut for adding petals
-		*/
+				/*	task of the week:
+1). fix radian reload of petals
+2). fix player death update
+3). fix deprecated keycode
+4). make it easier to add petals / make a shortcut for adding petals
+*/
 	</script>
 </body>
 </html>
