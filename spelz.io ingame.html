@@ -25,6 +25,7 @@ button {
 		var pi = 3.14159;
 		
 		var myGameArea = {
+			activeButtons: [],
 			activeKeys: [],
 			validKeys: [37, 38, 39, 40, 65, 68, 83, 87, 97, 100, 119, 115, 32, 16],
 			canvas: document.getElementById("mycanvas"),
@@ -52,12 +53,12 @@ button {
 					console.log("keyup");
 				});
 				this.canvas.addEventListener("mousedown", function (e) {
-					if (e.button === 0) {
-                        getMousePosition(myGameArea.canvas, e);
-						console.log("Left mouse is clicked");
-					} else if (e.button === 2) {
-						console.log("Right mouse is clicked");
-					}
+					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
+                    if (!isButtonActive) {
+                        myGameArea.activeButtons.push(e.button);                      
+                    }
+                    console.log(myGameArea.activeButtons);
+                    console.log("mousedown");
 				});
 			},
 			clear: function () {
@@ -126,7 +127,7 @@ button {
 					mob.update();
 				});
 			}
-			else if (myGameArea.activeKeys.length == 0) {
+            else if ((myGameArea.activeKeys.length == 0) && (myGameArea.activeButtons.length == 0)) {
                 myGameArea.context.canvas.width = window.innerWidth - 25;
                 myGameArea.context.canvas.height = window.innerHeight - 25;
 			   	myGameArea.clear();
@@ -149,8 +150,7 @@ button {
 				mobArray.forEach(mob => {
 					mob.update();
 				});
-			}
-
+			}            
 			myGameCharacter.speedX = 0;
 			myGameCharacter.speedY = 0;
 			var gameSpeed = myGameCharacter.speed;
@@ -179,26 +179,44 @@ button {
 					});
 				}
 				if (key == 16) {
-					console.log("17");
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
 							spellBook.orbitRadius -= 2;
 							spellBook.color = 'green';
 						}
 					});
-				}
+				}               
 			}
+            for (var n = 0; n < myGameArea.activeButtons.length; n++) {
+				var button = myGameArea.activeButtons[n];
+//				this.canvas.addEventListener("mouseup", function (e) {
+//					var buttonIndex = myGameArea.activeButtons.indexOf(e.button);
+//					var isButtonActive = buttonIndex >= 0;
+//                  if (isButtonActive) {
+//                      myGameArea.activeButtons.splice(buttonIndex, 1);
+//                  }
+//                  console.log(myGameArea.activeButtons);
+//                  console.log("mouseup");
+//				});
+                if (button == 0) {
+                    //					shootSpellBook();
+					console.log("Left mouse is clicked");                                    
+                }
+                else if (button == 2) {
+					console.log("Right mouse is clicked");                 
+                }
+            }
 		}
-        function getMousePosition(canvas, event) {
-	        let rect = canvas.getBoundingClientRect();
-	        let x = event.clientX - rect.left;
-			let y = event.clientY - rect.top;			
-			spellBooks[0].x = x;
-			spellBooks[0].y = y;
-			spellBooks[0].defendOrbitRadius = 0;
-            spellBooks[0].normalOrbitRadius = 0;
-			spellBooks[0].attackOrbitRadius = 0;
-			spellBooks[0].velocity = 0;   
+        function shootSpellBook() {	     		
+//			spellBooks[0].defendOrbitRadius = 0;
+//          spellBooks[0].normalOrbitRadius = 0;
+//			spellBooks[0].attackOrbitRadius = 0;
+			spellBooks[0].velocity = 0; 
+			spellBooks[0].radian += 0.3;
+            while (spellBooks[0].orbitRadius < 500) {            
+				spellBooks[0].orbitRadius += 1;
+                spellBooks[0].update();
+            }
 //		    console.log("Coordinate x: " + x);
 //		    console.log("Coordinate y: " + y);
 //		    console.log(" ");
