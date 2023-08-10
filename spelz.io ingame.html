@@ -26,6 +26,11 @@
         z-index: 1;
         height: calc(100% - 6px);
         width: calc(100% - 6px);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-content: start-end;
+        padding: 2px;
     }
     .spelzio {
         margin: 0;
@@ -35,14 +40,6 @@
         width: 100px;
         height: 70px;
         margin: 3px;
-    }
-    .maincontainer {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-content: start-end;
-        padding: 2px;
-        height: calc(100% - 6px);
     }
     .containera {
         display: flex;
@@ -82,28 +79,26 @@
 <body>
 	<canvas id="mycanvas"></canvas>
 	<div id="startGameMenu">
-		<div class="maincontainer">
-			<div class="containera">
-				<div class="item1a">
-					<button class="notstart">settings</button>
-					<button class="notstart">changelog</button>
-				</div>
-				<div class="item2a">
-					<button class="notstart">friends</button><br>
-					<button class="notstart">spelz</button><br>
-					<button class="notstart">monster gallery</button>
-				</div>
+		<div class="containera">
+			<div class="item1a">
+				<button class="notstart">settings</button>
+				<button class="notstart">changelog</button>
 			</div>
-			<div class="containerb">
-				<div class="item1b">
-					<h1 class="spelzio">spelz.io</h1>				
-					<input type="text" placeholder="Name" />
-					<button id="startGameButton" onclick="startGame()">start game</button>				
-				</div>
+			<div class="item2a">
+				<button class="notstart">friends</button><br>
+				<button class="notstart">spelz</button><br>
+				<button class="notstart">monster gallery</button>
 			</div>
-			<div class="containerc">
-				<a href="signin.html">sign in</a>
+		</div>
+		<div class="containerb">
+			<div class="item1b">
+				<h1 class="spelzio">spelz.io</h1>				
+				<input type="text" placeholder="Name" />
+				<button id="startGameButton" onclick="startGame()">start game</button>				
 			</div>
+		</div>
+		<div class="containerc">
+			<a href="signin.html">sign in</a>
 		</div>		
 	</div>
 	<script type="text/javascript" src="js/mob.js"></script>
@@ -143,14 +138,15 @@
 					console.log(myGameArea.activeKeys);
 					console.log("keyup");
 				});
-				//				this.canvas.addEventListener("mousedown", function (e) {
-				//					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
-				//					if (!isButtonActive) {
-				//						myGameArea.activeButtons.push(e.button);
-				//					}
-				//					console.log(myGameArea.activeButtons);
-				//					console.log("mousedown");
-				//				});
+//lets you use mouse buttons
+//				this.canvas.addEventListener("mousedown", function (e) {
+//					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
+//					if (!isButtonActive) {
+//						myGameArea.activeButtons.push(e.button);
+//					}
+//					console.log(myGameArea.activeButtons);
+//					console.log("mousedown");
+//				});
 			},
 			clear: function () {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -201,49 +197,40 @@
 			});
 		}
 		function updateGameArea() {
+// always updating		
+            myGameArea.clear();
+            myGameArea.context.canvas.width = window.innerWidth - 3;
+			myGameArea.context.canvas.height = window.innerHeight - 3;    
+			spellBooksUpdater();
+			myGameCharacter.update();
+            mobArray.forEach(mob => {
+                mob.update();
+            });
+// death
 			if (crashWith(myGameCharacter, mobArray)) {
 				myGameArea.activeKeys = [];
 				mobArray = [];
 				spellBooks = [];
 				alert("game over");
 				myGameArea.stop();
-				myGameArea.clear();
-
 				startGame();
 			}
+// hitting a mob
 			else if (crashWithSpellBook(spellBooks, mobArray)) {
-				myGameArea.clear();
 				myGameCharacter.x += myGameCharacter.speedX;
 				myGameCharacter.y += myGameCharacter.speedY;
-				spellBooksUpdater();
-				myGameCharacter.update();
-				mobArray.forEach(mob => {
-					mob.update();
-				});
 			}
-			else if ((myGameArea.activeKeys.length == 0) && (myGameArea.activeButtons.length == 0)) {
-				myGameArea.context.canvas.width = window.innerWidth - 3;
-				myGameArea.context.canvas.height = window.innerHeight - 3;
-				myGameArea.clear();
-				spellBooksUpdater();
-				myGameCharacter.update();
+//not moving anything
+			else if ((myGameArea.activeKeys.length == 0) && (myGameArea.activeButtons.length == 0)) {		
 				spellBooks.forEach(spellBook => {
 					spellBook.color = 'gray';
 				});
-				mobArray.forEach(mob => {
-					mob.update();
-				});
 				return;
 			}
-			else {
-				myGameArea.clear();
+//updates when moving
+			else {				
 				myGameCharacter.x += myGameCharacter.speedX;
 				myGameCharacter.y += myGameCharacter.speedY;
-				spellBooksUpdater();
-				myGameCharacter.update();
-				mobArray.forEach(mob => {
-					mob.update();
-				});
 			}
 			myGameCharacter.speedX = 0;
 			myGameCharacter.speedY = 0;
@@ -281,46 +268,47 @@
 					});
 				}
 			}
-			for (var n = 0; n < myGameArea.activeButtons.length; n++) {
-				var button = myGameArea.activeButtons[n];
-				if (button == 0) {
-					spellBooks[0].velocity = 0;
-					console.log("Left mouse button is clicked");
-					if (spellBooks[0].orbitRadius < 500) {
-						spellBooks[0].orbitRadius += 7;
-						console.log(spellBooks[0].orbitRadius);
-					}
-					else if ((spellBooks[0].orbitRadius >= 500) || (spellBooks[0].health <= 0)) {
-						spellBooks.splice(0, 1);
-						myGameArea.activeButtons.splice(i, 1);
-						setTimeout(function () {
-							let spellBook1Radian = 0;
-							if (spellBooks.length > 0) {
-								spellBook1Radian = spellBooks[0].radian;
-							}
-							let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500);
-							let radianMultiplier = (pi / maxSpellBooks) * 2;
-							if (spellBooks.length > 0) {
-								newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
-							}
-							else {
-								newSpellBook.radian = 0;
-							}
-							spellBooks.push(newSpellBook);
-						},
-							spellBooks[0].respawnTime
-						);
-					}
-				}
-				else if (button == 1) {
-					console.log("middle mouse button is clicked");
-					myGameArea.activeButtons.splice(i, 1);
-				}
-				else if (button == 2) {
-					console.log("Right mouse button is clicked");
-					myGameArea.activeButtons.splice(i, 1);
-				}
-			}
+
+//			for (var n = 0; n < myGameArea.activeButtons.length; n++) {
+//				var button = myGameArea.activeButtons[n];
+//				if (button == 0) {
+//					spellBooks[0].velocity = 0;
+//					console.log("Left mouse button is clicked");
+//					if (spellBooks[0].orbitRadius < 500) {
+//						spellBooks[0].orbitRadius += 7;
+//						console.log(spellBooks[0].orbitRadius);
+//					}
+//					else if ((spellBooks[0].orbitRadius >= 500) || (spellBooks[0].health <= 0)) {
+//						spellBooks.splice(0, 1);
+//						myGameArea.activeButtons.splice(i, 1);
+//						setTimeout(function () {
+//							let spellBook1Radian = 0;
+//							if (spellBooks.length > 0) {
+//								spellBook1Radian = spellBooks[0].radian;
+//							}
+//							let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500);
+//							let radianMultiplier = (pi / maxSpellBooks) * 2;
+//							if (spellBooks.length > 0) {
+//								newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
+//							}
+//							else {
+//								newSpellBook.radian = 0;
+//							}
+//							spellBooks.push(newSpellBook);
+//						},
+//							spellBooks[0].respawnTime
+//						);
+//					}
+//				}
+//				else if (button == 1) {
+//					console.log("middle mouse button is clicked");
+//					myGameArea.activeButtons.splice(i, 1);
+//				}
+//				else if (button == 2) {
+//					console.log("Right mouse button is clicked");
+//					myGameArea.activeButtons.splice(i, 1);
+//				}
+//			}
 		}
 		function crashWith(spellBook, mobs) {
 			let result = false;
@@ -386,11 +374,9 @@
 		}
 		/*	task of the week:
 		1). add fire guided projectile
-		2). fix player death update
 		3). fix deprecated keycode				
 		4). make it easier to add petals / make a shortcut for adding petals		
-		5). make a stable radian var for all spell books					
-		6). make canvas update its width and height even when im using my keys							
+		5). make a stable radian var for all spell books											
 		*/
 	</script>
 </body>
