@@ -25,9 +25,9 @@ class SpellBook {
 		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);		
 		ctx.fillStyle = this.color;
 		ctx.fill();
-//		ctx.lineWidth = 1;
-//		ctx.strokeStyle = "#000000";
-//        ctx.stroke();
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = "#000000";
+        ctx.stroke();
         ctx.closePath();
     }
 	update() {
