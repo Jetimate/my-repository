@@ -110,20 +110,22 @@
 		</div>
 		<div class="containerb">
 			<div class="item1b">
-				<h1 class="spelzio">spelz.io</h1>				
+				<h1 class="spelzio">spelz.io</h1>
 				<input id="inputUserName" type="text" placeholder="Name" />
-				<button id="startGameButton" onclick="startGame()">start game</button>				
+				<button id="startGameButton" onclick="startGame()">start game</button>
 			</div>
 		</div>
 		<div class="containerc">
 			<a href="signin.html">sign in</a>
-		</div>		
+		</div>
 	</div>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playable-character.js"></script>
 	<script type="text/javascript" src="js/spellbook.js"></script>
+	<script type="text/javascript" src="js/basicMob.js"></script>
+
 	<script>
-		let mobArray = [];
+		let basicMobArray = [];
 		let spellBooks;
 		let maxSpellBooks = 3;
 		var pi = 3.14159;
@@ -156,15 +158,15 @@
 					console.log(myGameArea.activeKeys);
 					console.log("keyup");
 				});
-//lets you use mouse buttons
-//				this.canvas.addEventListener("mousedown", function (e) {
-//					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
-//					if (!isButtonActive) {
-//						myGameArea.activeButtons.push(e.button);
-//					}
-//					console.log(myGameArea.activeButtons);
-//					console.log("mousedown");
-//				});
+				//lets you use mouse buttons
+				//				this.canvas.addEventListener("mousedown", function (e) {
+				//					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
+				//					if (!isButtonActive) {
+				//						myGameArea.activeButtons.push(e.button);
+				//					}
+				//					console.log(myGameArea.activeButtons);
+				//					console.log("mousedown");
+				//				});
 			},
 			clear: function () {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -175,11 +177,11 @@
 		}
 		function startGame() {
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
-			mobArray.push(new Mob(200, 200, 30, "red", 30, 1));
-			mobArray.push(new Mob(400, 400, 30, "red", 30, 1));
+            basicMobArray.push(new BasicMob(200, 200, 30, "#1db555", 1));
+            basicMobArray.push(new BasicMob(400, 400, 30, "#1db555", 1));
 			myGameArea.start();
 			myGameCharacter.update();
-			mobArray.forEach(item => {
+			basicMobArray.forEach(item => {
 				item.update();
 			});
 			spellBooksKeeper();
@@ -189,9 +191,9 @@
 
 		function spellBooksKeeper() {
 			spellBooks = [];
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500));
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
+			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
 			for (var i = 0; i < spellBooks.length; i++) {
 				if (i > 0)
 					spellBooks[i].radian = ((i * pi) / maxSpellBooks) * 2;
@@ -215,38 +217,38 @@
 			});
 		}
 		function updateGameArea() {
-// always updating		
-            myGameArea.clear();
-            myGameArea.context.canvas.width = window.innerWidth - 3;
-			myGameArea.context.canvas.height = window.innerHeight - 3;    
+			// always updating
+			myGameArea.clear();
+			myGameArea.context.canvas.width = window.innerWidth - 3;
+			myGameArea.context.canvas.height = window.innerHeight - 3;
 			spellBooksUpdater();
 			myGameCharacter.update();
-            mobArray.forEach(mob => {
-                mob.update();
-            });
-// death
-			if (crashWith(myGameCharacter, mobArray)) {
+			basicMobArray.forEach(basicMob => {
+				basicMob.update();
+			});
+			// death
+			if (crashWith(myGameCharacter, basicMobArray)) {
 				myGameArea.activeKeys = [];
-				mobArray = [];
+				basicMobArray = [];
 				spellBooks = [];
 				alert("game over");
 				myGameArea.stop();
 				startGame();
 			}
-// hitting a mob
-			else if (crashWithSpellBook(spellBooks, mobArray)) {
+			// hitting a basic mob
+			else if (crashWithSpellBook(spellBooks, basicMobArray)) {
 				myGameCharacter.x += myGameCharacter.speedX;
 				myGameCharacter.y += myGameCharacter.speedY;
 			}
-//not moving anything
-			else if ((myGameArea.activeKeys.length == 0) && (myGameArea.activeButtons.length == 0)) {		
-				spellBooks.forEach(spellBook => {
-					spellBook.color = 'gray';
-				});
-				return;
+			//not moving anything
+			else if ((myGameArea.activeKeys.length == 0) && (myGameArea.activeButtons.length == 0)) {
+//				spellBooks.forEach(spellBook => {
+//					spellBook.color = 'white';
+//				});
+//				return;
 			}
-//updates when moving
-			else {				
+			//updates when moving
+			else {
 				myGameCharacter.x += myGameCharacter.speedX;
 				myGameCharacter.y += myGameCharacter.speedY;
 			}
@@ -273,7 +275,7 @@
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
 							spellBook.orbitRadius += 2;
-							spellBook.color = 'red';
+//							spellBook.color = 'red';
 						}
 					});
 				}
@@ -281,58 +283,17 @@
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
 							spellBook.orbitRadius -= 2;
-							spellBook.color = 'green';
+//							spellBook.color = 'green';
 						}
 					});
 				}
 			}
-// failed attempt to making projectiles
-//			for (var n = 0; n < myGameArea.activeButtons.length; n++) {
-//				var button = myGameArea.activeButtons[n];
-//				if (button == 0) {
-//					spellBooks[0].velocity = 0;
-//					console.log("Left mouse button is clicked");
-//					if (spellBooks[0].orbitRadius < 500) {
-//						spellBooks[0].orbitRadius += 7;
-//						console.log(spellBooks[0].orbitRadius);
-//					}
-//					else if ((spellBooks[0].orbitRadius >= 500) || (spellBooks[0].health <= 0)) {
-//						spellBooks.splice(0, 1);
-//						myGameArea.activeButtons.splice(i, 1);
-//						setTimeout(function () {
-//							let spellBook1Radian = 0;
-//							if (spellBooks.length > 0) {
-//								spellBook1Radian = spellBooks[0].radian;
-//							}
-//							let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500);
-//							let radianMultiplier = (pi / maxSpellBooks) * 2;
-//							if (spellBooks.length > 0) {
-//								newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
-//							}
-//							else {
-//								newSpellBook.radian = 0;
-//							}
-//							spellBooks.push(newSpellBook);
-//						},
-//							spellBooks[0].respawnTime
-//						);
-//					}
-//				}
-//				else if (button == 1) {
-//					console.log("middle mouse button is clicked");
-//					myGameArea.activeButtons.splice(i, 1);
-//				}
-//				else if (button == 2) {
-//					console.log("Right mouse button is clicked");
-//					myGameArea.activeButtons.splice(i, 1);
-//				}
-//			}
 		}
-		function crashWith(spellBook, mobs) {
+		function crashWith(spellBook, basicMobs) {
 			let result = false;
-			mobs.forEach(mob => {
-				let radii = spellBook.radius + mob.radius;
-				let distance = getDistance(spellBook, mob);
+			basicMobs.forEach(basicMob => {
+				let radii = spellBook.radius + basicMob.radius;
+				let distance = getDistance(spellBook, basicMob);
 				let hasCrashed = distance < radii;
 				if (hasCrashed) {
 					result = hasCrashed;
@@ -340,33 +301,33 @@
 			});
 			return result;
 		}
-		function crashWithSpellBook(spellBooks, mobs) {
+		function crashWithSpellBook(spellBooks, basicMobs) {
 			let result = false;
 			spellBooks.forEach(spellBook => {
-				var mobIndex = 0;
-				mobs.forEach(mob => {
-					let radii = spellBook.radius + mob.radius;
-					let distance = getDistance(spellBook, mob);
+				var basicMobIndex = 0;
+				basicMobs.forEach(basicMob => {
+					let radii = spellBook.radius + basicMob.radius;
+					let distance = getDistance(spellBook, basicMob);
 					let hasCrashed = distance < radii;
 					if (hasCrashed) {
 						result = hasCrashed;
-						mob.health -= spellBook.damage;
-						mob.radius -= spellBook.damage;
-						spellBook.health -= mob.damage
-						console.log("mob health: " + mob.health);
-						if (mob.health <= 0) {
-							mobs.splice(mobIndex, 1);
+						basicMob.health -= spellBook.damage;
+						basicMob.radius -= spellBook.damage;
+						spellBook.health -= basicMob.damage
+						console.log("basic mob health: " + basicMob.health);
+						if (basicMob.health <= 5) {
+							basicMobs.splice(basicMobIndex, 1);
 							setTimeout(function () {
-								if (mobArray.length >= 1) {
-									let mobRandomX = Math.floor((Math.random() * 600) + 10);
-									let mobRandomY = Math.floor((Math.random() * 600) + 10);
-									let mobRandomRadiusXHealth = Math.floor((Math.random() * 100) + 10);
-									let newMob = new Mob(mobRandomX, mobRandomY, mobRandomRadiusXHealth, "red", mobRandomRadiusXHealth, 1);
-									mobArray.push(newMob);
+								if (basicMobArray.length >= 1) {
+									let basicMobRandomX = Math.floor((Math.random() * 1000) + 10);
+									let basicMobRandomY = Math.floor((Math.random() * 1000) + 10);
+									let basicMobRandomRadiusXHealth = Math.floor((Math.random() * 100) + 10);
+                                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", 1);
+									basicMobArray.push(newBasicMob);								
 								}
 							},
 								5000
-                            );
+							);
 						}
 						else if (spellBook.health <= 0) {
 							var spellBookIndex = spellBooks.indexOf(spellBook);
@@ -376,7 +337,7 @@
 								if (spellBooks.length > 0) {
 									spellBook1Radian = spellBooks[0].radian;
 								}
-								let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'gray', 45, 20, 70, 1, 1, 1500);
+								let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500);
 								let radianMultiplier = (pi / maxSpellBooks) * 2;
 								if (spellBooks.length > 0) {
 									newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
@@ -389,9 +350,9 @@
 								spellBook.respawnTime
 							);
 						}
-						mob.update();
+						basicMob.update();
 					}
-					mobIndex++;
+					basicMobIndex++;
 				});
 			});
 			return result;
@@ -401,13 +362,14 @@
 			let b = circle2.x - circle1.x;
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
-		/*	task of the week:
-		1). add fire guided projectile
-		2). transfer mob to basicMob
-		3). fix deprecated keycode				
-		4). make it easier to add petals / make a shortcut for adding petals		
-		5). make a stable radian var for all spell books	
-		
+			/*	task of the week:
+		1). add fire guided projectile		
+		3). fix deprecated keycode
+		4). make it easier to add petals / make a shortcut for adding petals
+		5). make a stable radian var for all spell books
+		6). add a new spellBook other than the basic one
+		7). make basic mob drop a new spellBook
+
 		*/
 	</script>
 </body>
