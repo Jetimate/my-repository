@@ -1,15 +1,13 @@
 class Mob {
 	constructor(x, y, radius, color, health, damage) {
-	this.speedX = 0;
-    this.speedY = 0;
-	this.speed = 2;
+//	this.mobType = 
     this.radius = radius;
 	this.color = color;  
 	this.health = health;
 	this.damage = damage;
     this.x = x;
     this.y = y;   
-		this.startingPos = {
+	this.startingPos = {
 		x,y
 		}	
 	}		
@@ -21,7 +19,7 @@ class Mob {
 		ctx.fill();
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = "#000000";
-      ctx.stroke();
+        ctx.stroke();
         ctx.closePath();
     }      
 }
