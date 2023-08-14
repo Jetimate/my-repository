@@ -134,30 +134,26 @@
 		var myGameArea = {
 			activeButtons: [],
 			activeKeys: [],
-			validKeys: [37, 38, 39, 40, 65, 68, 83, 87, 97, 100, 119, 115, 32, 16],
+            validKeys: ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space", "ShiftLeft", "ShiftRight"],
 			canvas: document.getElementById("mycanvas"),
 			start: function () {
 				this.context = this.canvas.getContext("2d");
 				this.interval = setInterval(updateGameArea, 20);
-				window.addEventListener('keydown', function (e) {
-					var isKeyActive = myGameArea.activeKeys.indexOf(e.keyCode) >= 0;
+				window.addEventListener('keydown', function(e) {
+					var isKeyActive = myGameArea.activeKeys.indexOf(e.code) >= 0;
 					if (!isKeyActive) {
-						var isValidKey = myGameArea.validKeys.indexOf(e.keyCode) >= 0;
+						var isValidKey = myGameArea.validKeys.indexOf(e.code) >= 0;
 						if (isValidKey) {
-							myGameArea.activeKeys.push(e.keyCode);
+							myGameArea.activeKeys.push(e.code);                       
 						}
 					}
-//					console.log(myGameArea.activeKeys);
-//					console.log("keydown");
 				});
-				window.addEventListener('keyup', function (e) {
-					var keyIndex = myGameArea.activeKeys.indexOf(e.keyCode);
+				window.addEventListener('keyup', function(e) {
+					var keyIndex = myGameArea.activeKeys.indexOf(e.code);
 					var isKeyActive = keyIndex >= 0;
 					if (isKeyActive) {
 						myGameArea.activeKeys.splice(keyIndex, 1);
 					}
-//					console.log(myGameArea.activeKeys);
-//					console.log("keyup");
 				});
 				//lets you use mouse buttons
 				//				this.canvas.addEventListener("mousedown", function (e) {
@@ -255,28 +251,28 @@
 			for (var i = 0; i < myGameArea.activeKeys.length; i++) {
 				var key = myGameArea.activeKeys[i];
 
-				if ((key == 37 || key == 65 || key == 97) && (myGameCharacter.speedX > -gameSpeed)) {
+				if ((key == "ArrowLeft" || key == "KeyA") && (myGameCharacter.speedX > -gameSpeed)) {
 					myGameCharacter.speedX -= gameSpeed;
 				}
-				if ((key == 39 || key == 68 || key == 100) && (myGameCharacter.speedX < gameSpeed)) {
+				if ((key == "ArrowRight" || key == "KeyD") && (myGameCharacter.speedX < gameSpeed)) {
 					myGameCharacter.speedX += gameSpeed;
 				}
-				if ((key == 38 || key == 87 || key == 119) && (myGameCharacter.speedY > -gameSpeed)) {
+				if ((key == "ArrowUp" || key == "KeyW") && (myGameCharacter.speedY > -gameSpeed)) {
 					myGameCharacter.speedY -= gameSpeed;
 				}
-				if ((key == 40 || key == 83 || key == 115) && (myGameCharacter.speedY < gameSpeed)) {
+				if ((key == "ArrowDown" || key == "KeyS") && (myGameCharacter.speedY < gameSpeed)) {
 					myGameCharacter.speedY += gameSpeed;
 				}
 // attack/spacebar
-				if (key == 32) {
+				if (key == "Space") {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
-							spellBook.orbitRadius += 2;					
+							spellBook.orbitRadius += 2;		
 						}
 					});
 				}
 // defend/shift
-				if (key == 16) {
+				if (key == "ShiftLeft") {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
 							spellBook.orbitRadius -= 2;
@@ -365,8 +361,7 @@
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
 		/*	tasks:
-		1). fix deprecated keycode
-		2). mob knocks back player instead of killing
+		1). mob knocks back player instead of killing
 		2). basic mob version 2 (this one moves but doesnt attack)
 		3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
 		4). make the a field of view that follows the player
