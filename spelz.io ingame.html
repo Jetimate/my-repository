@@ -178,8 +178,6 @@
 		}
 		function startGame() {
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
-//          basicMobArray.push(new BasicMob(200, 200, 30, "#1db555", 1));
-//          basicMobArray.push(new BasicMob(400, 400, 30, "#1db555", 1));
             spawnBasicMob();
 			myGameArea.start();
 			myGameCharacter.update();
@@ -269,19 +267,19 @@
 				if ((key == 40 || key == 83 || key == 115) && (myGameCharacter.speedY < gameSpeed)) {
 					myGameCharacter.speedY += gameSpeed;
 				}
+// attack/spacebar
 				if (key == 32) {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
-							spellBook.orbitRadius += 2;
-//							spellBook.color = 'red';
+							spellBook.orbitRadius += 2;					
 						}
 					});
 				}
+// defend/shift
 				if (key == 16) {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
 							spellBook.orbitRadius -= 2;
-//							spellBook.color = 'green';
 						}
 					});
 				}
@@ -366,15 +364,25 @@
 			let b = circle2.x - circle1.x;
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
-		/*	task of the week:
-		1). add fire guided projectile
-		3). fix deprecated keycode
-		4). make it easier to add petals / make a shortcut for adding petals
-		5). make a stable radian var for all spell books
-		6). add a new spellBook other than the basic one
-		7). make basic mob drop a new spellBook
-		8). make basic mobs spawn in nicely
-
+		/*	tasks:
+		1). fix deprecated keycode
+		2). mob knocks back player instead of killing
+		2). basic mob version 2 (this one moves but doesnt attack)
+		3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
+		4). make the a field of view that follows the player
+		4). add a new spellBook other than the basic one
+		5). make basic mob drop a new spell book
+		6). add a way to access spell books
+		7). make it easier to add petals / make a shortcut for adding petals
+		8). make a stable radian var for all spell books		
+		100). add fire guided projectile
+		1000). add a place where npcs will go to when their kingdom is invaded
+		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
+		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
+		1003). squads/teams will be a thing where friends can play together
+		1004). there should be a local gamemode so people can still have fun
+		1005). only add some ads
+		1006). ranks should be a thing
 		*/
 	</script>
 </body>
