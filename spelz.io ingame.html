@@ -127,9 +127,10 @@
 	<script>
 		let basicMobArray = [];
         let maxAmountBasicMob = 5;
-		let spellBooks;
+		let spellBooks = [];
 		let maxSpellBooks = 3;
-		var pi = 3.14159;
+		const pi = 3.14159;
+        let spawnSpellBookTimeout = [];
 
 		var myGameArea = {
 			activeButtons: [],
@@ -173,6 +174,15 @@
 			}
 		}
 		function startGame() {
+            myGameArea.activeKeys = [];
+            basicMobArray = [];
+			spellBooks = [];
+            for (var i = 0; i < spawnSpellBookTimeout.length; i++) {
+                clearTimeout(spawnSpellBookTimeout[i]);
+			}
+			console.log("Timeouts cleared");
+			spawnSpellBookTimeout = [];
+
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
             spawnBasicMob();
 			myGameArea.start();
@@ -186,10 +196,9 @@
 		}
 
 		function spellBooksKeeper() {
-			spellBooks = [];
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
-			spellBooks.push(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 45, 20, 70, 1, 1, 1500));
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 0, 45, 20, 70, 1, 10, 1500), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 1, 45, 20, 70, 1, 10, 1500), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f00', 2, 45, 20, 70, 1, 10, 1500), 10);
 			for (var i = 0; i < spellBooks.length; i++) {
 				if (i > 0) {
 					spellBooks[i].radian = ((i * pi) / maxSpellBooks) * 2;
@@ -224,10 +233,8 @@
 			});	
 			// death
 			if (crashWith(myGameCharacter, basicMobArray)) {
-				myGameArea.activeKeys = [];
-				basicMobArray = [];
-				spellBooks = [];
 				alert("game over");
+				
 				myGameArea.stop();
 				startGame();
 			}
@@ -287,15 +294,34 @@
                 if (basicMobArray.length < maxAmountBasicMob) {
                     let basicMobRandomX = Math.floor((Math.random() * 1000) + 10);
                     let basicMobRandomY = Math.floor((Math.random() * 1000) + 10);
-                    let basicMobRandomRadiusXHealth = Math.floor((Math.random() * 100) + 10);
-                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", 1);
+                    let basicMobRandomRadiusXHealth = Math.floor((Math.random() * 70) + 10);
+                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", basicMobRandomRadiusXHealth, 1);
                     basicMobArray.push(newBasicMob);
-					console.log("added a new basic mob");
 					if (basicMobArray.length < maxAmountBasicMob) {
 						me.spawnBasicMob();
 					}
                 }
             }, 3000);
+		}
+		function spawnSpellBook(spellBook, delay) {
+            spawnSpellBookTimeout.push(setTimeout(function () {
+                let spellBook1Radian = 0;
+                let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.radius, spellBook.color, spellBook.positionIndex, spellBook.normalOrbitRadius, spellBook.defendOrbitRadius, spellBook.attackOrbitRadius, spellBook.health, spellBook.damage, spellBook.respawnTime);
+                let radianMultiplier = (pi / maxSpellBooks) * 2;
+                if (spellBooks.length > 0) {
+                    spellBook1Radian = spellBooks[0].radian;
+                    newSpellBook.radian = spellBook1Radian + (radianMultiplier * (spellBook.positionIndex));
+                }
+                else {
+                    newSpellBook.radian = 0;
+				}
+//				newSpellBook.radian = spellBook.radian;
+//				newSpellBook.radian = newSpellBook.radian + (spellBook.velocity * (delay / 20));
+//                newSpellBook.radian = ((spellBook.radianLevel * pi) / maxSpellBooks) * 2;
+				spellBooks.push(newSpellBook);
+//                console.log("Spellbook spawned." + delay);
+			}, delay)
+			);
 		}
 		function crashWith(spellBook, basicMobs) {
 			let result = false;
@@ -319,35 +345,22 @@
 					let hasCrashed = distance < radii;
 					if (hasCrashed) {
 						result = hasCrashed;
-						basicMob.health -= spellBook.damage;
-						basicMob.radius -= spellBook.damage;
-						spellBook.health -= basicMob.damage
-						if (basicMob.health <= 5) {
+						if (basicMob.health > spellBook.damage) {
+                            basicMob.health -= spellBook.damage;
+							basicMob.radius -= spellBook.damage;
+							spellBook.health -= basicMob.damage;
+						}	else if (basicMob.health <= spellBook.damage) {
+							spellBook.health -= basicMob.damage;
 							basicMobs.splice(basicMobIndex, 1);
-							console.log("basicMob died");
 							spawnBasicMob();
 						}
-						else if (spellBook.health <= 0) {
-							var spellBookIndex = spellBooks.indexOf(spellBook);
-							spellBooks.splice(spellBookIndex, 1);
-							setTimeout(function () {
-								let spellBook1Radian = 0;
-								if (spellBooks.length > 0) {
-									spellBook1Radian = spellBooks[0].radian;
-								}
-								let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#ff00ff', 45, 20, 70, 1, 100, 1500);
-								let radianMultiplier = (pi / maxSpellBooks) * 2;
-								if (spellBooks.length > 0) {
-									newSpellBook.radian = spellBook1Radian + (radianMultiplier * spellBooks.length);
-								}
-								else {
-									newSpellBook.radian = 0;
-								}
-								spellBooks.push(newSpellBook);
-							},
-								spellBook.respawnTime
-							);
-						}
+                        if (spellBook.health <= 0) {
+                            var spellBookIndex = spellBooks.indexOf(spellBook);
+                            spellBooks.splice(spellBookIndex, 1);
+                            if (spellBooks.length < maxSpellBooks) {
+                                spawnSpellBook(spellBook, spellBook.respawnTime);
+                            }
+                        }
 						basicMob.update();
 					}
 					basicMobIndex++;
@@ -361,6 +374,10 @@
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
 		/*	tasks:
+		1). the game shall now push spellbooks 
+		1). make the game update the spell books position based on the max spellbooks amount
+		1). make the game over alert box take you to the game menu instead
+		1). fix the mob radius and health thing so that the basic mob will die at health 0
 		1). mob knocks back player instead of killing
 		2). basic mob version 2 (this one moves but doesnt attack)
 		3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
