@@ -126,12 +126,12 @@
 
 	<script>
 		let basicMobArray = [];
-        let maxAmountBasicMob = 5;
 		let spellBooks = [];
-		let maxSpellBooks = 3;
-		const pi = 3.14159;
         let spawnSpellBookTimeout = [];
-
+        let maxAmountBasicMob = 5;
+		let maxSpellBooks = 4;
+		const pi = 3.14159;
+       
 		var myGameArea = {
 			activeButtons: [],
 			activeKeys: [],
@@ -180,9 +180,7 @@
             for (var i = 0; i < spawnSpellBookTimeout.length; i++) {
                 clearTimeout(spawnSpellBookTimeout[i]);
 			}
-			console.log("Timeouts cleared");
 			spawnSpellBookTimeout = [];
-
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
             spawnBasicMob();
 			myGameArea.start();
@@ -196,15 +194,17 @@
 		}
 
 		function spellBooksKeeper() {
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 0, 45, 20, 70, 1, 10, 1500), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, 'white', 1, 45, 20, 70, 1, 10, 1500), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f00', 2, 45, 20, 70, 1, 10, 1500), 10);
-			for (var i = 0; i < spellBooks.length; i++) {
-				if (i > 0) {
-					spellBooks[i].radian = ((i * pi) / maxSpellBooks) * 2;
-				}
-				console.log(spellBooks[i].radian);
-			}
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#fff', 0, 45, 20, 70, 1, 10, 1500), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 1, 45, 20, 70, 1, 10, 1500), 10);
+			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#000', 2, 45, 20, 70, 1, 10, 1500), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#ff0', 3, 45, 20, 70, 1, 10, 1500), 10);
+//			for (var i = 0; i < spellBooks.length; i++) {
+//				if (i > 0) {
+//					spellBooks[i].radian = ((i * pi) / maxSpellBooks) * 2;
+//				}
+//				console.log(spellBooks[i].radian);
+//				console.log("something");
+//			}
 		}
 		function spellBooksUpdater() {
 			spellBooks.forEach(spellBook => {
@@ -233,8 +233,7 @@
 			});	
 			// death
 			if (crashWith(myGameCharacter, basicMobArray)) {
-				alert("game over");
-				
+				alert("game over");			
 				myGameArea.stop();
 				startGame();
 			}
@@ -257,7 +256,6 @@
 
 			for (var i = 0; i < myGameArea.activeKeys.length; i++) {
 				var key = myGameArea.activeKeys[i];
-
 				if ((key == "ArrowLeft" || key == "KeyA") && (myGameCharacter.speedX > -gameSpeed)) {
 					myGameCharacter.speedX -= gameSpeed;
 				}
@@ -270,7 +268,7 @@
 				if ((key == "ArrowDown" || key == "KeyS") && (myGameCharacter.speedY < gameSpeed)) {
 					myGameCharacter.speedY += gameSpeed;
 				}
-// attack/spacebar
+				// attack/spacebar
 				if (key == "Space") {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
@@ -278,7 +276,7 @@
 						}
 					});
 				}
-// defend/shift
+				// defend/shift
 				if (key == "ShiftLeft") {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
@@ -304,22 +302,19 @@
             }, 3000);
 		}
 		function spawnSpellBook(spellBook, delay) {
-            spawnSpellBookTimeout.push(setTimeout(function () {
-                let spellBook1Radian = 0;
-                let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.radius, spellBook.color, spellBook.positionIndex, spellBook.normalOrbitRadius, spellBook.defendOrbitRadius, spellBook.attackOrbitRadius, spellBook.health, spellBook.damage, spellBook.respawnTime);
-                let radianMultiplier = (pi / maxSpellBooks) * 2;
-                if (spellBooks.length > 0) {
-                    spellBook1Radian = spellBooks[0].radian;
-                    newSpellBook.radian = spellBook1Radian + (radianMultiplier * (spellBook.positionIndex));
-                }
-                else {
-                    newSpellBook.radian = 0;
+			spawnSpellBookTimeout.push(setTimeout(function () {
+				let spellBook1Radian = 0;
+				let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.radius, spellBook.color, spellBook.positionIndex, spellBook.normalOrbitRadius, spellBook.defendOrbitRadius, spellBook.attackOrbitRadius, spellBook.health, spellBook.damage, spellBook.respawnTime);
+				let radianMultiplier = (pi / maxSpellBooks) * 2;
+				if (spellBooks.length > 0) {
+					spellBook1Radian = spellBooks[0].radian;
+					newSpellBook.radian = (spellBook1Radian - (spellBooks[0].positionIndex * radianMultiplier)) + (radianMultiplier * spellBook.positionIndex);
+                    console.log(spellBooks[0].radian);
 				}
-//				newSpellBook.radian = spellBook.radian;
-//				newSpellBook.radian = newSpellBook.radian + (spellBook.velocity * (delay / 20));
-//                newSpellBook.radian = ((spellBook.radianLevel * pi) / maxSpellBooks) * 2;
-				spellBooks.push(newSpellBook);
-//                console.log("Spellbook spawned." + delay);
+				else {
+					newSpellBook.radian = 0;
+				}				
+				spellBooks.push(newSpellBook);         
 			}, delay)
 			);
 		}
@@ -373,20 +368,15 @@
 			let b = circle2.x - circle1.x;
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
-		/*	tasks:
-		1). the game shall now push spellbooks 
-		1). make the game update the spell books position based on the max spellbooks amount
-		1). make the game over alert box take you to the game menu instead
-		1). fix the mob radius and health thing so that the basic mob will die at health 0
+		/*	tasks:	
 		1). mob knocks back player instead of killing
-		2). basic mob version 2 (this one moves but doesnt attack)
+		2). basic mob version 2 (this one moves but doesnt attack)			
 		3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
-		4). make the a field of view that follows the player
-		4). add a new spellBook other than the basic one
-		5). make basic mob drop a new spell book
-		6). add a way to access spell books
-		7). make it easier to add petals / make a shortcut for adding petals
-		8). make a stable radian var for all spell books		
+		4). make the game always update the spell books position based on the max spellbooks amount
+		5). make the a field of view that follows the player
+		6). add a new spellBook other than the basic one
+		7). make basic mob drop a new spell book
+		8). add a way to access spell books in game
 		100). add fire guided projectile
 		1000). add a place where npcs will go to when their kingdom is invaded
 		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
