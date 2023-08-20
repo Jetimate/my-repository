@@ -15,18 +15,18 @@
 			width: 100px;
 		}
 
-		div {
-			border: 1px solid blue;
-		}
+        div {
+            /*border: 1px solid blue;*/
+        }
 
-		#mycanvas {
-			border: 1px solid #d3d3d3;
-			background-color: #f1f1f1;
-			position: absolute;
-			z-index: -1;
-		}
+        #mycanvas {
+            border: 1px solid #d3d3d3;
+            background-color: #f1f1f1;
+            position: absolute;
+            z-index: -1;
+        }
 
-		#startGameMenu {
+		#mainMenu {
 			border: 1px solid blue;
 			position: absolute;
 			z-index: 1;
@@ -96,7 +96,7 @@
 </head>
 <body>
 	<canvas id="mycanvas"></canvas>
-	<div id="startGameMenu">
+	<div id="mainMenu">
 		<div class="containera">
 			<div class="item1a">
 				<button class="notstart">settings</button>
@@ -123,48 +123,49 @@
 	<script type="text/javascript" src="js/playable-character.js"></script>
 	<script type="text/javascript" src="js/spellbook.js"></script>
 	<script type="text/javascript" src="js/basicMob.js"></script>
+	<script type="text/javascript" src="js/button.js"></script>
 
 	<script>
 		let basicMobArray = [];
 		let spellBooks = [];
-        let spawnSpellBookTimeout = [];
-        let maxAmountBasicMob = 5;
+		let spawnSpellBookTimeout = [];
+		let maxAmountBasicMob = 5;
 		let maxSpellBooks = 4;
+        const canvas = document.getElementById("mycanvas");
+        const ctx = canvas.getContext("2d");
 		const pi = 3.14159;
-       
+
 		var myGameArea = {
 			activeButtons: [],
 			activeKeys: [],
-            validKeys: ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space", "ShiftLeft", "ShiftRight"],
+			validKeys: ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space", "ShiftLeft", "ShiftRight"],
 			canvas: document.getElementById("mycanvas"),
 			start: function () {
 				this.context = this.canvas.getContext("2d");
 				this.interval = setInterval(updateGameArea, 20);
-				window.addEventListener('keydown', function(e) {
+				window.addEventListener('keydown', function (e) {
 					var isKeyActive = myGameArea.activeKeys.indexOf(e.code) >= 0;
 					if (!isKeyActive) {
 						var isValidKey = myGameArea.validKeys.indexOf(e.code) >= 0;
 						if (isValidKey) {
-							myGameArea.activeKeys.push(e.code);                       
+							myGameArea.activeKeys.push(e.code);
 						}
 					}
 				});
-				window.addEventListener('keyup', function(e) {
+				window.addEventListener('keyup', function (e) {
 					var keyIndex = myGameArea.activeKeys.indexOf(e.code);
 					var isKeyActive = keyIndex >= 0;
 					if (isKeyActive) {
 						myGameArea.activeKeys.splice(keyIndex, 1);
 					}
 				});
-				//lets you use mouse buttons
-				//				this.canvas.addEventListener("mousedown", function (e) {
-				//					var isButtonActive = myGameArea.activeButtons.indexOf(e.button) >= 0;
-				//					if (!isButtonActive) {
-				//						myGameArea.activeButtons.push(e.button);
-				//					}
-				//					console.log(myGameArea.activeButtons);
-				//					console.log("mousedown");
-				//				});
+				window.addEventListener('click', function (e) {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    experienceBarButton.clickButton(x, y);
+                    healthBarButton.clickButton(x, y);
+                });
 			},
 			clear: function () {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -174,37 +175,30 @@
 			}
 		}
 		function startGame() {
+			for (var i = 0; i < spawnSpellBookTimeout.length; i++) {
+				clearTimeout(spawnSpellBookTimeout[i]);
+			}
+			spawnSpellBookTimeout = [];
             myGameArea.activeKeys = [];
             basicMobArray = [];
 			spellBooks = [];
-            for (var i = 0; i < spawnSpellBookTimeout.length; i++) {
-                clearTimeout(spawnSpellBookTimeout[i]);
-			}
-			spawnSpellBookTimeout = [];
-			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 150, 10);
-            spawnBasicMob();
+		    myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0);		
+            experienceBarButton = new Button(5, 5, 200, 50, [5], "grey", "experience: " + myGameCharacter.experience);
+            healthBarButton = new Button(5, 60, 200, 50, [5], "grey", "health: " + myGameCharacter.health);
+			spawnBasicMob();
 			myGameArea.start();
-			myGameCharacter.update();
-			basicMobArray.forEach(item => {
-				item.update();
-			});
 			spellBooksKeeper();
-			var startGameMenuVariable = document.getElementById("startGameMenu");
-			startGameMenuVariable.remove();
+			var mainMenuVariable = document.getElementById("mainMenu");
+			if (mainMenuVariable) {
+				mainMenuVariable.remove();
+			}
 		}
 
 		function spellBooksKeeper() {
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#fff', 0, 45, 20, 70, 1, 10, 1500), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 1, 45, 20, 70, 1, 10, 1500), 10);
+			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#fff', 0, 45, 20, 70, 1, 10, 1500), 10);
+			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 1, 45, 20, 70, 1, 10, 1500), 10);
 			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#000', 2, 45, 20, 70, 1, 10, 1500), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#ff0', 3, 45, 20, 70, 1, 10, 1500), 10);
-//			for (var i = 0; i < spellBooks.length; i++) {
-//				if (i > 0) {
-//					spellBooks[i].radian = ((i * pi) / maxSpellBooks) * 2;
-//				}
-//				console.log(spellBooks[i].radian);
-//				console.log("something");
-//			}
+			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#ff0', 3, 45, 20, 70, 1, 10, 1500), 10);
 		}
 		function spellBooksUpdater() {
 			spellBooks.forEach(spellBook => {
@@ -230,10 +224,12 @@
 			myGameCharacter.update();
 			basicMobArray.forEach(basicMob => {
 				basicMob.update();
-			});	
+			});			
+			experienceBarButton.draw(ctx);
+            healthBarButton.draw(ctx);
 			// death
 			if (crashWith(myGameCharacter, basicMobArray)) {
-				alert("game over");			
+				alert("game over");
 				myGameArea.stop();
 				startGame();
 			}
@@ -272,7 +268,7 @@
 				if (key == "Space") {
 					spellBooks.forEach(spellBook => {
 						if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
-							spellBook.orbitRadius += 2;		
+							spellBook.orbitRadius += 2;
 						}
 					});
 				}
@@ -288,18 +284,19 @@
 		}
 		function spawnBasicMob() {
 			let me = this;
-            setTimeout(function () {
-                if (basicMobArray.length < maxAmountBasicMob) {
-                    let basicMobRandomX = Math.floor((Math.random() * 1000) + 10);
-                    let basicMobRandomY = Math.floor((Math.random() * 1000) + 10);
-                    let basicMobRandomRadiusXHealth = Math.floor((Math.random() * 70) + 10);
-                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", basicMobRandomRadiusXHealth, 1);
-                    basicMobArray.push(newBasicMob);
+			setTimeout(function () {
+				if (basicMobArray.length < maxAmountBasicMob) {
+					let basicMobRandomX = Math.floor((Math.random() * (1500 - 100 + 1)) + 100);
+					let basicMobRandomY = Math.floor((Math.random() * (1000 - 100 + 1)) + 100);
+					let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 10 + 1)) + 10);
+					let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
+                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", basicMobRandomRadiusXHealth, 1, basicMobRandomExperienceDrop);
+					basicMobArray.push(newBasicMob);
 					if (basicMobArray.length < maxAmountBasicMob) {
 						me.spawnBasicMob();
 					}
-                }
-            }, 3000);
+				}
+			}, 3000);
 		}
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
@@ -309,12 +306,12 @@
 				if (spellBooks.length > 0) {
 					spellBook1Radian = spellBooks[0].radian;
 					newSpellBook.radian = (spellBook1Radian - (spellBooks[0].positionIndex * radianMultiplier)) + (radianMultiplier * spellBook.positionIndex);
-                    console.log(spellBooks[0].radian);
+//                    console.log("spellBook radian: " + spellBooks[0].radian);
 				}
 				else {
 					newSpellBook.radian = 0;
-				}				
-				spellBooks.push(newSpellBook);         
+				}
+				spellBooks.push(newSpellBook);
 			}, delay)
 			);
 		}
@@ -341,21 +338,26 @@
 					if (hasCrashed) {
 						result = hasCrashed;
 						if (basicMob.health > spellBook.damage) {
-                            basicMob.health -= spellBook.damage;
+							basicMob.health -= spellBook.damage;
 							basicMob.radius -= spellBook.damage;
 							spellBook.health -= basicMob.damage;
-						}	else if (basicMob.health <= spellBook.damage) {
+						} else if (basicMob.health <= spellBook.damage) {
 							spellBook.health -= basicMob.damage;
+// bugged part
+                            console.log(basicMob.health);
+                            console.log(spellBook.health);
+							myGameCharacter.experience += basicMob.experienceDrop;
+                            experienceBarButton.text = "experience: " + myGameCharacter.experience;
 							basicMobs.splice(basicMobIndex, 1);
 							spawnBasicMob();
 						}
-                        if (spellBook.health <= 0) {
-                            var spellBookIndex = spellBooks.indexOf(spellBook);
-                            spellBooks.splice(spellBookIndex, 1);
-                            if (spellBooks.length < maxSpellBooks) {
-                                spawnSpellBook(spellBook, spellBook.respawnTime);
-                            }
-                        }
+						if (spellBook.health <= 0) {
+							var spellBookIndex = spellBooks.indexOf(spellBook);
+							spellBooks.splice(spellBookIndex, 1);
+							if (spellBooks.length < maxSpellBooks) {
+								spawnSpellBook(spellBook, spellBook.respawnTime);
+							}
+						}
 						basicMob.update();
 					}
 					basicMobIndex++;
@@ -368,24 +370,32 @@
 			let b = circle2.x - circle1.x;
 			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
-		/*	tasks:	
-		1). mob knocks back player instead of killing
-		2). basic mob version 2 (this one moves but doesnt attack)			
-		3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
-		4). make the game always update the spell books position based on the max spellbooks amount
-		5). make the a field of view that follows the player
-		6). add a new spellBook other than the basic one
-		7). make basic mob drop a new spell book
-		8). add a way to access spell books in game
-		100). add fire guided projectile
-		1000). add a place where npcs will go to when their kingdom is invaded
-		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
-		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
-		1003). squads/teams will be a thing where friends can play together
-		1004). there should be a local gamemode so people can still have fun
-		1005). only add some ads
-		1006). ranks should be a thing
-		*/
+/*	
+tasks:
+1). add exp and levels
+1). basic mob version 2 (this one moves but doesnt attack)
+2). mob knocks back player instead of killing
+3). add a player health bar
+3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
+4). make the game always update the spell books position based on the max spellbooks amount
+5). make the a field of view that follows the player
+6). add a new spellBook other than the basic one
+7). make basic mob drop a new spell book
+8). add a way to access spell books in game
+100). add fire guided projectile
+1000). add a place where npcs will go to when their kingdom is invaded
+1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
+1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
+1003). squads/teams will be a thing where friends can play together
+1004). there should be a local gamemode so people can still have fun
+1005). only add some ads
+1006). ranks should be a thing
+1007). a spellBook that progressively gets stronger the more mobs you kill
+
+bugs to fix:
+1). buttons multiple when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies
+2). the spell book issue happens when a spell book hits 2 very low health basic mob at the same time.
+*/
 	</script>
 </body>
 </html>

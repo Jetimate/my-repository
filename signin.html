@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <form>
+        <div>
+            <label for="Username">Username: </label>
+            <input type="text" id="Username" />
+        </div>
+        <div>
+            <label for="Password">Password: </label>
+            <input type="password" id="Password" />
+        </div>
+        <div>
+            <button id="btnLogin" type="button" onclick="login()">Login</button>
+        </div>
+    </form>
+
+    <script>
+        async function login() {
+            var username = document.querySelector("#Username").value;
+            var password = document.querySelector("#Password").value;
+
+            var url = `https://localhost:7064/api/Users?username=${username}&password=${password}`;
+            const response = await fetch(url);
+            console.log(response);
+            if (response.ok) {
+                alert("Login succeeded");
+                document.location.href = "/spelz.io ingame.html";
+            }
+                
+            else
+                alert("Login failed");
+
+            //fetch(url, {
+            //    "headers": {
+            //        "accept": "*/*",
+            //        "accept-language": "en-PH,en-US;q=0.9,en;q=0.8",
+            //        "sec-ch-ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
+            //        "sec-ch-ua-mobile": "?0",
+            //        "sec-ch-ua-platform": "\"Windows\"",
+            //        "sec-fetch-dest": "empty",
+            //        "sec-fetch-mode": "cors",
+            //        "sec-fetch-site": "same-origin"
+            //    },
+            //    "body": null,
+            //    "method": "GET",
+            //    "mode": "cors",
+            //    "credentials": "omit"
+            //}).then(result => {
+            //        if (result)
+            //            alert("Login succeeded");
+            //        else
+            //            alert("Login failed");
+            //    }                
+
+            //);
+
+            console.log("Download complete", response);
+
+        }
+    </script>
+</body>
+</html>
