@@ -131,7 +131,8 @@
 		let spawnSpellBookTimeout = [];
 		let maxAmountBasicMob = 5;
 		let maxSpellBooks = 4;
-        const canvas = document.getElementById("mycanvas");
+		let maxExperience = 20;
+		const canvas = document.getElementById("mycanvas");
         const ctx = canvas.getContext("2d");
 		const pi = 3.14159;
 
@@ -162,7 +163,8 @@
 				window.addEventListener('click', function (e) {
                     const rect = canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+					const y = e.clientY - rect.top;
+					levelBarButton.clickButton(x, y);
                     experienceBarButton.clickButton(x, y);
                     healthBarButton.clickButton(x, y);
                 });
@@ -182,9 +184,10 @@
             myGameArea.activeKeys = [];
             basicMobArray = [];
 			spellBooks = [];
-		    myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0);		
-            experienceBarButton = new Button(5, 5, 200, 50, [5], "grey", "experience: " + myGameCharacter.experience);
-            healthBarButton = new Button(5, 60, 200, 50, [5], "grey", "health: " + myGameCharacter.health);
+			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0, 0);		
+			levelBarButton = new Button(5, 5, 200, 50, [5], "grey", "level: " + myGameCharacter.level);
+            experienceBarButton = new Button(5, 60, 200, 50, [5], "grey", "experience: " + myGameCharacter.experience);
+            healthBarButton = new Button(5, 115, 200, 50, [5], "grey", "health: " + myGameCharacter.health);
 			spawnBasicMob();
 			myGameArea.start();
 			spellBooksKeeper();
@@ -224,7 +227,8 @@
 			myGameCharacter.update();
 			basicMobArray.forEach(basicMob => {
 				basicMob.update();
-			});			
+			});	
+			levelBarButton.draw(ctx);
 			experienceBarButton.draw(ctx);
             healthBarButton.draw(ctx);
 			// death
@@ -298,6 +302,18 @@
 				}
 			}, 3000);
 		}
+		function levelUp() {		
+			if (myGameCharacter.experience >= maxExperience) {
+				myGameCharacter.experience -= maxExperience;
+				maxExperience += 10;
+				myGameCharacter.level += 1;
+				console.log(maxExperience);
+				console.log("exp reached maximum capacity");
+			}
+			experienceBarButton.text = "experience: " + myGameCharacter.experience;
+            levelBarButton.text = "level: " + myGameCharacter.level;
+//			console.log("function called");
+		}
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;
@@ -344,10 +360,10 @@
 						} else if (basicMob.health <= spellBook.damage) {
 							spellBook.health -= basicMob.damage;
 // bugged part
-                            console.log(basicMob.health);
-                            console.log(spellBook.health);
-							myGameCharacter.experience += basicMob.experienceDrop;
-                            experienceBarButton.text = "experience: " + myGameCharacter.experience;
+//                            console.log(basicMob.health);
+ //                           console.log(spellBook.health);
+							myGameCharacter.experience += basicMob.experienceDrop;							
+							levelUp();
 							basicMobs.splice(basicMobIndex, 1);
 							spawnBasicMob();
 						}
@@ -393,7 +409,7 @@ tasks:
 1007). a spellBook that progressively gets stronger the more mobs you kill
 
 bugs to fix:
-1). buttons multiple when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies
+1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies
 2). the spell book issue happens when a spell book hits 2 very low health basic mob at the same time.
 */
 	</script>
