@@ -286,6 +286,18 @@
 				}
 			}
 		}
+        function levelUp() {
+            if (myGameCharacter.experience >= maxExperience) {
+                myGameCharacter.experience -= maxExperience;
+                maxExperience += 10;
+                myGameCharacter.level += 1;
+                console.log(maxExperience);
+                console.log("exp reached maximum capacity");
+            }
+            experienceBarButton.text = "experience: " + myGameCharacter.experience;
+            levelBarButton.text = "level: " + myGameCharacter.level;
+            //			console.log("function called");
+        }
 		function spawnBasicMob() {
 			let me = this;
 			setTimeout(function () {
@@ -302,18 +314,6 @@
 				}
 			}, 3000);
 		}
-		function levelUp() {		
-			if (myGameCharacter.experience >= maxExperience) {
-				myGameCharacter.experience -= maxExperience;
-				maxExperience += 10;
-				myGameCharacter.level += 1;
-				console.log(maxExperience);
-				console.log("exp reached maximum capacity");
-			}
-			experienceBarButton.text = "experience: " + myGameCharacter.experience;
-            levelBarButton.text = "level: " + myGameCharacter.level;
-//			console.log("function called");
-		}
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;
@@ -327,6 +327,8 @@
 				else {
 					newSpellBook.radian = 0;
 				}
+//3rd game issue
+				console.log("the third game issue(spell book health): " + newSpellBook.health);
 				spellBooks.push(newSpellBook);
 			}, delay)
 			);
@@ -360,8 +362,8 @@
 						} else if (basicMob.health <= spellBook.damage) {
 							spellBook.health -= basicMob.damage;
 // bugged part
-//                            console.log(basicMob.health);
- //                           console.log(spellBook.health);
+                            console.log(basicMob.health);
+                            console.log(spellBook.health);
 							myGameCharacter.experience += basicMob.experienceDrop;							
 							levelUp();
 							basicMobs.splice(basicMobIndex, 1);
@@ -408,9 +410,10 @@ tasks:
 1006). ranks should be a thing
 1007). a spellBook that progressively gets stronger the more mobs you kill
 
-bugs to fix:
-1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies
+game issues to fix:
+1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies.
 2). the spell book issue happens when a spell book hits 2 very low health basic mob at the same time.
+3). the spell book health keeps going down and doesnt go back up even when a new one is spawned.
 */
 	</script>
 </body>
