@@ -317,6 +317,7 @@
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;
+//4th game issue. the new spellBook gets it's data from a dead spell book
 				let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.radius, spellBook.color, spellBook.positionIndex, spellBook.normalOrbitRadius, spellBook.defendOrbitRadius, spellBook.attackOrbitRadius, spellBook.health, spellBook.damage, spellBook.respawnTime);
 				let radianMultiplier = (pi / maxSpellBooks) * 2;
 				if (spellBooks.length > 0) {
@@ -329,6 +330,7 @@
 				}
 //3rd game issue
 				console.log("the third game issue(spell book health): " + newSpellBook.health);
+                console.log("the 4th game issue: " + spellBook.x + "Y: " + spellBook.y);
 				spellBooks.push(newSpellBook);
 			}, delay)
 			);
@@ -414,6 +416,7 @@ game issues to fix:
 1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies.
 2). the spell book issue happens when a spell book hits 2 very low health basic mob at the same time.
 3). the spell book health keeps going down and doesnt go back up even when a new one is spawned.
+4). read code line 320.
 */
 	</script>
 </body>
