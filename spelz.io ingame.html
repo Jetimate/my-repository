@@ -135,6 +135,16 @@
 		const canvas = document.getElementById("mycanvas");
         const ctx = canvas.getContext("2d");
 		const pi = 3.14159;
+		const basicSpellBook = {
+			radius: 10,
+			color: "white",
+			normalOrbitRadius: 45,
+			defendOrbitRadius: 20,
+			attackOrbitRadius: 70,
+			health: 1,
+            damage: 10,
+            respawnTime: 1500
+        };
 
 		var myGameArea = {
 			activeButtons: [],
@@ -184,10 +194,10 @@
             myGameArea.activeKeys = [];
             basicMobArray = [];
 			spellBooks = [];
-			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0, 0);		
+			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0, 0);
 			levelBarButton = new Button(5, 5, 200, 50, [5], "grey", "level: " + myGameCharacter.level);
-            experienceBarButton = new Button(5, 60, 200, 50, [5], "grey", "experience: " + myGameCharacter.experience);
-            healthBarButton = new Button(5, 115, 200, 50, [5], "grey", "health: " + myGameCharacter.health);
+            experienceBarButton = new Button(5, 60, 200, 50, [5], "#ff0", "experience: " + myGameCharacter.experience);
+            healthBarButton = new Button(5, 115, 200, 50, [5], "#eb1000", "health: " + myGameCharacter.health);
 			spawnBasicMob();
 			myGameArea.start();
 			spellBooksKeeper();
@@ -198,10 +208,10 @@
 		}
 
 		function spellBooksKeeper() {
-			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#fff', 0, 45, 20, 70, 1, 10, 1500), 10);
-			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#f0f', 1, 45, 20, 70, 1, 10, 1500), 10);
-			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#000', 2, 45, 20, 70, 1, 10, 1500), 10);
-			spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, 10, '#ff0', 3, 45, 20, 70, 1, 10, 1500), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 0, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 1, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 2, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 3, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
 		}
 		function spellBooksUpdater() {
 			spellBooks.forEach(spellBook => {
@@ -302,8 +312,8 @@
 			let me = this;
 			setTimeout(function () {
 				if (basicMobArray.length < maxAmountBasicMob) {
-					let basicMobRandomX = Math.floor((Math.random() * (1500 - 100 + 1)) + 100);
-					let basicMobRandomY = Math.floor((Math.random() * (1000 - 100 + 1)) + 100);
+					let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+					let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
 					let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 10 + 1)) + 10);
 					let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
                     let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "#1db555", basicMobRandomRadiusXHealth, 1, basicMobRandomExperienceDrop);
@@ -317,20 +327,15 @@
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;
-//4th game issue. the new spellBook gets it's data from a dead spell book
-				let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.radius, spellBook.color, spellBook.positionIndex, spellBook.normalOrbitRadius, spellBook.defendOrbitRadius, spellBook.attackOrbitRadius, spellBook.health, spellBook.damage, spellBook.respawnTime);
+                let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, spellBook.positionIndex, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime);
 				let radianMultiplier = (pi / maxSpellBooks) * 2;
 				if (spellBooks.length > 0) {
 					spellBook1Radian = spellBooks[0].radian;
 					newSpellBook.radian = (spellBook1Radian - (spellBooks[0].positionIndex * radianMultiplier)) + (radianMultiplier * spellBook.positionIndex);
-//                    console.log("spellBook radian: " + spellBooks[0].radian);
 				}
 				else {
 					newSpellBook.radian = 0;
 				}
-//3rd game issue
-				console.log("the third game issue(spell book health): " + newSpellBook.health);
-                console.log("the 4th game issue: " + spellBook.x + "Y: " + spellBook.y);
 				spellBooks.push(newSpellBook);
 			}, delay)
 			);
@@ -364,8 +369,6 @@
 						} else if (basicMob.health <= spellBook.damage) {
 							spellBook.health -= basicMob.damage;
 // bugged part
-                            console.log(basicMob.health);
-                            console.log(spellBook.health);
 							myGameCharacter.experience += basicMob.experienceDrop;							
 							levelUp();
 							basicMobs.splice(basicMobIndex, 1);
@@ -392,13 +395,12 @@
 		}
 /*	
 tasks:
-1). add exp and levels
 1). basic mob version 2 (this one moves but doesnt attack)
 2). mob knocks back player instead of killing
 3). add a player health bar
 3). not pressing shift or spacebar makes the spell book act passively(it will move around but will still follow you)
 4). make the game always update the spell books position based on the max spellbooks amount
-5). make the a field of view that follows the player
+5). make a field of view that follows the player
 6). add a new spellBook other than the basic one
 7). make basic mob drop a new spell book
 8). add a way to access spell books in game
@@ -414,9 +416,7 @@ tasks:
 
 game issues to fix:
 1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies.
-2). the spell book issue happens when a spell book hits 2 very low health basic mob at the same time.
-3). the spell book health keeps going down and doesnt go back up even when a new one is spawned.
-4). read code line 320.
+2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice.
 */
 	</script>
 </body>
