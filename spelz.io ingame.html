@@ -126,6 +126,9 @@
 	<script type="text/javascript" src="js/button.js"></script>
 
 	<script>
+		let levelBarButton;
+		let experienceBarButton;
+		let healthBarButton;
 		let basicMobArray = [];
 		let spellBooks = [];
 		let spawnSpellBookTimeout = [];
@@ -194,10 +197,18 @@
             myGameArea.activeKeys = [];
             basicMobArray = [];
 			spellBooks = [];
+            maxExperience = 20;
+            console.log("max experience: " + maxExperience);
 			myGameCharacter = new PlayableCharacter(300, 300, 15, "yellow", 1, 10, 0, 0);
-			levelBarButton = new Button(5, 5, 200, 50, [5], "grey", "level: " + myGameCharacter.level);
-            experienceBarButton = new Button(5, 60, 200, 50, [5], "#ff0", "experience: " + myGameCharacter.experience);
-            healthBarButton = new Button(5, 115, 200, 50, [5], "#eb1000", "health: " + myGameCharacter.health);
+			if (levelBarButton == undefined) {
+				levelBarButton = new Button(5, 5, 200, 50, [5], "grey", "level: " + myGameCharacter.level);
+			}
+			if (experienceBarButton == undefined) {
+				experienceBarButton = new Button(5, 60, 200, 50, [5], "#ff0", "experience: " + myGameCharacter.experience);
+			}
+            if (healthBarButton == undefined) {
+				healthBarButton = new Button(5, 115, 200, 50, [5], "#eb1000", "health: " + myGameCharacter.health);
+			}
 			spawnBasicMob();
 			myGameArea.start();
 			spellBooksKeeper();
@@ -299,10 +310,9 @@
         function levelUp() {
             if (myGameCharacter.experience >= maxExperience) {
                 myGameCharacter.experience -= maxExperience;
-                maxExperience += 10;
+                maxExperience += 20;
                 myGameCharacter.level += 1;
-                console.log(maxExperience);
-                console.log("exp reached maximum capacity");
+                console.log("max experience: " + maxExperience);
             }
             experienceBarButton.text = "experience: " + myGameCharacter.experience;
             levelBarButton.text = "level: " + myGameCharacter.level;
@@ -337,6 +347,7 @@
 					newSpellBook.radian = 0;
 				}
 				spellBooks.push(newSpellBook);
+				console.log(spellBook.radian);
 			}, delay)
 			);
 		}
@@ -416,7 +427,7 @@ tasks:
 
 game issues to fix:
 1). buttons multiply when the player dies(restarting the game by command ingame) we need to remove buttons before restarting the game after the player dies.
-2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice.
+2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice and deletes 2 spellbooks.
 */
 	</script>
 </body>

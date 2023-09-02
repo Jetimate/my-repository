@@ -10,8 +10,9 @@ class BasicMob extends Mob {
 }
 
 class StageTwoMob extends Mob {
-	constructor(x, y, radius, color, health, damage) {
+	constructor(x, y, radius, color, health, damage, experienceDrop) {
 		super(x, y, radius, color, health, damage);
+		this.experienceDrop = experienceDrop;
 		this.startingPos = {
 			x, y
 		}
