@@ -1,6 +1,6 @@
 class PlayableCharacter extends Mob {
-	constructor(x, y, radius, color, health, damage, experience, level) {
-		super(x, y, radius, color, health, damage);
+	constructor(x, y, radius, color, health, damage, type, experience, level) {
+		super(x, y, radius, color, health, damage, type);
 		this.experience = experience;
 		this.level = level;
 		this.startingPos = {

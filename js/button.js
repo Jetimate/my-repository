@@ -24,11 +24,11 @@ class Button {
     }
 	
 	clickButton(xmouse, ymouse) {
-		console.log("window x: " + xmouse + " window y: " + ymouse);
+//		console.log("window x: " + xmouse + " window y: " + ymouse);
 		const distance = 
 		Math.sqrt(xmouse >= this.xPoint && xmouse < this.width + this.xPoint && ymouse >= this.yPoint && ymouse < this.height + this.yPoint);
 		if (distance) {
-			console.log("true");
+			console.log("a canvas button was clicked");
 		}
 	}
 }
