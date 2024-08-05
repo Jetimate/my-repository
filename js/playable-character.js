@@ -8,6 +8,6 @@ class PlayableCharacter extends Mob {
 		}
 		this.speedX = 0;
 	    this.speedY = 0;
-		this.speed = 4;		
+		this.speed = 0;		
 	}		
 }

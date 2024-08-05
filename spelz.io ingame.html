@@ -134,7 +134,7 @@
 		let spawnSpellBookTimeout = [];
 		let maxAmountBasicMob = 5;
 		let maxAmountStage2Mob = 3;
-		let maxSpellBooks = 4;
+		let maxSpellBooks = 8;
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
         const ctx = canvas.getContext("2d");
@@ -157,7 +157,7 @@
 			canvas: document.getElementById("mycanvas"),
 			start: function () {
 				this.context = this.canvas.getContext("2d");
-				this.interval = setInterval(updateGameArea, 20);
+                this.interval = setInterval(updateGameArea, 20);
 				window.addEventListener('keydown', function (e) {
 					var isKeyActive = myGameArea.activeKeys.indexOf(e.code) >= 0;
 					if (!isKeyActive) {
@@ -196,7 +196,8 @@
 			}
 			spawnSpellBookTimeout = [];
             myGameArea.activeKeys = [];
-            basicMobArray = [];
+			basicMobArray = [];
+			stage2MobArray = [];
 			spellBooks = [];
 			maxExperience = 20;
             myGameCharacter = new PlayableCharacter(300, 300, 15, "smileyy.webp", 5, 0, "image", 0, 0);
@@ -227,6 +228,10 @@
             spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 1, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
             spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 2, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
             spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 3, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 4, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 5, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 6, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.color, 7, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
 		}
 		function spellBooksUpdater() {
 			spellBooks.forEach(spellBook => {
@@ -255,18 +260,23 @@
 				basicMob.update();
 			});	
             stage2MobArray.forEach(stage2Mob => {
-                stage2Mob.update();
+				stage2Mob.update();
+				stage2Mob.newPos();
+                stage2Mob.move();
             });
 			levelBarButton.draw(ctx);
 			experienceBarButton.draw(ctx);
 			healthBarButton.draw(ctx);
 			// player and mob collision
-            if (crashWith(myGameCharacter, basicMobArray) || crashWith(myGameCharacter, stage2MobArray)) {
+		    if (playerCrashWith(myGameCharacter, basicMobArray) || playerCrashWith(myGameCharacter, stage2MobArray)) {
                 myGameCharacter.newPos();
+            }
+			// mob to mob collision
+			if (crashWith(stage2MobArray, basicMobArray) || crashWith(stage2MobArray, stage2MobArray)) {
+				myGameCharacter.newPos();
 			}
-
 			// hitting a basic mob
-            else if (crashWithSpellBook(spellBooks, basicMobArray) || crashWithSpellBook(spellBooks, stage2MobArray)) {
+            if (crashWithSpellBook(spellBooks, basicMobArray) || crashWithSpellBook(spellBooks, stage2MobArray)) {
                 myGameCharacter.newPos();
 			}
 			//not moving anything
@@ -278,7 +288,7 @@
 			}
             myGameCharacter.moveAngle = 0;
             myGameCharacter.speed = 0;
-			var gameSpeed = myGameCharacter.speed;
+//			var gameSpeed = myGameCharacter.speed;
 
 			for (var i = 0; i < myGameArea.activeKeys.length; i++) {
 				var key = myGameArea.activeKeys[i];
@@ -345,14 +355,14 @@
                     let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
                     let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
                     let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-                    let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "green2.webp", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop);
-					stage2MobArray.push(newStage2Mob);
+                    let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "spider.png", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
+					stage2MobArray.push(newStage2Mob);                 
                     if (stage2MobArray.length < maxAmountStage2Mob) {
                         me.spawnStage2Mob();
                     }
                 }
             }, 4000);
-        }
+		}
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;
@@ -370,38 +380,74 @@
 			}, delay)
 			);
 		}
-        function crashWith(mob1, mob2) {
+        function crashWith(mob1Array, mob2Array) {
 			let result = false;
-            mob2.forEach(mob2 => {
-                let radii = mob1.radius + mob2.radius;
-                let distance = getDistance(mob1, mob2);
-				let hasCrashed = distance < radii;
-				if (hasCrashed) {
-					result = hasCrashed;
-                    const dx = mob2.x - mob1.x;
-                    const dy = mob2.y - mob1.y;
-                    // Calculate knockback direction
-                    const angle = Math.atan2(dy, dx);
-					const knockbackDistance = 1;
-					// Apply knockback
-					for (let i = 0; i < 20; i++) {	
-                        mob1.update();
-                        mob1.x -= Math.cos(angle) * knockbackDistance;
-                        mob1.y -= Math.sin(angle) * knockbackDistance;
-                        mob2.x += Math.cos(angle) * knockbackDistance;
-                        mob2.y += Math.sin(angle) * knockbackDistance;                     
+			mob1Array = mob1Array;
+			mob1Array.forEach(mob1 => {
+				mob2Array = mob2Array;
+				mob2Array.forEach(mob2 => {
+					let radii = mob1.radius + mob2.radius;
+					let distance = getDistance(mob1, mob2);
+					let hasCrashed = distance < radii;
+					if (hasCrashed) {
+						result = hasCrashed;
+						const dx = mob2.x - mob1.x;
+						const dy = mob2.y - mob1.y;
+						// Calculate knockback direction
+						const angle = Math.atan2(dy, dx);
+						const knockbackDistance = 1;
+						// Apply knockback
+						for (let i = 0; i < 20; i++) {
+							mob1.x -= Math.cos(angle) * knockbackDistance;
+							mob1.y -= Math.sin(angle) * knockbackDistance;
+							mob2.x += Math.cos(angle) * knockbackDistance;
+							mob2.y += Math.sin(angle) * knockbackDistance;
+//							mob1.update();
+//							mob2.update();
+						}
+						mob1.health -= mob2.damage;
+						mob2.health -= mob1.damage;
 					}
-                    mob1.health -= mob2.damage;
-                    healthBarButton.text = "health: " + mob1.health;
-                    if (mob1.health <= 0) {
-						alert("game over");
-						myGameArea.stop();
-						startGame();
-					}
-				}
+				});
 			});
 			return result;
 		}
+        function playerCrashWith(mob1, mob2Array) {
+        let result = false;
+            mob2Array = mob2Array;
+            mob2Array.forEach(mob2 => {
+                let radii = mob1.radius + mob2.radius;
+                let distance = getDistance(mob1, mob2);
+                let hasCrashed = distance < radii;
+                if (hasCrashed) {
+                   result = hasCrashed;
+                   const dx = mob2.x - mob1.x;
+                   const dy = mob2.y - mob1.y;
+                   // Calculate knockback direction
+                   const angle = Math.atan2(dy, dx);
+                   const knockbackDistance = 1;
+                   // Apply knockback
+                   for (let i = 0; i < 20; i++) {
+                       mob1.x -= Math.cos(angle) * knockbackDistance;
+                       mob1.y -= Math.sin(angle) * knockbackDistance;
+                       mob2.x += Math.cos(angle) * knockbackDistance;
+                       mob2.y += Math.sin(angle) * knockbackDistance;
+//                     mob1.update();
+//		               mob2.update();
+                   }
+                   mob1.health -= mob2.damage;
+                   mob2.health -= mob1.damage;
+                   // player to mob collision
+                   healthBarButton.text = "health: " + myGameCharacter.health;
+                   if (myGameCharacter.health <= 0) {
+                       alert("game over");
+                       myGameArea.stop();
+                       startGame();
+                   }
+                }
+            });            
+            return result;
+        }
 		function crashWithSpellBook(spellBooks, mob2Array) {
 			let result = false;
 			spellBooks.forEach(spellBook => {
@@ -456,13 +502,14 @@
 		}
 /*	
 tasks:
-1). basic mob version 2 (this one moves but doesnt attack)
-2). mob to mob knockback
-3). add currency to buy upgrades. you can earn currency when killing mobs or when leveling up
-4). add images
-5). add a new spellBook other than the basic one
-6). add fire guided projectile
-7). add player stats
+1). add images / done 08/02/24
+2). basic mob version 2 (this one moves but doesnt attack) / done 08/04/24
+3). mob to mob knockback
+4). update the way that the spellbooks follow the player
+4). add player stats(you can change your stats according to the max stats that youve earned; you can lower it to the lowest and increase it to the max stat that you have unlocked)
+5). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
+6). add a new spellBook other than the basic one
+7). add fire guided projectile
 8). make basic mob drop a new spell book
 9). make a field of view that follows the player
 10). add a way to access spell books in game

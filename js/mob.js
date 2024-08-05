@@ -19,7 +19,7 @@ class Mob {
 		x,y
 		}	
 	}		
-    update() {
+	update() {
 		var ctx = myGameArea.context;
 		ctx.save();
 		ctx.translate(this.x, this.y);
@@ -39,12 +39,46 @@ class Mob {
 		this.x += this.speed * Math.sin(this.angle);
 		this.y -= this.speed * Math.cos(this.angle);
 	}
+	move() {
+		switch (this.state) {
+			case 0:
+				if (this.frames < 120) {
+					this.frames++;
+				} else {
+					this.moveAngle = 0;
+					this.frames = 0;
+					setTimeout(() => this.update(), 2000);
+					this.state = 1;
+					return;
+				}
+				break;
+
+			case 1:
+				if (this.frames < 120) {
+					this.speed = 2;
+					// Ensure the entity stays within the canvas boundaries
+					if (this.x < this.radius) this.x = this.radius;
+					if (this.x > canvas.width - this.radius) this.x = canvas.width - this.radius;
+					if (this.y < this.radius) this.y = this.radius;
+					if (this.y > canvas.height - this.radius) this.y = canvas.height - this.radius;
+					this.frames++;
+				} else {
+					this.speed = 0;
+					this.frames = 0;
+					setTimeout(() => this.update(), 2000); // Stop for 2 seconds
+					this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
+					this.state = 0;
+					return;
+				}
+				break;
+
+		}
+	}
 }
 class BasicMob extends Mob {
 	constructor(x, y, radius, color, health, damage, type, intelligence, experienceDrop) {
 		super(x, y, radius, color, health, damage, type, intelligence);
 		this.experienceDrop = experienceDrop;
-		//		this.health = radius + 5;
 		this.startingPos = {
 			x, y
 		}
@@ -57,7 +91,7 @@ class BasicMob extends Mob {
 				let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
 				let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "green1.jpg", basicMobRandomRadiusXHealth, 1, "image", basicMobRandomExperienceDrop);
+				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "green1.jpg", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
 				basicMobArray.push(newBasicMob);
 				if (basicMobArray.length < maxAmountBasicMob) {
 					me.spawn();
@@ -68,15 +102,19 @@ class BasicMob extends Mob {
 }
 
 class Stage2Mob extends Mob {
-	constructor(x, y, radius, color, health, damage, type, intelligence, experienceDrop) {
+	constructor(x, y, radius, color, health, damage, type, intelligence, experienceDrop, state, frames) {
 		super(x, y, radius, color, health, damage, type, intelligence);
 		this.experienceDrop = experienceDrop;
+		this.state = state;
+		this.frames = frames;
 		this.startingPos = {
 			x, y
 		}
+		this.angle = 0;
+		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 		this.speedX = 0;
 		this.speedY = 0;
-		this.speed = 4;
+		this.speed = 0;
 	}
 	spawn() {
 	let me = this;
@@ -86,18 +124,12 @@ class Stage2Mob extends Mob {
 				let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
 				let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "green2.webp", stage2MobRandomRadiusXHealth, 1, "image", stage2MobRandomExperienceDrop);
+				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "spider.png", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
 				stage2MobArray.push(newStage2Mob);
 				if (stage2MobArray.length < maxAmountStage2Mob) {
 					me.spawn();
 				}
 			}
-		}, 4000);
-	}
-	move() {
-		let me = this;
-		setTimeout(function () {
-			
 		}, 4000);
 	}
 }
