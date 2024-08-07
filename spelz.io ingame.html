@@ -272,7 +272,11 @@
                 myGameCharacter.newPos();
             }
 			// mob to mob collision
-			if (crashWith(stage2MobArray, basicMobArray) || crashWith(stage2MobArray, stage2MobArray)) {
+            if (crashWith(stage2MobArray, basicMobArray) ||
+				crashWith(stage2MobArray, stage2MobArray)) {
+				myGameCharacter.newPos();
+			}
+			if (crashWith(basicMobArray, basicMobArray)) {
 				myGameCharacter.newPos();
 			}
 			// hitting a basic mob
@@ -335,8 +339,10 @@
 			let me = this;
 			setTimeout(function () {
 				if (basicMobArray.length < maxAmountBasicMob) {
-					let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-					let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+					// for x 1250 - 100 + 1)) + 100
+					// for y 750 - 100 + 1)) + 100
+					let basicMobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+					let basicMobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
 					let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 					let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
                     let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "green1.jpg", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
@@ -351,12 +357,13 @@
             let me = this;
             setTimeout(function () {
                 if (stage2MobArray.length < maxAmountStage2Mob) {
-                    let stage2MobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-                    let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let stage2MobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+                    let stage2MobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
                     let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
                     let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
                     let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "spider.png", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
-					stage2MobArray.push(newStage2Mob);                 
+					stage2MobArray.push(newStage2Mob);         
+                    console.log("mob health: " + newStage2Mob.health + " mob radius: " + newStage2Mob.radius);
                     if (stage2MobArray.length < maxAmountStage2Mob) {
                         me.spawnStage2Mob();
                     }
@@ -382,9 +389,7 @@
 		}
         function crashWith(mob1Array, mob2Array) {
 			let result = false;
-			mob1Array = mob1Array;
 			mob1Array.forEach(mob1 => {
-				mob2Array = mob2Array;
 				mob2Array.forEach(mob2 => {
 					let radii = mob1.radius + mob2.radius;
 					let distance = getDistance(mob1, mob2);
@@ -393,20 +398,22 @@
 						result = hasCrashed;
 						const dx = mob2.x - mob1.x;
 						const dy = mob2.y - mob1.y;
-						// Calculate knockback direction
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = 1;
-						// Apply knockback
-						for (let i = 0; i < 20; i++) {
-							mob1.x -= Math.cos(angle) * knockbackDistance;
-							mob1.y -= Math.sin(angle) * knockbackDistance;
-							mob2.x += Math.cos(angle) * knockbackDistance;
-							mob2.y += Math.sin(angle) * knockbackDistance;
-//							mob1.update();
-//							mob2.update();
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const minDistance = mob1.radius + mob2.radius;
+                        if (distance < minDistance) {
+							// Calculate knockback direction
+							const angle = Math.atan2(dy, dx);
+							const knockbackDistance = 1;
+							// Apply knockback
+							for (let i = 0; i < 5; i++) {
+								mob1.x -= Math.cos(angle) * knockbackDistance;
+								mob1.y -= Math.sin(angle) * knockbackDistance;
+								mob2.x += Math.cos(angle) * knockbackDistance;
+								mob2.y += Math.sin(angle) * knockbackDistance;
+								// mob1.update();
+								// mob2.update();
+							}
 						}
-						mob1.health -= mob2.damage;
-						mob2.health -= mob1.damage;
 					}
 				});
 			});
@@ -414,7 +421,6 @@
 		}
         function playerCrashWith(mob1, mob2Array) {
         let result = false;
-            mob2Array = mob2Array;
             mob2Array.forEach(mob2 => {
                 let radii = mob1.radius + mob2.radius;
                 let distance = getDistance(mob1, mob2);
@@ -422,7 +428,7 @@
                 if (hasCrashed) {
                    result = hasCrashed;
                    const dx = mob2.x - mob1.x;
-                   const dy = mob2.y - mob1.y;
+				   const dy = mob2.y - mob1.y;
                    // Calculate knockback direction
                    const angle = Math.atan2(dy, dx);
                    const knockbackDistance = 1;
@@ -437,6 +443,7 @@
                    }
                    mob1.health -= mob2.damage;
                    mob2.health -= mob1.damage;
+				   mob2.radius = mob2.health;
                    // player to mob collision
                    healthBarButton.text = "health: " + myGameCharacter.health;
                    if (myGameCharacter.health <= 0) {
@@ -451,9 +458,8 @@
 		function crashWithSpellBook(spellBooks, mob2Array) {
 			let result = false;
 			spellBooks.forEach(spellBook => {
-				var mob2Index = 0;
-				mob2Array = mob2Array;
-                mob2Array.forEach(mob2 => {
+                for (let mob2Index = 0; mob2Index < mob2Array.length; mob2Index++) {
+                    let mob2 = mob2Array[mob2Index];
                     let radii = spellBook.radius + mob2.radius;
                     let distance = getDistance(spellBook, mob2);
 					let hasCrashed = distance < radii;
@@ -461,18 +467,19 @@
 						result = hasCrashed;
                         if (mob2.health > spellBook.damage && mob2.health > 10) {
                             mob2.health -= spellBook.damage;
-                            mob2.radius -= spellBook.damage;
+                            mob2.radius = mob2.health;
                             spellBook.health -= mob2.damage;
                         } else if (mob2.health <= spellBook.damage || mob2.health <= 10) { 
                             spellBook.health -= mob2.damage;
 // bugged part
                             myGameCharacter.experience += mob2.experienceDrop;							
 							levelUp();
+							console.log("mob health: " + mob2.health + " mob radius: " + mob2.radius + " spellbook damage: " + spellBook.damage);
                             mob2Array.splice(mob2Index, 1);
 							mob2.spawn();
 						}
 						if (spellBook.health <= 0) {
-							var spellBookIndex = spellBooks.indexOf(spellBook);
+							let spellBookIndex = spellBooks.indexOf(spellBook);
 							spellBooks.splice(spellBookIndex, 1);
 							if (spellBooks.length < maxSpellBooks) {
 								spawnSpellBook(spellBook, spellBook.respawnTime);
@@ -490,8 +497,7 @@
                         mob2.x += Math.cos(angle) * knockbackDistance;
                         mob2.y += Math.sin(angle) * knockbackDistance;
 					}
-					mob2Index++;
-				});
+				}
 			});
 			return result;
 		}
@@ -504,17 +510,18 @@
 tasks:
 1). add images / done 08/02/24
 2). basic mob version 2 (this one moves but doesnt attack) / done 08/04/24
-3). mob to mob knockback
-4). update the way that the spellbooks follow the player
-4). add player stats(you can change your stats according to the max stats that youve earned; you can lower it to the lowest and increase it to the max stat that you have unlocked)
-5). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
-6). add a new spellBook other than the basic one
-7). add fire guided projectile
-8). make basic mob drop a new spell book
-9). make a field of view that follows the player
-10). add a way to access spell books in game
-11). not pressing shift or spacebar makes the spell book act passively(it will only follow you around)
-12). make the game always update the spell books position based on the max spellbooks amount
+3). mob to mob knockback / done 08/05/24
+4). mob to mob knockback version 2 / done 08/07/24
+5). update the way that the spellbooks follow the player
+6). add player stats(you can change your stats according to the max stats that youve earned; you can lower it to the lowest and increase it to the max stat that you have unlocked)
+7). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
+8). add a new spellBook other than the basic one
+9). add fire guided projectile
+10). make basic mob drop a new spell book
+11). make a field of view that follows the player
+12). add a way to access spell books in game
+13). not pressing shift or spacebar makes the spell book act passively(it will only follow you around)
+14). make the game always update the spell books position based on the max spellbooks amount
 101). hard level: fix the spellbook issue
 1000). add a place where npcs will go to when their kingdom is invaded
 1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded

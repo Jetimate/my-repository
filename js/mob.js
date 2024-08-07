@@ -87,8 +87,8 @@ class BasicMob extends Mob {
 		let me = this;
 		setTimeout(function () {
 			if (basicMobArray.length < maxAmountBasicMob) {
-				let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let basicMobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+				let basicMobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
 				let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
 				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "green1.jpg", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
@@ -120,8 +120,8 @@ class Stage2Mob extends Mob {
 	let me = this;
 		setTimeout(function () {
 			if (stage2MobArray.length < maxAmountStage2Mob) {
-				let stage2MobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let stage2MobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+				let stage2MobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
 				let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
 				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "spider.png", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
