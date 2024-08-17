@@ -6,8 +6,15 @@ class PlayableCharacter extends Mob {
 		this.startingPos = {
 		x,y
 		}
-		this.speedX = 0;
-	    this.speedY = 0;
+		this.movementX = 0;
+		this.movementY = 0;
 		this.speed = 0;		
 	}		
+	playerNewPos() {
+		this.angle += this.moveAngle * Math.PI / 180;
+		this.x += this.speed * Math.sin(this.angle);
+		this.y -= this.speed * Math.cos(this.angle);
+		myGameCharacter.x += myGameCharacter.movementX;
+		myGameCharacter.y += myGameCharacter.movementY;
+	}
 }
