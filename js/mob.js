@@ -12,6 +12,7 @@ class Mob {
 	this.damage = damage;
 	this.type = type;
 	this.intelligence = intelligence;
+	this.healthRegen = 0;
 	this.speed = 0;
 	this.angle = 0;
 	this.moveAngle = 0;
@@ -27,11 +28,13 @@ class Mob {
 		if (this.type == "image") {
 			ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
 		} //draw hitbox
+		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
 		ctx.strokeStyle = "blue";
 		ctx.stroke();
 		ctx.closePath();
+		*/
 		ctx.restore();
 	}      
 	newPos() {
@@ -87,11 +90,11 @@ class BasicMob extends Mob {
 		let me = this;
 		setTimeout(function () {
 			if (basicMobArray.length < maxAmountBasicMob) {
-				let basicMobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
-				let basicMobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+				let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+				let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
 				let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "green1.jpg", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
+				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "luminousRock.png", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
 				basicMobArray.push(newBasicMob);
 				if (basicMobArray.length < maxAmountBasicMob) {
 					me.spawn();
@@ -120,11 +123,11 @@ class Stage2Mob extends Mob {
 	let me = this;
 		setTimeout(function () {
 			if (stage2MobArray.length < maxAmountStage2Mob) {
-				let stage2MobRandomX = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
-				let stage2MobRandomY = Math.floor((Math.random() * (700 - 700 + 1)) + 700);
+				let stage2MobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+				let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
 				let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "spider.png", stage2MobRandomRadiusXHealth, 1, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
+				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "luminousSpirit.png", stage2MobRandomRadiusXHealth, 5, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
 				stage2MobArray.push(newStage2Mob);
 				if (stage2MobArray.length < maxAmountStage2Mob) {
 					me.spawn();
