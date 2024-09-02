@@ -148,13 +148,12 @@
 		let levelBarButton;
 		let experienceBarButton;
 		let healthBarButton;
-        let manaBarButton;
-		let basicMobArray = [];
-		let stage2MobArray = [];
+		let manaBarButton;
+		let mobsArray = [];
 		let spellBooks = [];
 		let spawnSpellBookTimeout = [];
-		let maxAmountBasicMob = 5;
-		let maxAmountStage2Mob = 3;
+        let maxAmountLuminousRock = 30;
+        let maxAmountLuminousSpirit = 15;
 		let maxSpellBooks = 2;
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
@@ -233,9 +232,7 @@
 				clearTimeout(spawnSpellBookTimeout[i]);
 			}
 			spawnSpellBookTimeout = [];
-            myGameArea.activeKeys = [];
-			basicMobArray = [];
-			stage2MobArray = [];
+			myGameArea.activeKeys = [];
 			spellBooks = [];
 			maxExperience = 20;
             myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", 90, 150, 0, "image", 0, 0, 0.01, 0.5);
@@ -250,9 +247,9 @@
 			}
             if (manaBarButton == undefined) {
                 manaBarButton = new Button(5, 170, 200, 50, [5], "#dbcff8", "mana: " + myGameCharacter.mana);
-            }
-			spawnBasicMob();
-			spawnStage2Mob();
+			}
+            spawnLuminousRock();
+            spawnLuminousSpirit();
 			myGameArea.start();
 			spellBooksKeeper();
 			var mainMenuVariable = document.getElementById("mainMenu");
@@ -294,32 +291,25 @@
 			myGameCharacter.regenerateHealth();
 			myGameCharacter.regenerateMana();
 			updatePlayerPosition();
-			basicMobArray.forEach(basicMob => {
-				basicMob.update();
+            mobsArray.forEach(mob => {
+				mob.update();
+                mob.newPos();
+                mob.move();
 			});	
-            stage2MobArray.forEach(stage2Mob => {
-				stage2Mob.update();
-				stage2Mob.newPos();
-                stage2Mob.move();
-            });
 			levelBarButton.draw(ctx);
 			experienceBarButton.draw(ctx);
 			healthBarButton.draw(ctx);
             manaBarButton.draw(ctx);
 			// player and mob collision
-		    if (playerCrashWith(myGameCharacter, basicMobArray) || playerCrashWith(myGameCharacter, stage2MobArray)) {
+            if (playerCrashWith(myGameCharacter, mobsArray)) {
                 myGameCharacter.playerNewPos();
             }
 			// mob to mob collision
-            if (crashWith(stage2MobArray, basicMobArray) ||
-				crashWith(stage2MobArray, stage2MobArray)) {
-                myGameCharacter.playerNewPos();
-			}
-			if (crashWith(basicMobArray, basicMobArray)) {
+            if (crashWith(mobsArray, mobsArray)) {
                 myGameCharacter.playerNewPos();
 			}
 			// hitting a basic mob
-            if (crashWithSpellBook(spellBooks, basicMobArray) || crashWithSpellBook(spellBooks, stage2MobArray)) {
+            if (crashWithSpellBook(spellBooks, mobsArray)) {
                 myGameCharacter.playerNewPos();
 			}
 			//updates when moving
@@ -406,40 +396,46 @@
             }
             experienceBarButton.text = "experience: " + myGameCharacter.experience;
             levelBarButton.text = "level: " + myGameCharacter.level;
-        }
-		function spawnBasicMob() {
+		}
+		function spawnLuminousRock() {
 			let me = this;
 			setTimeout(function () {
-				if (basicMobArray.length < maxAmountBasicMob) {
+                let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
+                if (totalLuminousRockCount <= maxAmountLuminousRock) {
 					// for x 1250 - 100 + 1)) + 100
 					// for y 750 - 100 + 1)) + 100
-                    let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-                    let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
-					let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-					let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-                    let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "luminousRock.png", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
-					basicMobArray.push(newBasicMob);
-					if (basicMobArray.length < maxAmountBasicMob) {
-						me.spawnBasicMob();
+                    let luminousRockRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+                    let luminousRockRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
+                    let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
+					let luminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, "luminousRock.png", luminousRockRandomRadiusXHealth, 1, "luminousRock", "passive", "nothing", 0, luminousRockRandomExperienceDrop, 0, 0);
+					mobsArray.push(luminousRock);
+                    console.log(mobsArray);
+                    console.log("totalLuminousRockCount: " + totalLuminousRockCount);
+                    if (totalLuminousRockCount <= maxAmountLuminousRock) {
+                        me.spawnLuminousRock();
 					}
 				}
-			}, 3000);
+            }, 1500);
 		}
-		function spawnStage2Mob() {		
-            let me = this;
-            setTimeout(function () {
-                if (stage2MobArray.length < maxAmountStage2Mob) {
-                    let stage2MobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-                    let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
-                    let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-                    let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-                    let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "luminousSpirit.png", stage2MobRandomRadiusXHealth, 5, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
-					stage2MobArray.push(newStage2Mob);         
-                    if (stage2MobArray.length < maxAmountStage2Mob) {
-                        me.spawnStage2Mob();
-                    }
-                }
-            }, 4000);
+		function spawnLuminousSpirit() {
+			let me = this;
+			setTimeout(function () {
+                let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
+                if (totalLuminousSpiritCount <= maxAmountLuminousSpirit) {
+                    let luminousSpiritRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+                    let luminousSpiritRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
+                    let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
+                    let luminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, "luminousSpirit.png", luminousSpiritRandomRadiusXHealth, 5, "luminousSpirit", "passive", "nothing", 1, luminousSpiritRandomExperienceDrop, 0, 0);
+					mobsArray.push(luminousSpirit);
+                    console.log(mobsArray);
+                    console.log("totalLuminousSpiritCount: " + totalLuminousSpiritCount);
+                    if (totalLuminousSpiritCount <= maxAmountLuminousSpirit) {
+                        me.spawnLuminousSpirit();
+					}
+				}
+            }, 2000);
 		}
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {

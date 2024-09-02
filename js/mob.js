@@ -1,17 +1,20 @@
 class Mob {
-	constructor(x, y, radius, color, health, damage, type, intelligence) {
-	if (type == "image") {
-		this.image = new Image();
-		this.image.src = color;
-	}
+	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
+	this.image = new Image();
+	this.image.src = appearance;
 	this.x = x;
 	this.y = y;
 	this.radius = radius;
-	this.color = color;  
+	this.appearance = appearance;  
 	this.health = health;
 	this.damage = damage;
+	this.mobName = mobName;
 	this.type = type;
+	this.ability = ability;
 	this.intelligence = intelligence;
+	this.experienceDrop = experienceDrop;
+	this.state = state;
+	this.frames = frames;
 	this.healthRegen = 0;
 	this.speed = 0;
 	this.angle = 0;
@@ -25,9 +28,8 @@ class Mob {
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
-		if (this.type == "image") {
-			ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-		} //draw hitbox
+		ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
+	    //draw hitbox
 		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
@@ -43,7 +45,7 @@ class Mob {
 		this.y -= this.speed * Math.cos(this.angle);
 	}
 	move() {
-		if (this.intelligence = 1) {
+		if (this.intelligence == 1) {
 			switch (this.state) {
 				case 0:
 					if (this.frames < 120) {
@@ -78,16 +80,15 @@ class Mob {
 
 			}			
 		}
-		else if (this.intelligence = 2) {
+		else if (this.intelligence == 2) {
 			//this means that the stage 2 mob attacks
 			console.log("hi");
 		}
 	}
 }
-class BasicMob extends Mob {
-	constructor(x, y, radius, color, health, damage, type, intelligence, experienceDrop) {
-		super(x, y, radius, color, health, damage, type, intelligence);
-		this.experienceDrop = experienceDrop;
+class LuminousRock extends Mob {
+	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
+		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
 		this.startingPos = {
 			x, y
 		}
@@ -95,50 +96,47 @@ class BasicMob extends Mob {
 	spawn() {
 		let me = this;
 		setTimeout(function () {
-			if (basicMobArray.length < maxAmountBasicMob) {
-				let basicMobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let basicMobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
-				let basicMobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let basicMobRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-				let newBasicMob = new BasicMob(basicMobRandomX, basicMobRandomY, basicMobRandomRadiusXHealth, "luminousRock.png", basicMobRandomRadiusXHealth, 1, "image", 0, basicMobRandomExperienceDrop);
-				basicMobArray.push(newBasicMob);
-				if (basicMobArray.length < maxAmountBasicMob) {
+			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
+			if (totalLuminousRockCount < maxAmountLuminousRock) {
+				let luminousRockRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+				let luminousRockRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
+				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
+				let luminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, "luminousRock.png", luminousRockRandomRadiusXHealth, 1, "luminousRock", "passive", "nothing", 0, luminousRockRandomExperienceDrop, 0, 0);
+				mobsArray.push(luminousRock);
+				if (totalLuminousRockCount <= maxAmountLuminousRock) {
 					me.spawn();
 				}
 			}
-		}, 3000);
+		}, 1500);
 	}
 }
 
-class Stage2Mob extends Mob {
-	constructor(x, y, radius, color, health, damage, type, intelligence, experienceDrop, state, frames) {
-		super(x, y, radius, color, health, damage, type, intelligence);
-		this.experienceDrop = experienceDrop;
-		this.state = state;
-		this.frames = frames;
+class LuminousSpirit extends Mob {
+	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
+		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
 		this.startingPos = {
 			x, y
 		}
 		this.angle = 0;
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
-		this.speedX = 0;
-		this.speedY = 0;
 		this.speed = 0;
 	}
 	spawn() {
-	let me = this;
+		let me = this;
 		setTimeout(function () {
-			if (stage2MobArray.length < maxAmountStage2Mob) {
-				let stage2MobRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let stage2MobRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
-				let stage2MobRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-				let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "luminousSpirit.png", stage2MobRandomRadiusXHealth, 5, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
-				stage2MobArray.push(newStage2Mob);
-				if (stage2MobArray.length < maxAmountStage2Mob) {
+			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
+			if (totalLuminousSpiritCount < maxAmountLuminousSpirit) {
+				let luminousSpiritRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+				let luminousSpiritRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
+				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
+				let luminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, "luminousSpirit.png", luminousSpiritRandomRadiusXHealth, 5, "luminousSpirit", "passive", "nothing", 1, luminousSpiritRandomExperienceDrop, 0, 0);
+				mobsArray.push(luminousSpirit);
+				if (totalLuminousSpiritCount <= maxAmountLuminousSpirit) {
 					me.spawn();
 				}
 			}
-		}, 4000);
+		}, 2000);
 	}
 }
