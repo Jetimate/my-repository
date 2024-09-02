@@ -43,38 +43,44 @@ class Mob {
 		this.y -= this.speed * Math.cos(this.angle);
 	}
 	move() {
-		switch (this.state) {
-			case 0:
-				if (this.frames < 120) {
-					this.frames++;
-				} else {
-					this.moveAngle = 0;
-					this.frames = 0;
-					setTimeout(() => this.update(), 2000);
-					this.state = 1;
-					return;
-				}
-				break;
+		if (this.intelligence = 1) {
+			switch (this.state) {
+				case 0:
+					if (this.frames < 120) {
+						this.frames++;
+					} else {
+						this.moveAngle = 0;
+						this.frames = 0;
+						setTimeout(() => this.update(), 2000);
+						this.state = 1;
+						return;
+					}
+					break;
 
-			case 1:
-				if (this.frames < 120) {
-					this.speed = 2;
-					// Ensure the entity stays within the canvas boundaries
-					if (this.x < this.radius) this.x = this.radius;
-					if (this.x > canvas.width - this.radius) this.x = canvas.width - this.radius;
-					if (this.y < this.radius) this.y = this.radius;
-					if (this.y > canvas.height - this.radius) this.y = canvas.height - this.radius;
-					this.frames++;
-				} else {
-					this.speed = 0;
-					this.frames = 0;
-					setTimeout(() => this.update(), 2000); // Stop for 2 seconds
-					this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
-					this.state = 0;
-					return;
-				}
-				break;
+				case 1:
+					if (this.frames < 120) {
+						this.speed = 2;
+						// Ensure the entity stays within the canvas boundaries
+						if (this.x < this.radius) this.x = this.radius;
+						if (this.x > canvas.width - this.radius) this.x = canvas.width - this.radius;
+						if (this.y < this.radius) this.y = this.radius;
+						if (this.y > canvas.height - this.radius) this.y = canvas.height - this.radius;
+						this.frames++;
+					} else {
+						this.speed = 0;
+						this.frames = 0;
+						setTimeout(() => this.update(), 2000); // Stop for 2 seconds
+						this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
+						this.state = 0;
+						return;
+					}
+					break;
 
+			}			
+		}
+		else if (this.intelligence = 2) {
+			//this means that the stage 2 mob attacks
+			console.log("hi");
 		}
 	}
 }

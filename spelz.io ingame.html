@@ -435,7 +435,6 @@
                     let stage2MobRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
                     let newStage2Mob = new Stage2Mob(stage2MobRandomX, stage2MobRandomY, stage2MobRandomRadiusXHealth, "luminousSpirit.png", stage2MobRandomRadiusXHealth, 5, "image", 1, stage2MobRandomExperienceDrop, 0, 0);
 					stage2MobArray.push(newStage2Mob);         
-                    console.log("mob health: " + newStage2Mob.health + " mob radius: " + newStage2Mob.radius);
                     if (stage2MobArray.length < maxAmountStage2Mob) {
                         me.spawnStage2Mob();
                     }
