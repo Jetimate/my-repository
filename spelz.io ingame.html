@@ -137,7 +137,6 @@
 			ShiftLeft: false,
 			ShiftRight: false,
 			Space: false,
-            KeyV: false,
             KeyB: false
 		};
         let xVelocity = 1;
@@ -152,8 +151,9 @@
 		let mobsArray = [];
 		let spellBooks = [];
 		let spawnSpellBookTimeout = [];
-        let maxAmountLuminousRock = 30;
-        let maxAmountLuminousSpirit = 15;
+        let maxAmountLuminousRock = 15;
+		let maxAmountLuminousSpirit = 10;
+		let maxAmountSpecter = 5;
 		let maxSpellBooks = 2;
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
@@ -249,7 +249,8 @@
                 manaBarButton = new Button(5, 170, 200, 50, [5], "#dbcff8", "mana: " + myGameCharacter.mana);
 			}
             spawnLuminousRock();
-            spawnLuminousSpirit();
+			spawnLuminousSpirit();
+			spawnSpecter();
 			myGameArea.start();
 			spellBooksKeeper();
 			var mainMenuVariable = document.getElementById("mainMenu");
@@ -265,37 +266,24 @@
             spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, 0, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
             spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, 1, basicSpellBook.normalOrbitRadius, basicSpellBook.defendOrbitRadius, basicSpellBook.attackOrbitRadius, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
             }
-		function spellBooksUpdater() {
-			spellBooks.forEach(spellBook => {
-				spellBook.startingPos = {
-					x: myGameCharacter.x,
-					y: myGameCharacter.y
-				}
-				if (spellBook.orbitRadius < spellBook.normalOrbitRadius) {
-					spellBook.orbitRadius += 1;
-				}
-				else if (spellBook.orbitRadius > spellBook.normalOrbitRadius) {
-					spellBook.orbitRadius -= 1;
-				}
-				spellBook.update();
-			});
-		}
 		function updateGameArea() {
 			// always updating
 			myGameArea.clear();
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
-			spellBooksUpdater();
+            mobsArray.forEach(mob => {
+                mob.update();
+                mob.newPos();
+                mob.interact();
+            });
+            spellBooks.forEach(spellBook => {
+                spellBook.update();
+            });
 			myGameCharacter.playerNewPos();
 			myGameCharacter.update();
 			myGameCharacter.regenerateHealth();
 			myGameCharacter.regenerateMana();
 			updatePlayerPosition();
-            mobsArray.forEach(mob => {
-				mob.update();
-                mob.newPos();
-                mob.move();
-			});	
 			levelBarButton.draw(ctx);
 			experienceBarButton.draw(ctx);
 			healthBarButton.draw(ctx);
@@ -320,26 +308,8 @@
 			myGameCharacter.movementY = 0;
 			myGameCharacter.moveAngle = 0;
 			myGameCharacter.speed = 0;
-            // attack/spacebar
-			if (keys.Space) {
-                spellBooks.forEach(spellBook => {
-                    if (spellBook.orbitRadius < spellBook.attackOrbitRadius) {
-						spellBook.orbitRadius += 2;
-                    }
-				});
-                myGameCharacter.playerNewPos();
-            }
-            // defend/shift
-			if (keys.ShiftLeft || keys.ShiftRight) {
-                spellBooks.forEach(spellBook => {
-                    if (spellBook.orbitRadius > spellBook.defendOrbitRadius) {
-                        spellBook.orbitRadius -= 2;
-                    }
-				});
-                myGameCharacter.playerNewPos();
-			}
 			// spawn more spellbooks
-            if (keys.KeyV) {
+            if (keys.Space) {
 				if (myGameCharacter.mana > 10) {
 					myGameCharacter.mana -= 10;
 					basicSpellBook.index += 1;
@@ -374,7 +344,7 @@
 				} else if (keys.KeyS || keys.ArrowDown) { // Down
 					myGameCharacter.angle = (1 * Math.PI);
 					myGameCharacter.speed = 1;
-				} else if (keys.KeyA || keys.ArrowLeft) { // Left
+                } else if (keys.KeyA || keys.ArrowLeft) { // Left
 					myGameCharacter.angle = (1.5 * Math.PI);
 					myGameCharacter.speed = 1;
 				} else if (keys.KeyD || keys.ArrowRight) { // Right
@@ -386,7 +356,8 @@
 		function playerDeath() {
             alert("game over");
             myGameArea.stop();
-            startGame();
+			startGame();
+			//wip
 		}
         function levelUp() {
             if (myGameCharacter.experience >= maxExperience) {
@@ -401,7 +372,7 @@
 			let me = this;
 			setTimeout(function () {
                 let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
-                if (totalLuminousRockCount <= maxAmountLuminousRock) {
+                if (totalLuminousRockCount < maxAmountLuminousRock) {
 					// for x 1250 - 100 + 1)) + 100
 					// for y 750 - 100 + 1)) + 100
                     let luminousRockRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
@@ -411,18 +382,17 @@
 					let luminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, "luminousRock.png", luminousRockRandomRadiusXHealth, 1, "luminousRock", "passive", "nothing", 0, luminousRockRandomExperienceDrop, 0, 0);
 					mobsArray.push(luminousRock);
                     console.log(mobsArray);
-                    console.log("totalLuminousRockCount: " + totalLuminousRockCount);
-                    if (totalLuminousRockCount <= maxAmountLuminousRock) {
+                    if (totalLuminousRockCount < maxAmountLuminousRock) {
                         me.spawnLuminousRock();
 					}
 				}
-            }, 1500);
+            }, 3000);
 		}
 		function spawnLuminousSpirit() {
 			let me = this;
 			setTimeout(function () {
                 let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
-                if (totalLuminousSpiritCount <= maxAmountLuminousSpirit) {
+                if (totalLuminousSpiritCount < maxAmountLuminousSpirit) {
                     let luminousSpiritRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
                     let luminousSpiritRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
                     let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
@@ -430,13 +400,29 @@
                     let luminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, "luminousSpirit.png", luminousSpiritRandomRadiusXHealth, 5, "luminousSpirit", "passive", "nothing", 1, luminousSpiritRandomExperienceDrop, 0, 0);
 					mobsArray.push(luminousSpirit);
                     console.log(mobsArray);
-                    console.log("totalLuminousSpiritCount: " + totalLuminousSpiritCount);
-                    if (totalLuminousSpiritCount <= maxAmountLuminousSpirit) {
+                    if (totalLuminousSpiritCount < maxAmountLuminousSpirit) {
                         me.spawnLuminousSpirit();
 					}
 				}
-            }, 2000);
+            }, 4000);
 		}
+        function spawnSpecter() {
+            let me = this;
+            setTimeout(function () {
+                let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
+                if (totalSpecterCount < maxAmountSpecter) {
+                    let specterRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
+                    let specterRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let specterRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
+                    let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
+                    let specter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, "specter.png", specterRandomRadiusXHealth, 5, "specter", "hostile", "nothing", 1, specterRandomExperienceDrop, 0, 0);
+                    mobsArray.push(specter);
+                    if (totalSpecterCount < maxAmountSpecter) {
+                        me.spawnSpecter();
+                    }
+                }
+            }, 8000);
+        }
 		function spawnSpellBook(spellBook, delay) {
 			spawnSpellBookTimeout.push(setTimeout(function () {
 				let spellBook1Radian = 0;

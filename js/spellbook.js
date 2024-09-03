@@ -24,9 +24,9 @@ class SpellBook {
 		this.damage = damage;
 		this.respawnTime = respawnTime;
 		this.startingPos = {
-			x,
-			y
-		};	
+			x: myGameCharacter.x,
+			y: myGameCharacter.y
+		}
     }
 
 	setTarget(x, y) {
