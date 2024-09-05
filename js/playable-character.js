@@ -24,16 +24,12 @@ class PlayableCharacter extends Mob {
 	}
 	regenerateHealth() {
 		if (this.health < this.maxHealth) {
-//			let playerHealth = myGameCharacter.health;
-//			let healthSubstringed = playerHealth.substring(0, 4)
 			this.health += this.healthRegen;
-			healthBarButton.text = "health: " + myGameCharacter.health;
 		}
 	}
 	regenerateMana() {
 		if (this.mana < this.maxMana) {
 			this.mana += this.manaRegen;
-			manaBarButton.text = "mana: " + myGameCharacter.mana;
 		}
 	}
 }

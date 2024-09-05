@@ -1,5 +1,5 @@
 class SpellBook {
-	constructor(x, y, radius, type, color, positionIndex, normalOrbitRadius, defendOrbitRadius, attackOrbitRadius, health, damage, respawnTime) {
+	constructor(x, y, radius, type, color, positionIndex, health, damage, respawnTime) {
 		if (type == "image") {
 			this.image = new Image();
 			this.image.src = color;
@@ -16,10 +16,6 @@ class SpellBook {
         this.radius = radius;
 		this.color = color;
 		this.positionIndex = positionIndex;
-		this.normalOrbitRadius = normalOrbitRadius;
-		this.defendOrbitRadius = defendOrbitRadius;
-		this.attackOrbitRadius = attackOrbitRadius;
-        this.orbitRadius = 10;
 		this.health = health;
 		this.damage = damage;
 		this.respawnTime = respawnTime;
@@ -90,12 +86,26 @@ class SpellBook {
 			this.x += this.speed * Math.sin(this.angle);
 			this.y -= this.speed * Math.cos(this.angle);
 		} else {
-			const targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * this.orbitRadius;
-			const targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * this.orbitRadius;
+			// Calculate target orbit position
+			const targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * (myGameCharacter.radius * 5);
+			const targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * (myGameCharacter.radius * 5);
+
+			// Calculate distance to target orbit position
+			const dx = targetX - this.x;
+			const dy = targetY - this.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			// Adjust speed based on the distance (e.g., speed scales with distance)
+			const minSpeed = this.speed / 4;
+			const maxSpeed = this.speed;
+			const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
+			const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
+
+			// Calculate the movement angle and update position
 			this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
-			this.positionIndex += 0.09;
-			this.x += this.speed * Math.sin(this.angle);
-			this.y -= this.speed * Math.cos(this.angle);
+			this.positionIndex += 0.01;
+			this.x += adjustedSpeed * Math.sin(this.angle);
+			this.y -= adjustedSpeed * Math.cos(this.angle);
 		}
 
 		this.handleCollisions();
