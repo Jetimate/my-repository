@@ -152,29 +152,29 @@
 		const pi = 3.14159;
 		const luminousRock = {
 			maxAmount: 15,
+            mobName: "luminousRock",
             appearance: "luminousRock.png",
             damage: 1,
-            mobName: "luminousRock",
             type: "passive",
             ability: "nothing",
             intelligence: 0,
 			respawnTime: 3000
 		};
         const luminousSpirit = {
-            maxAmount: 10,
+			maxAmount: 10,
+            mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             damage: 5,
-            mobName: "luminousSpirit",
             type: "passive",
             ability: "nothing",
             intelligence: 1,
             respawnTime: 4000
 		};
         const specter = {
-            maxAmount: 5,
+			maxAmount: 5,
+            mobName: "specter",
             appearance: "specter.png",
             damage: 5,
-            mobName: "specter",
             type: "hostile",
             ability: "nothing",
             intelligence: 1,
@@ -182,20 +182,25 @@
         };
 		const summonSpecter = {
 			maxAmount: 2,
+			name: "summonSpecter",
 			radius: 15,
 			appearance: "specter.png",
             index: 1,
 			health: 10,
-            damage: 5,
+			damage: 5,
+			speed: 3,
             respawnTime: 1500
 		};
-		const spikeSpelz = {
-			radius: 12,
-			appearance: "specter.png",
+		const castSpike = {
+			maxAmount: 2,
+			name: "castSpike",
+			radius: 15,
+			appearance: "spike.png",
             index: 1,
-            health: 10,
-            damage: 5,
-            respawnTime: 1500
+            health: 5,
+			damage: 10,
+			speed: 5,
+			respawnTime: 500
 		};
 		var myGameArea = {
 			canvas: document.getElementById("mycanvas"),
@@ -280,8 +285,10 @@
             addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
 		function spellsKeeper() {
-            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
-            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.respawnTime), summonSpecter.respawnTime);
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.maxAmount, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.respawnTime), summonSpecter.respawnTime);
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.maxAmount, 2, castSpike.health, castSpike.damage, castSpike.speed, castSpike.respawnTime), castSpike.respawnTime);
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.maxAmount, 3, castSpike.health, castSpike.damage, castSpike.speed, castSpike.respawnTime), castSpike.respawnTime);
             }
 		function updateGameArea() {
 			// always updating
@@ -295,6 +302,9 @@
             });
             spellsArray.forEach(spell => {
 				spell.update();
+                let currentSpellName = spell.name;
+                let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
+                console.log(spell.name + ": " + totalThisSpellCount + "> " + spell.maxAmount);
             });
 			myGameCharacter.playerNewPos();
 			myGameCharacter.update();
@@ -327,10 +337,10 @@
 			myGameCharacter.speed = 0;
 			//summon specters
             if (keys.Space) {
-				if (myGameCharacter.mana > 10) {
-					myGameCharacter.mana -= 10;
+				if (myGameCharacter.mana > 1) {
+					myGameCharacter.mana -= 1;
 					summonSpecter.index += 1;
-                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, summonSpecter.index, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
+                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.maxAmount, summonSpecter.index, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.respawnTime), 10);
                     myGameCharacter.playerNewPos();
 				}
 			}
@@ -393,14 +403,8 @@
 		}
         function castSpell(spell, delay) {
             castSpellTimeout.push(setTimeout(function () {
-				let newSpell = new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.appearance, spell.positionIndex, spell.health, spell.damage, spell.respawnTime);
-				console.log(myGameCharacter.x);
+                let newSpell = new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.respawnTime);
                 spellsArray.push(newSpell);
-            }, delay)
-            );
-		}
-		function shootSpike() {
-			castSpellTimeout.push(setTimeout(function () {
             }, delay)
             );
 		}
@@ -546,8 +550,11 @@
 						if (spell.health <= 0) {
 							let spellIndex = spellsArray.indexOf(spell);
 							spellsArray.splice(spellIndex, 1);
-							if (spellsArray.length < spell.maxAmount) {
-								castSpell(spell, delay);
+							let currentSpellName = spell.name;
+                            let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
+                            //console.log(spell.name + ": " + totalThisSpellCount + "> " + spell.maxAmount);
+                            if (totalThisSpellCount < spell.maxAmount) {
+								castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.respawnTime), spell.respawnTime);
 							}
 						}
                         mob2.update();

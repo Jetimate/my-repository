@@ -1,20 +1,22 @@
 class Spell {
-	constructor(x, y, radius, appearance, positionIndex, health, damage, respawnTime) {
+	constructor(x, y, radius, name, appearance, maxAmount, positionIndex, health, damage, speed, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.radian = 0;
-		this.speed = 3;
 		this.angle = 0;
 		this.moveAngle = 0;
 		this.targetX = null;
 		this.targetY = null;
         this.x = x;
         this.y = y;
-        this.radius = radius;
+		this.radius = radius;
+		this.name = name;
 		this.appearance = appearance;
+		this.maxAmount = maxAmount;
 		this.positionIndex = positionIndex;
 		this.health = health;
 		this.damage = damage;
+		this.speed = speed;
 		this.respawnTime = respawnTime;
 		this.startingPos = {
 			x: myGameCharacter.x,
@@ -83,8 +85,8 @@ class Spell {
 			this.y -= this.speed * Math.cos(this.angle);
 		} else {
 			// Calculate target orbit position
-			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / summonSpecter.maxAmount)) * (myGameCharacter.radius * 5);
-			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / summonSpecter.maxAmount)) * (myGameCharacter.radius * 5);
+			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
+			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
 
 			// Calculate distance to target orbit position
 			const dx = targetX - this.x;
