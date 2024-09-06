@@ -186,13 +186,20 @@
         };
 		const basicSpellBook = {
 			radius: 15,
-			type: "image",
-			color: "luminousSpirit.png",
+			appearance: "luminousSpirit.png",
             index: 1,
 			health: 10,
             damage: 5,
             respawnTime: 1500
-        };
+		};
+		const spikeSpelz = {
+			radius: 12,
+			appearance: "specter.png",
+            index: 1,
+            health: 10,
+            damage: 5,
+            respawnTime: 1500
+		};
 		var myGameArea = {
 			canvas: document.getElementById("mycanvas"),
 			start: function () {
@@ -276,8 +283,8 @@
             addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
 		function spellBooksKeeper() {
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, 0, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, 1, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, 0, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, 1, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
             }
 		function updateGameArea() {
 			// always updating
@@ -326,7 +333,7 @@
 				if (myGameCharacter.mana > 10) {
 					myGameCharacter.mana -= 10;
 					basicSpellBook.index += 1;
-					spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, basicSpellBook.index, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+                    spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, basicSpellBook.index, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
 					myGameCharacter.playerNewPos();
 				}
 			}
@@ -389,11 +396,16 @@
 		}
         function spawnSpellBook(spellBook, delay) {
             spawnSpellBookTimeout.push(setTimeout(function () {
-                let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.type, basicSpellBook.color, spellBook.positionIndex, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime);
+                let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, spellBook.positionIndex, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime);
                 spellBooks.push(newSpellBook);
             }, delay)
             );
-        }
+		}
+		function shootSpike() {
+			spawnSpellBookTimeout.push(setTimeout(function () {
+            }, delay)
+            );
+		}
 		function spawnLuminousRock() {
 			let me = this;
 			setTimeout(function () {

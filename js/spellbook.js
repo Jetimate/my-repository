@@ -1,10 +1,7 @@
 class SpellBook {
-	constructor(x, y, radius, type, color, positionIndex, health, damage, respawnTime) {
-		if (type == "image") {
-			this.image = new Image();
-			this.image.src = color;
-		}
-		this.type = type;
+	constructor(x, y, radius, appearance, positionIndex, health, damage, respawnTime) {
+		this.image = new Image();
+		this.image.src = appearance;
 		this.radian = 0;
 		this.speed = 3;
 		this.angle = 0;
@@ -14,7 +11,7 @@ class SpellBook {
         this.x = x;
         this.y = y;
         this.radius = radius;
-		this.color = color;
+		this.appearance = appearance;
 		this.positionIndex = positionIndex;
 		this.health = health;
 		this.damage = damage;
@@ -58,9 +55,8 @@ class SpellBook {
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);
-		if (this.type == "image") {
-			ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-		} 
+		ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
+		
 		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);	
