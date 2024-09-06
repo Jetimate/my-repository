@@ -121,7 +121,7 @@
 	</div>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playable-character.js"></script>
-	<script type="text/javascript" src="js/spellbook.js"></script>
+	<script type="text/javascript" src="js/spell.js"></script>
 	<script type="text/javascript" src="js/button.js"></script>
 
 	<script>
@@ -144,12 +144,8 @@
         let mouseY = 0;
 		let mobsArray = [];
 		let buttonsArray = [];
-		let spellBooks = [];
-		let spawnSpellBookTimeout = [];
-        let maxAmountLuminousRock = 15;
-		let maxAmountLuminousSpirit = 10;
-		let maxAmountSpecter = 5;
-		let maxSpellBooks = 2;
+		let spellsArray = [];
+		let castSpellTimeout = [];
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
         const ctx = canvas.getContext("2d");
@@ -184,9 +180,10 @@
             intelligence: 1,
             respawnTime: 8000
         };
-		const basicSpellBook = {
+		const summonSpecter = {
+			maxAmount: 2,
 			radius: 15,
-			appearance: "luminousSpirit.png",
+			appearance: "specter.png",
             index: 1,
 			health: 10,
             damage: 5,
@@ -256,12 +253,12 @@
             }
         });
 		function startGame() {
-			for (var i = 0; i < spawnSpellBookTimeout.length; i++) {
-				clearTimeout(spawnSpellBookTimeout[i]);
+            for (var i = 0; i < castSpellTimeout.length; i++) {
+                clearTimeout(castSpellTimeout[i]);
 			}
-			spawnSpellBookTimeout = [];
+            castSpellTimeout = [];
             buttonsArray = [];
-			spellBooks = [];
+			spellsArray = [];
             mobsArray = [];
 			maxExperience = 20;
             myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", 90, 1500, 0, "image", 0, 0, 0.01, 0.5);
@@ -270,7 +267,7 @@
 			spawnSpecter();
 			myGameArea.start();
 			buttonsKeeper();
-			spellBooksKeeper();
+			spellsKeeper();
 			var mainMenuVariable = document.getElementById("mainMenu");
 			if (mainMenuVariable) {
 				mainMenuVariable.remove();
@@ -282,9 +279,9 @@
             addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
             addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
-		function spellBooksKeeper() {
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, 0, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
-            spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, 1, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
+		function spellsKeeper() {
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
+            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
             }
 		function updateGameArea() {
 			// always updating
@@ -296,8 +293,8 @@
                 mob.newPos();
                 mob.interact();
             });
-            spellBooks.forEach(spellBook => {
-                spellBook.update();
+            spellsArray.forEach(spell => {
+				spell.update();
             });
 			myGameCharacter.playerNewPos();
 			myGameCharacter.update();
@@ -317,7 +314,7 @@
                 myGameCharacter.playerNewPos();
 			}
 			// hitting a basic mob
-            if (crashWithSpellBook(spellBooks, mobsArray)) {
+            if (crashWithSpell(spellsArray, mobsArray)) {
                 myGameCharacter.playerNewPos();
 			}
 			//updates when moving
@@ -328,20 +325,20 @@
 			myGameCharacter.movementY = 0;
 			myGameCharacter.moveAngle = 0;
 			myGameCharacter.speed = 0;
-			// spawn more spellbooks
+			//summon specters
             if (keys.Space) {
 				if (myGameCharacter.mana > 10) {
 					myGameCharacter.mana -= 10;
-					basicSpellBook.index += 1;
-                    spawnSpellBook(new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, basicSpellBook.index, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime), 10);
-					myGameCharacter.playerNewPos();
+					summonSpecter.index += 1;
+                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.appearance, summonSpecter.index, summonSpecter.health, summonSpecter.damage, summonSpecter.respawnTime), 10);
+                    myGameCharacter.playerNewPos();
 				}
 			}
-			//deletes spellbooks
+			//delete specters
 			if (keys.KeyB) {
-				if (basicSpellBook.index >= maxSpellBooks) {
-					spellBooks.splice(basicSpellBook.index, 1);
-					basicSpellBook.index -= 1;
+				if (summonSpecter.index >= summonSpecter.maxAmount) {
+                    spellsArray.splice(summonSpecter.index, 1);
+                    summonSpecter.index -= 1;
 					myGameCharacter.playerNewPos();
 				}
             }
@@ -376,9 +373,9 @@
 		function playerDeath() {
 			alert("game over");
 			myGameArea.stop();
-            spawnSpellBookTimeout = [];
+            castSpellTimeout = [];
             buttonsArray = [];
-            spellBooks = [];
+            spellsArray = [];
             mobsArray = [];
             startGame();
 			//wip
@@ -394,15 +391,16 @@
 			let newButton = new Button(button.xPoint, button.yPoint, button.width, button.height, button.radii, button.color, button.name, button.text);
 			buttonsArray.push(newButton);
 		}
-        function spawnSpellBook(spellBook, delay) {
-            spawnSpellBookTimeout.push(setTimeout(function () {
-                let newSpellBook = new SpellBook(myGameCharacter.x, myGameCharacter.y, basicSpellBook.radius, basicSpellBook.appearance, spellBook.positionIndex, basicSpellBook.health, basicSpellBook.damage, basicSpellBook.respawnTime);
-                spellBooks.push(newSpellBook);
+        function castSpell(spell, delay) {
+            castSpellTimeout.push(setTimeout(function () {
+				let newSpell = new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.appearance, spell.positionIndex, spell.health, spell.damage, spell.respawnTime);
+				console.log(myGameCharacter.x);
+                spellsArray.push(newSpell);
             }, delay)
             );
 		}
 		function shootSpike() {
-			spawnSpellBookTimeout.push(setTimeout(function () {
+			castSpellTimeout.push(setTimeout(function () {
             }, delay)
             );
 		}
@@ -523,44 +521,44 @@
             });            
             return result;
         }
-		function crashWithSpellBook(spellBooks, mob2Array) {
+		function crashWithSpell(spellsArray, mob2Array) {
 			let result = false;
-			spellBooks.forEach(spellBook => {
+			spellsArray.forEach(spell => {
                 for (let mob2Index = 0; mob2Index < mob2Array.length; mob2Index++) {
                     let mob2 = mob2Array[mob2Index];
-                    let radii = spellBook.radius + mob2.radius;
-                    let distance = getDistance(spellBook, mob2);
+                    let radii = spell.radius + mob2.radius;
+                    let distance = getDistance(spell, mob2);
 					let hasCrashed = distance < radii;
 					if (hasCrashed) {
 						result = hasCrashed;
-                        if (mob2.health > spellBook.damage && mob2.health > 15) {
-                            mob2.health -= spellBook.damage;
+                        if (mob2.health > spell.damage && mob2.health > 15) {
+                            mob2.health -= spell.damage;
                             mob2.radius = mob2.health;
-                            spellBook.health -= mob2.damage;
-                        } else if (mob2.health <= spellBook.damage || mob2.health <= 15) { 
-                            spellBook.health -= mob2.damage;
+                            spell.health -= mob2.damage;
+                        } else if (mob2.health <= spell.damage || mob2.health <= 15) { 
+                            spell.health -= mob2.damage;
 // bugged part
                             myGameCharacter.experience += mob2.experienceDrop;							
 							levelUp();
                             mob2Array.splice(mob2Index, 1);
 							mob2.spawn();
 						}
-						if (spellBook.health <= 0) {
-							let spellBookIndex = spellBooks.indexOf(spellBook);
-							spellBooks.splice(spellBookIndex, 1);
-							if (spellBooks.length < maxSpellBooks) {
-								spawnSpellBook(spellBook, spellBook.respawnTime);
+						if (spell.health <= 0) {
+							let spellIndex = spellsArray.indexOf(spell);
+							spellsArray.splice(spellIndex, 1);
+							if (spellsArray.length < spell.maxAmount) {
+								castSpell(spell, delay);
 							}
 						}
                         mob2.update();
-                        const dx = mob2.x - spellBook.x;
-                        const dy = mob2.y - spellBook.y;
+                        const dx = mob2.x - spell.x;
+                        const dy = mob2.y - spell.y;
                         // Calculate knockback direction
                         const angle = Math.atan2(dy, dx);
                         const knockbackDistance = 2;
                         // Apply knockback
-                        spellBook.x -= Math.cos(angle) * knockbackDistance;
-                        spellBook.y -= Math.sin(angle) * knockbackDistance;
+                        spell.x -= Math.cos(angle) * knockbackDistance;
+                        spell.y -= Math.sin(angle) * knockbackDistance;
                         mob2.x += Math.cos(angle) * knockbackDistance;
                         mob2.y += Math.sin(angle) * knockbackDistance;
 					}

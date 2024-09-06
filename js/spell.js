@@ -1,4 +1,4 @@
-class SpellBook {
+class Spell {
 	constructor(x, y, radius, appearance, positionIndex, health, damage, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
@@ -27,25 +27,25 @@ class SpellBook {
 		this.targetY = y;
 	}
 	handleCollisions() {
-		for (let i = 0; i < spellBooks.length; i++) {
-			for (let j = i + 1; j < spellBooks.length; j++) {
-				const spellBookA = spellBooks[i];
-				const spellBookB = spellBooks[j];
+		for (let i = 0; i < spellsArray.length; i++) {
+			for (let j = i + 1; j < spellsArray.length; j++) {
+				const spellA = spellsArray[i];
+				const spellB = spellsArray[j];
 
-				const dx = spellBookB.x - spellBookA.x;
-				const dy = spellBookB.y - spellBookA.y;
+				const dx = spellB.x - spellA.x;
+				const dy = spellB.y - spellA.y;
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
-				if (distance < spellBookA.radius + spellBookB.radius) {
+				if (distance < spellA.radius + spellB.radius) {
 					// Calculate knockback direction
 					const angle = Math.atan2(dy, dx);
-					const knockbackDistance = (spellBookA.radius + spellBookB.radius - distance) / 2;
+					const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
 					// Apply knockback
-					spellBookA.x -= Math.cos(angle) * knockbackDistance;
-					spellBookA.y -= Math.sin(angle) * knockbackDistance;
-					spellBookB.x += Math.cos(angle) * knockbackDistance;
-					spellBookB.y += Math.sin(angle) * knockbackDistance;
+					spellA.x -= Math.cos(angle) * knockbackDistance;
+					spellA.y -= Math.sin(angle) * knockbackDistance;
+					spellB.x += Math.cos(angle) * knockbackDistance;
+					spellB.y += Math.sin(angle) * knockbackDistance;
 				}
 			}
 		}
@@ -71,7 +71,7 @@ class SpellBook {
     }
 	update() {
 		if (isMouseDown) {
-			spellBooks.forEach(spellBook => spellBook.setTarget(mouseX, mouseY));
+			spellsArray.forEach(spell => spell.setTarget(mouseX, mouseY));
 			let mouseXStabilizer = mouseX % this.speed;
 			mouseX -= mouseXStabilizer;
 			let mouseYStabilizer = mouseY % this.speed;
@@ -83,8 +83,8 @@ class SpellBook {
 			this.y -= this.speed * Math.cos(this.angle);
 		} else {
 			// Calculate target orbit position
-			const targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * (myGameCharacter.radius * 5);
-			const targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / maxSpellBooks)) * (myGameCharacter.radius * 5);
+			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / summonSpecter.maxAmount)) * (myGameCharacter.radius * 5);
+			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / summonSpecter.maxAmount)) * (myGameCharacter.radius * 5);
 
 			// Calculate distance to target orbit position
 			const dx = targetX - this.x;
