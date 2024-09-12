@@ -327,9 +327,9 @@
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
         function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, "cast", "castSpike"));
-            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, "summon", "summonSpirit"));
-            addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, "summon", "summonSpecter"));
+            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 60, "cast", "castSpike"));
+            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
+            addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
         }
 		function spellsKeeper() {
             castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
@@ -442,7 +442,7 @@
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook) {
-			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.ability, spellBook.text)
+			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.cooldown, spellBook.ability, spellBook.text)
 			spellBooksArray.push(newSpellBook);
             //(xPoint, yPoint, width, height, radii, appearance, name, ability, text)
 		}

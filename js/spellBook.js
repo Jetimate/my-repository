@@ -1,7 +1,9 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, ability, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, cooldown, ability, text) {
 		this.image = new Image();
 		this.image.src = appearance;
+		this.cooldownTimer = 0; // Initialize cooldown timer
+		this.skillReady = true;  // Skill can be used initially
 		this.x = x;
 		this.y = y;
 		this.index = index;
@@ -12,6 +14,7 @@ class SpellBook {
 		this.appearance = appearance;
 		this.name = name;
 		this.spell = spell;
+		this.cooldown = cooldown;
 		this.ability = ability;
 		this.text = text;
 	}
@@ -50,39 +53,51 @@ class SpellBook {
 
 	update() {
 		if (this.index === 1) {
-			if (keys.Digit1) {
+			if (keys.Digit1 && this.skillReady) {
 				skill1 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill1 && !skill1Used) {
-				this.borderColor = "black"
+				this.borderColor = "black";
 				this.interact();
 				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill1 = false;
 				skill1Used = true;
+				this.skillReady = false;
 			}
 		}
 		if (this.index === 2) {
-			if (keys.Digit2) {
+			if (keys.Digit2 && this.skillReady) {
 				skill2 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill2 && !skill2Used) {
-				this.borderColor = "black"
+				this.borderColor = "black";
 				this.interact();
 				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill2 = false;
 				skill2Used = true;
+				this.skillReady = false;
 			}
 		}
 		if (this.index === 3) {
-			if (keys.Digit3) {
+			if (keys.Digit3 && this.skillReady) {
 				skill3 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill3 && !skill3Used) {
-				this.borderColor = "black"
+				this.borderColor = "black";
 				this.interact();
 				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill3 = false;
 				skill3Used = true;
+				this.skillReady = false;
+			}
+		}
+		if (!this.skillReady) {
+			this.cooldownTimer++;
+			this.borderColor = "red";
+			if (this.cooldownTimer >= this.cooldown) {
+				this.borderColor = "black";
+				this.skillReady = true;  // Skill becomes ready again
+				this.cooldownTimer = 0;  // Reset the cooldown timer
 			}
 		}
 		this.draw(ctx)
