@@ -2,8 +2,8 @@ class SpellBook {
 	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, cooldown, ability, text) {
 		this.image = new Image();
 		this.image.src = appearance;
-		this.cooldownTimer = 0; // Initialize cooldown timer
-		this.skillReady = true;  // Skill can be used initially
+		this.cooldownTimer = 0;
+		this.skillReady = true;
 		this.x = x;
 		this.y = y;
 		this.index = index;
@@ -37,9 +37,7 @@ class SpellBook {
 			castMouseX = mouseX;
 			castMouseY = mouseY;
 			for (let i = 0; i < this.spell.castAmount; i++) {
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
-				//this.spell.index += 1;
-				console.log(this.spell.index);
+				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
 			}
 		}
 		if (this.ability === "summon" && myGameCharacter.mana > this.spell.manaCost) {

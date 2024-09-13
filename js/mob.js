@@ -20,11 +20,13 @@ class Mob {
 	this.angle = 0;
 	this.moveAngle = 0;
 	this.FOVRadius = radius;
-	this.startingPos = {
-		x,y
-		}	
+	this.timeoutId = null;
+	this.isDead = false;
 	}		
 	update() {
+		if (this.isDead) {
+			return;
+		}
 		var ctx = myGameArea.context;
 		ctx.save();
 		ctx.translate(this.x, this.y);
@@ -49,7 +51,19 @@ class Mob {
 		this.targetX = x;
 		this.targetY = y;
 	}
+	die() {
+		// Set the isDead flag to true
+		this.isDead = true;
+
+		// If there are any pending timeouts, clear them
+		if (this.timeoutId) {
+			clearTimeout(this.timeoutId);
+		}
+	}
 	interact() {
+		if (this.isDead) {
+			return;
+		}
 		if (this.intelligence == 1) {
 			switch (this.state) {
 				case 0:
@@ -58,9 +72,8 @@ class Mob {
 					} else {
 						this.moveAngle = 0;
 						this.frames = 0;
-						setTimeout(() => this.update(), 2000);
 						this.state = 1;
-						return;
+						this.timeoutId = setTimeout(() => this.update(), 2000);
 					}
 					break;
 
@@ -76,10 +89,9 @@ class Mob {
 					} else {
 						this.speed = 0;
 						this.frames = 0;
-						setTimeout(() => this.update(), 2000); // Stop for 2 seconds
 						this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 						this.state = 0;
-						return;
+						this.timeoutId = setTimeout(() => this.update(), 2000);
 					}
 					break;
 
@@ -106,12 +118,9 @@ class Mob {
 class LuminousRock extends Mob {
 	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
 		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
-		this.startingPos = {
-			x, y
-		}
 	}
 	spawn() {
-		let me = this;
+		//let me = this;
 		setTimeout(function () {
 			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
@@ -125,7 +134,7 @@ class LuminousRock extends Mob {
 				mobsArray.push(newLuminousRock);
 				console.log(mobsArray);
 				if (totalLuminousRockCount < luminousRock.maxAmount) {
-					me.spawn();
+					spawnLuminousRock();
 				}
 			}
 		}, luminousRock.respawnTime);
@@ -135,13 +144,10 @@ class LuminousRock extends Mob {
 class LuminousSpirit extends Mob {
 	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
 		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
-		this.startingPos = {
-			x, y
-		}
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
-		let me = this;
+		//let me = this;
 		setTimeout(function () {
 			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
@@ -153,7 +159,7 @@ class LuminousSpirit extends Mob {
 				mobsArray.push(newLuminousSpirit);
 				console.log(mobsArray);
 				if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-					me.spawn();
+					spawnLuminousSpirit();
 				}
 			}
 		}, luminousSpirit.respawnTime);
@@ -162,14 +168,11 @@ class LuminousSpirit extends Mob {
 class Specter extends Mob {
 	constructor(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames) {
 		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
-		this.startingPos = {
-			x, y
-		}
 		this.FOVRadius = 250;
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
-		let me = this;
+		//let me = this;
 		setTimeout(function () {
 			let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 			if (totalSpecterCount < specter.maxAmount) {
@@ -180,7 +183,7 @@ class Specter extends Mob {
 				let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
 				mobsArray.push(newSpecter);
 				if (totalSpecterCount < specter.maxAmount) {
-					me.spawn();
+					spawnSpecter();
 				}
 			}
 		}, specter.respawnTime);

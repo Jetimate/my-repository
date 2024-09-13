@@ -23,10 +23,6 @@ class Spell {
 		this.ability = ability;
 		this.manaCost = manaCost;
 		this.respawnTime = respawnTime;
-		this.startingPos = {
-			x: myGameCharacter.x,
-			y: myGameCharacter.y
-		}
     }
 
 	setTarget(x, y) {
@@ -36,7 +32,6 @@ class Spell {
 	destroy() {
 		let spellIndex = spellsArray.indexOf(this);
 		if (spellIndex > -1) {
-			console.log(spellIndex);
 			spellsArray.splice(spellIndex, 1);
 		}
 	}

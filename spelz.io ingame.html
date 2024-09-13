@@ -164,9 +164,9 @@
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
 		const ctx = canvas.getContext("2d");
-		const pi = 3.14159;
+		//const pi = 3.14159;
 		const luminousRock = {
-			maxAmount: 15,
+			maxAmount: 5,
 			mobName: "luminousRock",
 			appearance: "luminousRock.png",
 			damage: 1,
@@ -176,7 +176,7 @@
 			respawnTime: 3000
 		};
 		const luminousSpirit = {
-			maxAmount: 0,
+			maxAmount: 3,
 			mobName: "luminousSpirit",
 			appearance: "luminousSpirit.png",
 			damage: 1,
@@ -186,7 +186,7 @@
 			respawnTime: 4000
 		};
 		const specter = {
-			maxAmount: 0,
+			maxAmount: 2,
 			mobName: "specter",
 			appearance: "specter.png",
 			damage: 3,
@@ -224,13 +224,13 @@
 			respawnTime: 1500
 		};
 		const castSpike = {
-			castAmount: 5,
+			castAmount: 1,
 			maxAmount: 0,
 			name: "castSpike",
-			radius: 12,
+			radius: 60,
 			appearance: "spike.png",
 			index: 1,
-			health: 5,
+			health: 50,
 			damage: 5,
 			speed: 10,
 			ability: "cast",
@@ -454,7 +454,7 @@
 			);
 		}
 		function spawnLuminousRock() {
-			let me = this;
+			//let me = this;
 			setTimeout(function () {
 				let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 				if (totalLuminousRockCount < luminousRock.maxAmount) {
@@ -468,13 +468,13 @@
 					mobsArray.push(newLuminousRock);
 					//console.log(mobsArray);
 					if (totalLuminousRockCount < luminousRock.maxAmount) {
-						me.spawnLuminousRock();
+						spawnLuminousRock();
 					}
 				}
 			}, luminousRock.respawnTime);
 		}
 		function spawnLuminousSpirit() {
-			let me = this;
+			//let me = this;
 			setTimeout(function () {
 				let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 				if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
@@ -486,13 +486,13 @@
 					mobsArray.push(newLuminousSpirit);
 					console.log(mobsArray);
 					if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-						me.spawnLuminousSpirit();
+						spawnLuminousSpirit();
 					}
 				}
 			}, luminousSpirit.respawnTime);
 		}
 		function spawnSpecter() {
-			let me = this;
+			//let me = this;
 			setTimeout(function () {
 				let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 				if (totalSpecterCount < specter.maxAmount) {
@@ -503,7 +503,7 @@
 					let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
 					mobsArray.push(newSpecter);
 					if (totalSpecterCount < specter.maxAmount) {
-						me.spawnSpecter();
+						spawnSpecter();
 					}
 				}
 			}, specter.respawnTime);
@@ -585,10 +585,11 @@
 							mob2.radius = mob2.health;
 							spell.health -= mob2.damage;
 						} else if (mob2.health <= spell.damage || mob2.health <= 15) {
-							spell.health -= mob2.damage;
-							// bugged part
+							//spell.health -= mob2.damage;
+                            // bugged part
 							myGameCharacter.experience += mob2.experienceDrop;
 							levelUp();
+							mob2.die();
 							mob2Array.splice(mob2Index, 1);
 							mob2.spawn();
 						}
@@ -643,7 +644,6 @@
 		game issues to fix:
 		2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice and deletes 2 spellbooks.
 		3). mobs don't spawn properly whenever the game over feature is activated
-		4). stage 2 mobs get draw updated to their death position when dying.
 		*/
 	</script>
 </body>
