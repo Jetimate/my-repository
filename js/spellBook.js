@@ -51,7 +51,7 @@ class SpellBook {
 
 	update() {
 		if (this.index === 1) {
-			if (keys.Digit1 && this.skillReady) {
+			if (keys.Digit1 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
 				skill1 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill1 && !skill1Used) {
@@ -64,7 +64,7 @@ class SpellBook {
 			}
 		}
 		if (this.index === 2) {
-			if (keys.Digit2 && this.skillReady) {
+			if (keys.Digit2 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
 				skill2 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill2 && !skill2Used) {
@@ -77,7 +77,7 @@ class SpellBook {
 			}
 		}
 		if (this.index === 3) {
-			if (keys.Digit3 && this.skillReady) {
+			if (keys.Digit3 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
 				skill3 = true;
 				this.borderColor = "green";
 			} else if (isMouseDown && skill3 && !skill3Used) {

@@ -196,41 +196,41 @@
 			respawnTime: 8000
 		};
 		const summonSpirit = {
-			castAmount: 3,
+			castAmount: 8,
             maxAmount: 5,
             name: "summonSpirit",
             radius: 15,
             appearance: "luminousSpirit.png",
             index: 1,
             health: 10,
-            damage: 1,
+            damage: 3,
             speed: 3,
 			ability: "summon",
             manaCost: 20,
             respawnTime: 1000
         };
 		const summonSpecter = {
-			castAmount: 2,
+			castAmount: 5,
 			maxAmount: 2,
 			name: "summonSpecter",
 			radius: 15,
 			appearance: "specter.png",
 			index: 1,
 			health: 10,
-			damage: 3,
-			speed: 3,
+			damage: 5,
+			speed: 5,
 			ability: "summon",
             manaCost: 30,
 			respawnTime: 1500
 		};
 		const castSpike = {
-			castAmount: 1,
+			castAmount: 2,
 			maxAmount: 0,
 			name: "castSpike",
-			radius: 60,
+			radius: 15,
 			appearance: "spike.png",
 			index: 1,
-			health: 50,
+			health: 5,
 			damage: 5,
 			speed: 10,
 			ability: "cast",
@@ -307,7 +307,7 @@
 			spellsArray = [];
 			mobsArray = [];
 			maxExperience = 20;
-			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", 90, 1500, 0, 0, 0, 0.01, 0.5);
+			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", 90, 200, 0, 0, 0, 0.01, 0.02);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
 			spawnSpecter();
@@ -327,13 +327,13 @@
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
         function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 60, "cast", "castSpike"));
-            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
-            addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
+            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 30, "cast", "castSpike"));
+            //addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
+            //addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
         }
 		function spellsKeeper() {
-            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
-            castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
+            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
+            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
             //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 2, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
             //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 3, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
 		}
@@ -383,40 +383,31 @@
 			myGameCharacter.moveAngle = 0;
 			myGameCharacter.speed = 0;
 
-			//summon specters
-			if (keys.Space) {
-				if (myGameCharacter.mana > 1) {
-					myGameCharacter.mana -= 1;
-					castSpike.index += 1;
-                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, castSpike.index, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), 10);
-					myGameCharacter.playerNewPos();
-				}
-			}
 			function updatePlayerPosition() {
 				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
 					myGameCharacter.angle = (1.75 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
 					myGameCharacter.angle = (2.25 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
 					myGameCharacter.angle = (1.25 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
 					myGameCharacter.angle = (0.75 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if (keys.KeyW || keys.ArrowUp) { // Up
 					myGameCharacter.angle = (2 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if (keys.KeyS || keys.ArrowDown) { // Down
 					myGameCharacter.angle = (1 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if (keys.KeyA || keys.ArrowLeft) { // Left
 					myGameCharacter.angle = (1.5 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				} else if (keys.KeyD || keys.ArrowRight) { // Right
 					myGameCharacter.angle = (0.5 * Math.PI);
-					myGameCharacter.speed = 1;
+					myGameCharacter.speed = 1.5;
 				}
 			}
 		}
@@ -435,6 +426,14 @@
 				myGameCharacter.experience -= maxExperience;
 				maxExperience += 20;
 				myGameCharacter.level += 1;
+				myGameCharacter.maxHealth += 5;
+				myGameCharacter.manaRegen += 0.001;
+				if (myGameCharacter.level == 5) {
+                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 300, "summon", "summonSpirit"));
+				}
+				if (myGameCharacter.level == 10) {
+                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 420, "summon", "summonSpecter"));
+				}
 			}
 		}
 		function addButton(button) {
