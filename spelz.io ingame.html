@@ -124,6 +124,7 @@
 	<script type="text/javascript" src="js/spellBook.js"></script>
 	<script type="text/javascript" src="js/spell.js"></script>
 	<script type="text/javascript" src="js/button.js"></script>
+	<script type="text/javascript" src="js/background.js"></script>
 
 	<script>
 		const keys = {
@@ -156,6 +157,13 @@
 		let castMouseY = 0;
 		let mouseClickX = 0;
 		let mouseClickY = 0;
+        let camera = {
+            x: 0,  // Camera's x position (top-left corner of the viewport)
+            y: 0,  // Camera's y position (top-left corner of the viewport)
+            width: canvas.width,  // Width of the camera (matches the canvas size)
+            height: canvas.height,  // Height of the camera (matches the canvas size)
+        };
+		let backgroundArray = [];
 		let mobsArray = [];
 		let buttonsArray = [];
 		let spellBooksArray = [];
@@ -301,6 +309,7 @@
 			for (var i = 0; i < castSpellTimeout.length; i++) {
 				clearTimeout(castSpellTimeout[i]);
 			}
+			backgroundArray = [];
 			castSpellTimeout = [];
 			buttonsArray = [];
 			spellBooksArray = [];
@@ -312,6 +321,7 @@
 			spawnLuminousSpirit();
 			spawnSpecter();
 			myGameArea.start();
+            backgroundKeeper()
 			buttonsKeeper();
 			spellBooksKeeper();
 			spellsKeeper();
@@ -319,6 +329,10 @@
 			if (mainMenuVariable) {
 				mainMenuVariable.remove();
 			}
+		}
+		function backgroundKeeper() {
+			addBackground(new Background(10, 10, 2500, 1000, "gridBG.jpg"));
+            //(x, y, width, height, appearance)
 		}
 		function buttonsKeeper() {
 			addButton(new Button(5, 5, 200, 50, [5], "#5fa7e5", "levelBarButton", "level: " + myGameCharacter.level));
@@ -342,6 +356,9 @@
 			myGameArea.clear();
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
+			backgroundArray.forEach(background => {
+                background.draw(ctx);
+			});
 			mobsArray.forEach(mob => {
 				mob.update();
 				mob.newPos();
@@ -411,10 +428,16 @@
 				}
 			}
 		}
+        function updateCamera() {
+            // Center the camera on the player
+            camera.x = myGameCharacter.x - camera.width / 2;
+            camera.y = myGameCharacter.y - camera.height / 2;
+        }
 		function playerDeath() {
 			alert("game over");
 			myGameArea.stop();
 			castSpellTimeout = [];
+			backgroundArray = [];
 			buttonsArray = [];
 			spellBooksArray = [];
 			spellsArray = [];
@@ -436,6 +459,10 @@
 				}
 			}
 		}
+        function addBackground(background) {
+			let newBackground = new Background(background.x, background.y, background.width, background.height, background.appearance);
+            backgroundArray.push(newBackground);
+        }
 		function addButton(button) {
 			let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.text);
 			buttonsArray.push(newButton);
