@@ -34,8 +34,8 @@ class SpellBook {
 	interact() {
 		if (this.ability === "cast" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			castMouseX = mouseX;
-			castMouseY = mouseY;
+			castMouseX = worldX - biome1.x;
+			castMouseY = worldY - biome1.y;
 			for (let i = 0; i < this.spell.castAmount; i++) {
 				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
 			}

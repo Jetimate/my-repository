@@ -17,4 +17,15 @@ class Background {
 		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 		ctx.closePath();
 	}
+	clickImage(biome) {
+		//console.log("Mouse clicked at world position X:", worldX, "Y:", worldY);
+
+		// Check if the click is within the bounds of the image
+		if (worldX >= this.x && worldX <= this.x + this.width &&
+			worldY >= this.y && worldY <= this.y + this.height) {
+			//console.log("x: " + (worldX - this.x) + " y: " + (worldY - this.y));
+		} else {
+			console.log("Mouse clicked outside the image.");
+		}
+	}
 }

@@ -81,9 +81,9 @@ class Spell {
 		if (this.ability === "summon") {
 			if (isMouseDown) {
 				let summoningSpells = spellsArray.filter(element => element.ability === "summon");
-				summoningSpells.forEach(spell => spell.setTarget(mouseX, mouseY));
-				let dx = mouseX - this.x;
-				let dy = mouseY - this.y;
+				summoningSpells.forEach(spell => spell.setTarget(worldX - biome1.x, worldY - biome1.y));
+				let dx = (worldX - biome1.x) - this.x;
+				let dy = (worldY - biome1.y) - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 				this.x += this.speed * Math.sin(this.angle);
 				this.y -= this.speed * Math.cos(this.angle);

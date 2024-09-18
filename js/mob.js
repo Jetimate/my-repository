@@ -120,14 +120,18 @@ class LuminousRock extends Mob {
 		super(x, y, radius, appearance, health, damage, mobName, type, ability, intelligence, experienceDrop, state, frames);
 	}
 	spawn() {
-		//let me = this;
 		setTimeout(function () {
 			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
 				// for x 1250 - 100 + 1)) + 100
 				// for y 750 - 100 + 1)) + 100
-				let luminousRockRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let luminousRockRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				//let luminousRockRandomX = (Math.floor((Math.random() * (1250 - 100 + 1)) + 100)) - camera.x;
+				//let luminousRockRandomY = (Math.floor((Math.random() * (750 - 100 + 1)) + 100)) - camera.y;
+				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
+				//let luminousRockRandomX = (biome1.x - camera.x) + 100;
+				//let luminousRockRandomY = (biome1.y - camera.y) + 100;
+				console.log(luminousRockRandomX + " " + luminousRockRandomY);
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
 				let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, 0, 0);
@@ -151,8 +155,8 @@ class LuminousSpirit extends Mob {
 		setTimeout(function () {
 			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-				let luminousSpiritRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let luminousSpiritRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
 				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
 				let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, 0, 0);
@@ -176,8 +180,8 @@ class Specter extends Mob {
 		setTimeout(function () {
 			let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 			if (totalSpecterCount < specter.maxAmount) {
-				let specterRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-				let specterRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
 				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
 				let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);

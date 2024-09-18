@@ -125,6 +125,7 @@
 	<script type="text/javascript" src="js/spell.js"></script>
 	<script type="text/javascript" src="js/button.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
+	<script type="text/javascript" src="js/camera.js"></script>
 
 	<script>
 		const keys = {
@@ -149,21 +150,17 @@
 		let skill2 = false;
 		let skill3 = false;
 		let skill1Used = false
-        let skill2Used = false;
-        let skill3Used = false;
+		let skill2Used = false;
+		let skill3Used = false;
 		let mouseX = 0;
 		let mouseY = 0;
 		let castMouseX = 0;
 		let castMouseY = 0;
 		let mouseClickX = 0;
 		let mouseClickY = 0;
-        let camera = {
-            x: 0,  // Camera's x position (top-left corner of the viewport)
-            y: 0,  // Camera's y position (top-left corner of the viewport)
-            width: canvas.width,  // Width of the camera (matches the canvas size)
-            height: canvas.height,  // Height of the camera (matches the canvas size)
-        };
-		let backgroundArray = [];
+        let worldX = null;
+        let worldY = null;
+		//let backgroundArray = [];
 		let mobsArray = [];
 		let buttonsArray = [];
 		let spellBooksArray = [];
@@ -174,7 +171,7 @@
 		const ctx = canvas.getContext("2d");
 		//const pi = 3.14159;
 		const luminousRock = {
-			maxAmount: 5,
+			maxAmount: 10,
 			mobName: "luminousRock",
 			appearance: "luminousRock.png",
 			damage: 1,
@@ -184,7 +181,7 @@
 			respawnTime: 3000
 		};
 		const luminousSpirit = {
-			maxAmount: 3,
+			maxAmount: 5,
 			mobName: "luminousSpirit",
 			appearance: "luminousSpirit.png",
 			damage: 1,
@@ -205,18 +202,18 @@
 		};
 		const summonSpirit = {
 			castAmount: 8,
-            maxAmount: 5,
-            name: "summonSpirit",
-            radius: 15,
-            appearance: "luminousSpirit.png",
-            index: 1,
-            health: 10,
-            damage: 3,
-            speed: 3,
+			maxAmount: 5,
+			name: "summonSpirit",
+			radius: 15,
+			appearance: "luminousSpirit.png",
+			index: 1,
+			health: 10,
+			damage: 3,
+			speed: 3,
 			ability: "summon",
-            manaCost: 20,
-            respawnTime: 1000
-        };
+			manaCost: 20,
+			respawnTime: 1000
+		};
 		const summonSpecter = {
 			castAmount: 5,
 			maxAmount: 2,
@@ -228,19 +225,19 @@
 			damage: 5,
 			speed: 5,
 			ability: "summon",
-            manaCost: 30,
+			manaCost: 30,
 			respawnTime: 1500
 		};
 		const castSpike = {
-			castAmount: 2,
+			castAmount: 1,
 			maxAmount: 0,
 			name: "castSpike",
-			radius: 15,
+			radius: 60,
 			appearance: "spike.png",
 			index: 1,
-			health: 5,
+			health: 50,
 			damage: 5,
-			speed: 10,
+			speed: 20,
 			ability: "cast",
 			manaCost: 5,
 			respawnTime: 500
@@ -249,7 +246,7 @@
 			canvas: document.getElementById("mycanvas"),
 			start: function () {
 				this.context = this.canvas.getContext("2d");
-                this.interval = setInterval(updateGameArea, 16.67);
+				this.interval = setInterval(updateGameArea, 16.67);
 			},
 			clear: function () {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -263,10 +260,10 @@
 			mouseClickX = e.clientX - rect.left;
 			mouseClickY = e.clientY - rect.top;
 			buttonsArray.forEach(button => {
-                button.clickButton(mouseClickX, mouseClickY);
+				button.clickButton(mouseClickX, mouseClickY);
 			});
-            spellBooksArray.forEach(spellBook => {
-                spellBook.clickButton(mouseClickX, mouseClickY);
+			spellBooksArray.forEach(spellBook => {
+				spellBook.clickButton(mouseClickX, mouseClickY);
 			})
 		});
 		window.addEventListener('mousedown', (event) => {
@@ -274,10 +271,13 @@
 			isMouseDown = true;
 			skill1Used = false
 			skill2Used = false;
-            skill3Used = false;
+			skill3Used = false;
 			const rect = canvas.getBoundingClientRect();
 			mouseX = event.clientX - rect.left;
 			mouseY = event.clientY - rect.top;
+            worldX = (mouseX / camera.zoom) + camera.x;
+            worldY = (mouseY / camera.zoom) + camera.y;
+			biome1.clickImage(biome1);
 		});
 
 		window.addEventListener('mouseup', () => {
@@ -289,11 +289,13 @@
 				const rect = canvas.getBoundingClientRect();
 				mouseX = event.clientX - rect.left;
 				mouseY = event.clientY - rect.top;
+                worldX = (mouseX / camera.zoom) + camera.x;
+                worldY = (mouseY / camera.zoom) + camera.y;
 			}
 		});
 		// Key down event listener
 		window.addEventListener('keydown', (event) => {
-				//console.log(event);
+			//console.log(event);
 			if (event.code in keys) {
 				keys[event.code] = true;
 			}
@@ -309,19 +311,21 @@
 			for (var i = 0; i < castSpellTimeout.length; i++) {
 				clearTimeout(castSpellTimeout[i]);
 			}
-			backgroundArray = [];
+			//backgroundArray = [];
 			castSpellTimeout = [];
 			buttonsArray = [];
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
 			maxExperience = 20;
+            biome1 = new Background(10, 10, 2500, 1000, "gridBG.jpg");
 			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", 90, 200, 0, 0, 0, 0.01, 0.02);
+            camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
 			spawnSpecter();
 			myGameArea.start();
-            backgroundKeeper()
+			//backgroundKeeper()
 			buttonsKeeper();
 			spellBooksKeeper();
 			spellsKeeper();
@@ -330,35 +334,37 @@
 				mainMenuVariable.remove();
 			}
 		}
+		/*
 		function backgroundKeeper() {
 			addBackground(new Background(10, 10, 2500, 1000, "gridBG.jpg"));
-            //(x, y, width, height, appearance)
-		}
+			//(x, y, width, height, appearance)
+		} */
 		function buttonsKeeper() {
 			addButton(new Button(5, 5, 200, 50, [5], "#5fa7e5", "levelBarButton", "level: " + myGameCharacter.level));
 			addButton(new Button(5, 60, 200, 50, [5], "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience));
 			addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
 		}
-        function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 30, "cast", "castSpike"));
-            //addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
-            //addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
-        }
+		function spellBooksKeeper() {
+			addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 30, "cast", "castSpike"));
+			//addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
+			//addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
+		}
 		function spellsKeeper() {
-            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
-            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
-            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 2, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
-            //castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 3, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
+			//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 0, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
+			//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, summonSpecter.radius, summonSpecter.name, summonSpecter.appearance, summonSpecter.castAmount, summonSpecter.maxAmount, 1, summonSpecter.health, summonSpecter.damage, summonSpecter.speed, summonSpecter.ability, summonSpecter.manaCost, summonSpecter.respawnTime), summonSpecter.respawnTime);
+			//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 2, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
+			//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, castSpike.radius, castSpike.name, castSpike.appearance, castSpike.castAmount, castSpike.maxAmount, 3, castSpike.health, castSpike.damage, castSpike.speed, castSpike.ability, castSpike.manaCost, castSpike.respawnTime), castSpike.respawnTime);
 		}
 		function updateGameArea() {
 			// always updating
-			myGameArea.clear();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
-			backgroundArray.forEach(background => {
-                background.draw(ctx);
-			});
+			camera.follow(myGameCharacter);
+			ctx.save();
+			camera.applyTransform(ctx)
+			biome1.draw(ctx);
 			mobsArray.forEach(mob => {
 				mob.update();
 				mob.newPos();
@@ -367,18 +373,19 @@
 			spellsArray.forEach(spell => {
 				spell.update();
 			});
-			spellBooksArray.forEach(spellBook => {
-				spellBook.update();
-			});
 			myGameCharacter.playerNewPos();
 			myGameCharacter.update();
 			myGameCharacter.regenerateHealth();
 			myGameCharacter.regenerateMana();
 			updatePlayerPosition();
-			buttonsArray.forEach(button => {
-				button.update();
-				button.draw(ctx);
+			ctx.restore();
+            spellBooksArray.forEach(spellBook => {
+                spellBook.update();
 			});
+            buttonsArray.forEach(button => {
+                button.update();
+                button.draw(ctx);
+            });
 			// player and mob collision
 			if (playerCrashWith(myGameCharacter, mobsArray)) {
 				myGameCharacter.playerNewPos();
@@ -428,11 +435,6 @@
 				}
 			}
 		}
-        function updateCamera() {
-            // Center the camera on the player
-            camera.x = myGameCharacter.x - camera.width / 2;
-            camera.y = myGameCharacter.y - camera.height / 2;
-        }
 		function playerDeath() {
 			alert("game over");
 			myGameArea.stop();
@@ -451,18 +453,19 @@
 				myGameCharacter.level += 1;
 				myGameCharacter.maxHealth += 5;
 				myGameCharacter.manaRegen += 0.001;
-				if (myGameCharacter.level == 5) {
-                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 300, "summon", "summonSpirit"));
+				if (myGameCharacter.level == 1) {
+					addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 300, "summon", "summonSpirit"));
 				}
-				if (myGameCharacter.level == 10) {
-                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 420, "summon", "summonSpecter"));
+				if (myGameCharacter.level == 1) {
+					addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 420, "summon", "summonSpecter"));
 				}
 			}
 		}
-        function addBackground(background) {
+		/*
+		function addBackground(background) {
 			let newBackground = new Background(background.x, background.y, background.width, background.height, background.appearance);
-            backgroundArray.push(newBackground);
-        }
+			backgroundArray.push(newBackground);
+		}*/
 		function addButton(button) {
 			let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.text);
 			buttonsArray.push(newButton);
@@ -470,11 +473,11 @@
 		function addSpellBook(spellBook) {
 			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.cooldown, spellBook.ability, spellBook.text)
 			spellBooksArray.push(newSpellBook);
-            //(xPoint, yPoint, width, height, radii, appearance, name, ability, text)
+			//(xPoint, yPoint, width, height, radii, appearance, name, ability, text)
 		}
 		function castSpell(spell, delay) {
 			castSpellTimeout.push(setTimeout(function () {
-                let newSpell = new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime);
+				let newSpell = new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime);
 				spellsArray.push(newSpell);
 			}, delay)
 			);
@@ -486,8 +489,14 @@
 				if (totalLuminousRockCount < luminousRock.maxAmount) {
 					// for x 1250 - 100 + 1)) + 100
 					// for y 750 - 100 + 1)) + 100
-					let luminousRockRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-					let luminousRockRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    //let luminousRockRandomX = (Math.floor((Math.random() * (1250 - 100 + 1)) + 100)) - camera.x;
+					//let luminousRockRandomY = (Math.floor((Math.random() * (750 - 100 + 1)) + 100)) - camera.y;
+					// (mouseX / camera.zoom) + camera.x
+                    //let luminousRockRandomX = 100 - camera.x;
+                    //let luminousRockRandomY = 100 - camera.y;
+                    let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+                    let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
+                    console.log(luminousRockRandomX + " " + luminousRockRandomY);
 					let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 					let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
 					let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, 0, 0);
@@ -504,8 +513,8 @@
 			setTimeout(function () {
 				let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 				if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-					let luminousSpiritRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-					let luminousSpiritRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+                    let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
 					let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 					let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
 					let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, 0, 0);
@@ -522,8 +531,8 @@
 			setTimeout(function () {
 				let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 				if (totalSpecterCount < specter.maxAmount) {
-					let specterRandomX = Math.floor((Math.random() * (1250 - 100 + 1)) + 100);
-					let specterRandomY = Math.floor((Math.random() * (750 - 100 + 1)) + 100);
+                    let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
+                    let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
 					let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
 					let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
 					let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
@@ -612,7 +621,7 @@
 							spell.health -= mob2.damage;
 						} else if (mob2.health <= spell.damage || mob2.health <= 15) {
 							//spell.health -= mob2.damage;
-                            // bugged part
+							// bugged part
 							myGameCharacter.experience += mob2.experienceDrop;
 							levelUp();
 							mob2.die();
@@ -623,9 +632,9 @@
 							let spellIndex = spellsArray.indexOf(spell);
 							spellsArray.splice(spellIndex, 1);
 							let currentSpellName = spell.name;
-                            let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
+							let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
 							if (totalThisSpellCount < spell.maxAmount) {
-                                castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
+								castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
 							}
 						}
 						mob2.update();
