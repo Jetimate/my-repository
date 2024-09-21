@@ -52,17 +52,24 @@ class Mob {
 		this.targetY = y;
 	}
 	die() {
-		// Set the isDead flag to true
+		// Set the isDead flag to true update
+		this.state = 0;
+		this.frames = 0;
+		this.moveAngle = 0;
+		this.speed = 0;
 		this.isDead = true;
-
-		// If there are any pending timeouts, clear them
-		if (this.timeoutId) {
-			clearTimeout(this.timeoutId);
-		}
 	}
 	interact() {
 		if (this.isDead) {
 			return;
+		}
+		if (this.intelligence == -1) {
+			console.log("called");
+			this.state = 0;
+			this.frames = 0;
+			this.moveAngle = 0;
+			this.speed = 0;
+			this.die();
 		}
 		if (this.intelligence == 1) {
 			switch (this.state) {
@@ -73,7 +80,6 @@ class Mob {
 						this.moveAngle = 0;
 						this.frames = 0;
 						this.state = 1;
-						this.timeoutId = setTimeout(() => this.update(), 2000);
 					}
 					break;
 
@@ -91,7 +97,6 @@ class Mob {
 						this.frames = 0;
 						this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 						this.state = 0;
-						this.timeoutId = setTimeout(() => this.update(), 2000);
 					}
 					break;
 
@@ -123,23 +128,14 @@ class LuminousRock extends Mob {
 		setTimeout(function () {
 			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
-				// for x 1250 - 100 + 1)) + 100
-				// for y 750 - 100 + 1)) + 100
-				//let luminousRockRandomX = (Math.floor((Math.random() * (1250 - 100 + 1)) + 100)) - camera.x;
-				//let luminousRockRandomY = (Math.floor((Math.random() * (750 - 100 + 1)) + 100)) - camera.y;
 				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
-				//let luminousRockRandomX = (biome1.x - camera.x) + 100;
-				//let luminousRockRandomY = (biome1.y - camera.y) + 100;
 				console.log(luminousRockRandomX + " " + luminousRockRandomY);
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
 				let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, 0, 0);
 				mobsArray.push(newLuminousRock);
 				console.log(mobsArray);
-				if (totalLuminousRockCount < luminousRock.maxAmount) {
-					spawnLuminousRock();
-				}
 			}
 		}, luminousRock.respawnTime);
 	}
@@ -151,7 +147,6 @@ class LuminousSpirit extends Mob {
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
-		//let me = this;
 		setTimeout(function () {
 			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
@@ -162,9 +157,6 @@ class LuminousSpirit extends Mob {
 				let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, 0, 0);
 				mobsArray.push(newLuminousSpirit);
 				console.log(mobsArray);
-				if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-					spawnLuminousSpirit();
-				}
 			}
 		}, luminousSpirit.respawnTime);
 	}
@@ -176,7 +168,6 @@ class Specter extends Mob {
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
-		//let me = this;
 		setTimeout(function () {
 			let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 			if (totalSpecterCount < specter.maxAmount) {
@@ -186,9 +177,6 @@ class Specter extends Mob {
 				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
 				let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
 				mobsArray.push(newSpecter);
-				if (totalSpecterCount < specter.maxAmount) {
-					spawnSpecter();
-				}
 			}
 		}, specter.respawnTime);
 	}

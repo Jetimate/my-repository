@@ -57,7 +57,6 @@ class SpellBook {
 			} else if (isMouseDown && skill1 && !skill1Used) {
 				this.borderColor = "black";
 				this.interact();
-				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill1 = false;
 				skill1Used = true;
 				this.skillReady = false;
@@ -70,7 +69,6 @@ class SpellBook {
 			} else if (isMouseDown && skill2 && !skill2Used) {
 				this.borderColor = "black";
 				this.interact();
-				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill2 = false;
 				skill2Used = true;
 				this.skillReady = false;
@@ -83,7 +81,6 @@ class SpellBook {
 			} else if (isMouseDown && skill3 && !skill3Used) {
 				this.borderColor = "black";
 				this.interact();
-				//castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.respawnTime), 10);
 				skill3 = false;
 				skill3Used = true;
 				this.skillReady = false;
