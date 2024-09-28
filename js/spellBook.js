@@ -36,24 +36,48 @@ class SpellBook {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
-			for (let i = 0; i < this.spell.castAmount; i++) {
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
-			}
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
 		}
 		if (this.ability === "summon" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			for (let i = 0; i < this.spell.castAmount; i++) {
-				this.spell.index += 1;
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
-			}
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					this.spell.index += 1;
+					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
 		}
 		if (this.ability === "teleport" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
-			for (let i = 0; i < this.spell.castAmount; i++) {
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
-			}
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
 		}
 		if (this.ability === "smash" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;

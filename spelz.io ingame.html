@@ -275,10 +275,10 @@
             appearance: "smash.png",
             index: 1,
             health: 1,
-            damage: 5,
+            damage: 10,
             speed: 0,
             ability: "smash",
-            manaCost: 5,
+            manaCost: 25,
             respawnTime: 500
         };
 		var myGameArea = {
@@ -491,10 +491,10 @@
 					addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 420, "summon", "summonSpecter"));
 				}
                 if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, 60, "teleport", "teleport"));
+                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, 180, "teleport", "teleport"));
 				}
                 if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "smash.png", "smashBook", smash, 60, "smash", "smash"));
+                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "smash.png", "smashBook", smash, 120, "smash", "smash"));
                 }
 			}
 		}
@@ -631,11 +631,13 @@
 						if (spell.health <= 0) {
 							let spellIndex = spellsArray.indexOf(spell);
 							spellsArray.splice(spellIndex, 1);
+							/*
 							let currentSpellName = spell.name;
 							let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
 							if (totalThisSpellCount < spell.maxAmount) {
-								castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
+								castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.ignoreCollision, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
 							}
+							*/
 						}
 						if (!spell.ignoreCollision) {
 							const dx = mob2.x - spell.x;
