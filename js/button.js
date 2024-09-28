@@ -28,7 +28,7 @@ class Button {
 			this.text = "level: " + myGameCharacter.level;
 		}
 		if (this.name == "experienceBarButton") {
-			this.text = "experience: " + myGameCharacter.experience;
+			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
 		}
 		if (this.name == "healthBarButton") {
 			this.text = "health: " + myGameCharacter.health + "/" + myGameCharacter.maxHealth;

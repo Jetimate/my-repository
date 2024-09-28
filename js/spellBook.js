@@ -37,15 +37,38 @@ class SpellBook {
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
 			for (let i = 0; i < this.spell.castAmount; i++) {
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
+				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
 			}
 		}
 		if (this.ability === "summon" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 			for (let i = 0; i < this.spell.castAmount; i++) {
 				this.spell.index += 1;
-				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
 			}
+		}
+		if (this.ability === "teleport" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+			castMouseX = worldX - biome1.x;
+			castMouseY = worldY - biome1.y;
+			for (let i = 0; i < this.spell.castAmount; i++) {
+				castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10)
+			}
+		}
+		if (this.ability === "smash" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius + (spellCount * 15), this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
 		}
 	}
 
@@ -83,6 +106,30 @@ class SpellBook {
 				this.interact();
 				skill3 = false;
 				skill3Used = true;
+				this.skillReady = false;
+			}
+		}
+		if (this.index === 4) {
+			if (keys.Digit4 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
+				skill4 = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && skill4 && !skill4Used) {
+				this.borderColor = "black";
+				this.interact();
+				skill4 = false;
+				skill4Used = true;
+				this.skillReady = false;
+			}
+		}
+		if (this.index === 5) {
+			if (keys.Digit5 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
+				skill5 = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && skill5 && !skill5Used) {
+				this.borderColor = "black";
+				this.interact();
+				skill5 = false;
+				skill5Used = true;
 				this.skillReady = false;
 			}
 		}

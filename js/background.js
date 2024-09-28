@@ -10,11 +10,26 @@ class Background {
 	}		
 	draw(ctx) {
 		ctx.beginPath();
-		ctx.rect(this.x, this.y, this.width, this.height);
-		ctx.strokeStyle = "black";
-		ctx.lineWidth = "3";
-		ctx.stroke();
 		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+		//ctx.rect(this.x, this.y, this.width, this.height);
+		ctx.rect(10, 10, 2000 - 10, 1000 - 10);
+		ctx.strokeStyle = "green";
+		ctx.lineWidth = "1";
+		ctx.stroke();
+		ctx.closePath();
+
+		ctx.beginPath();
+		ctx.rect(1000, 10, 1500 - 10, 1000 - 10);
+		ctx.strokeStyle = "blue";
+		ctx.lineWidth = "1";
+		ctx.stroke();
+		ctx.closePath();
+
+		ctx.beginPath();
+		ctx.rect(1500, 10, 1000 - 10, 1000 - 10)
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = "1";
+		ctx.stroke();
 		ctx.closePath();
 	}
 	clickImage(biome) {

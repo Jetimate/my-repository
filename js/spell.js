@@ -1,5 +1,5 @@
 class Spell {
-	constructor(x, y, radius, name, appearance, castAmount, maxAmount, positionIndex, health, damage, speed, ability, manaCost, respawnTime) {
+	constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreCollision, positionIndex, health, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.radian = 0;
@@ -16,6 +16,7 @@ class Spell {
 		this.appearance = appearance;
 		this.castAmount = castAmount;
 		this.maxAmount = maxAmount;
+		this.ignoreCollision = ignoreCollision;
 		this.positionIndex = positionIndex;
 		this.health = health;
 		this.damage = damage;
@@ -36,25 +37,27 @@ class Spell {
 		}
 	}
 	handleCollisions() {
-		for (let i = 0; i < spellsArray.length; i++) {
-			for (let j = i + 1; j < spellsArray.length; j++) {
-				const spellA = spellsArray[i];
-				const spellB = spellsArray[j];
+		if (!this.ignoreCollision) {
+			for (let i = 0; i < spellsArray.length; i++) {
+				for (let j = i + 1; j < spellsArray.length; j++) {
+					const spellA = spellsArray[i];
+					const spellB = spellsArray[j];
 
-				const dx = spellB.x - spellA.x;
-				const dy = spellB.y - spellA.y;
-				const distance = Math.sqrt(dx * dx + dy * dy);
+					const dx = spellB.x - spellA.x;
+					const dy = spellB.y - spellA.y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
 
-				if (distance < spellA.radius + spellB.radius) {
-					// Calculate knockback direction
-					const angle = Math.atan2(dy, dx);
-					const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
+					if (distance < spellA.radius + spellB.radius) {
+						// Calculate knockback direction
+						const angle = Math.atan2(dy, dx);
+						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
-					// Apply knockback
-					spellA.x -= Math.cos(angle) * knockbackDistance;
-					spellA.y -= Math.sin(angle) * knockbackDistance;
-					spellB.x += Math.cos(angle) * knockbackDistance;
-					spellB.y += Math.sin(angle) * knockbackDistance;
+						// Apply knockback
+						spellA.x -= Math.cos(angle) * knockbackDistance;
+						spellA.y -= Math.sin(angle) * knockbackDistance;
+						spellB.x += Math.cos(angle) * knockbackDistance;
+						spellB.y += Math.sin(angle) * knockbackDistance;
+					}
 				}
 			}
 		}
@@ -65,16 +68,16 @@ class Spell {
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);
 		ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-		/*
+		
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);	
 		ctx.lineWidth = 1;
-		ctx.strokeStyle = "blue";
+		ctx.strokeStyle = "red";
 		ctx.moveTo(0, 0);
 		ctx.lineTo(0, 0 - this.radius);
         ctx.stroke();
 		ctx.closePath();
-		*/
+		
 		ctx.restore();
 	}
 	update() {
@@ -125,6 +128,32 @@ class Spell {
 
 			// If lifeTimer exceeds maxLife, this entity will be removed
 			if (this.lifeTimer >= 120) {
+				// Call the function to remove this entity from the array
+				this.destroy();
+			}
+		}
+		if (this.ability === "teleport") {
+			// Calculate the angle only once, if it hasn't been calculated yet
+			if (!this.hasTarget) {
+				let dx = castMouseX - this.x;
+				let dy = castMouseY - this.y;
+				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+				this.x += this.speed * Math.sin(this.angle);
+				this.y -= this.speed * Math.cos(this.angle);
+				this.lifeTimer++;
+			}
+			// If lifeTimer exceeds maxLife, this entity will be removed
+			if (this.lifeTimer >= 30) {
+				// Call the function to remove this entity from the array
+				myGameCharacter.x = this.x;
+				myGameCharacter.y = this.y;
+				this.destroy();
+			}
+		}
+		if (this.ability === "smash") {
+			this.lifeTimer++;
+			// If lifeTimer exceeds maxLife, this entity will be removed
+			if (this.lifeTimer >= 5) {
 				// Call the function to remove this entity from the array
 				this.destroy();
 			}

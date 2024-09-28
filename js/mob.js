@@ -88,9 +88,9 @@ class Mob {
 						this.speed = 2;
 						// Ensure the entity stays within the canvas boundaries
 						if (this.x < this.radius) this.x = this.radius;
-						if (this.x > canvas.width - this.radius) this.x = canvas.width - this.radius;
+						if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
 						if (this.y < this.radius) this.y = this.radius;
-						if (this.y > canvas.height - this.radius) this.y = canvas.height - this.radius;
+						if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 						this.frames++;
 					} else {
 						this.speed = 0;
@@ -116,6 +116,11 @@ class Mob {
 				let dx = myGameCharacter.x - this.x;
 				let dy = myGameCharacter.y - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+				// Ensure the entity stays within the canvas boundaries
+				if (this.x < this.radius) this.x = this.radius;
+				if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+				if (this.y < this.radius) this.y = this.radius;
+				if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 			}
 		}
 	}
@@ -128,8 +133,8 @@ class LuminousRock extends Mob {
 		setTimeout(function () {
 			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
-				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
-				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
+				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1700 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
+				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				console.log(luminousRockRandomX + " " + luminousRockRandomY);
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
@@ -150,8 +155,8 @@ class LuminousSpirit extends Mob {
 		setTimeout(function () {
 			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
-				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
+				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000))) / camera.zoom) + camera.x;
+				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
 				let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, 0, 0);
@@ -171,8 +176,8 @@ class Specter extends Mob {
 		setTimeout(function () {
 			let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 			if (totalSpecterCount < specter.maxAmount) {
-				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1250 - 100 + 1)) + 100))) / camera.zoom) + camera.x;
-				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (750 - 100 + 1)) + 100))) / camera.zoom) + camera.y;
+				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 1500 + 1)) + 1500))) / camera.zoom) + camera.x;
+				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
 				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
 				let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
