@@ -53,10 +53,13 @@ class Spell {
 						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
 						// Apply knockback
-						spellA.x -= Math.cos(angle) * knockbackDistance;
-						spellA.y -= Math.sin(angle) * knockbackDistance;
-						spellB.x += Math.cos(angle) * knockbackDistance;
-						spellB.y += Math.sin(angle) * knockbackDistance;
+						if (!spellA.ignoreCollision) {
+							spellA.x -= Math.cos(angle) * knockbackDistance;
+							spellA.y -= Math.sin(angle) * knockbackDistance;
+						} if (!spellB.ignoreCollision) {
+							spellB.x += Math.cos(angle) * knockbackDistance;
+							spellB.y += Math.sin(angle) * knockbackDistance;
+						}
 					}
 				}
 			}

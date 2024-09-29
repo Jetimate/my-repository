@@ -86,13 +86,13 @@ class SpellBook {
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
-					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius + (spellCount * 15), this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius + (spellCount * 10), this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
 					clearInterval(interval);
 				}
-			}, 50);
+			}, 15);
 		}
 	}
 
