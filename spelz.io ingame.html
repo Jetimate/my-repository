@@ -176,41 +176,67 @@
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
 		const ctx = canvas.getContext("2d");
-		// mobs
-		const luminousRock = {
-			maxAmount: 10,
-			mobName: "luminousRock",
-			appearance: "luminousRock.png",
+		// loot drops
+		const castSpikeLootDrop = {
+			radius: 20,
+			name: "castSpikeLootDrop",
+            appearance: "spike.png",
+            ignoreCollision: false,
+            text: "spike"
+		};
+        // mobs
+        const luminousRock = {
+            maxAmount: 10,
+            mobName: "luminousRock",
+            appearance: "luminousRock.png",
             ignoreCollision: true,
-			damage: 1,
-			type: "passive",
-			ability: "nothing",
-			intelligence: 0,
-			respawnTime: 3000
-		};
-		const luminousSpirit = {
-			maxAmount: 5,
-			mobName: "luminousSpirit",
-			appearance: "luminousSpirit.png",
+            damage: 1,
+            type: "passive",
+            ability: "nothing",
+            lootDrop: castSpikeLootDrop,
+            intelligence: 0,
+            respawnTime: 3000
+        };
+        const luminousSpirit = {
+            maxAmount: 5,
+            mobName: "luminousSpirit",
+            appearance: "luminousSpirit.png",
             ignoreCollision: false,
-			damage: 1,
-			type: "passive",
-			ability: "nothing",
-			intelligence: 1,
-			respawnTime: 4000
-		};
-		const specter = {
-			maxAmount: 2,
-			mobName: "specter",
-			appearance: "specter.png",
+            damage: 1,
+            type: "passive",
+            ability: "nothing",
+            lootDrop: castSpikeLootDrop,
+            intelligence: 1,
+            respawnTime: 4000
+        };
+        const specter = {
+            maxAmount: 2,
+            mobName: "specter",
+            appearance: "specter.png",
             ignoreCollision: false,
-			damage: 3,
-			type: "hostile",
-			ability: "nothing",
-			intelligence: 1,
-			respawnTime: 8000
-		};
+            damage: 3,
+            type: "hostile",
+            ability: "nothing",
+            lootDrop: castSpikeLootDrop,
+            intelligence: 1,
+            respawnTime: 8000
+        };
 		// spells
+        const castSpike = {
+            castAmount: 2,
+            maxAmount: 0,
+            ignoreCollision: false,
+            name: "castSpike",
+            radius: 12,
+            appearance: "spike.png",
+            index: 1,
+            health: 2,
+            damage: 5,
+            speed: 10,
+            ability: "cast",
+            manaCost: 5,
+            respawnTime: 500
+        };
 		const summonSpirit = {
 			castAmount: 8,
 			maxAmount: 5,
@@ -227,7 +253,7 @@
 			respawnTime: 1000
 		};
 		const summonSpecter = {
-			castAmount: 5,
+			castAmount: 50,
 			maxAmount: 2,
 			ignoreCollision: false,
 			name: "summonSpecter",
@@ -240,21 +266,6 @@
 			ability: "summon",
 			manaCost: 30,
 			respawnTime: 1500
-		};
-		const castSpike = {
-			castAmount: 2,
-			maxAmount: 0,
-			ignoreCollision: false,
-			name: "castSpike",
-			radius: 12,
-			appearance: "spike.png",
-			index: 1,
-			health: 2,
-			damage: 5,
-			speed: 10,
-			ability: "cast",
-			manaCost: 5,
-			respawnTime: 500
 		};
 		const teleport = {
 			castAmount: 1,
@@ -521,7 +532,7 @@
 			spellBooksArray.push(newSpellBook);
 		}
         function dropLoot(loot) {
-            let newLoot = new Loot(loot.x, loot.y, loot.name, loot.appearance, loot.ignoreCollision, loot.text)
+			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.appearance, loot.ignoreCollision, loot.text)
 			lootsArray.push(newLoot);
         }
 		function castSpell(spell, delay) {
@@ -537,7 +548,7 @@
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-                let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRock.ignoreCollision, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, 0, 0);
+                let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRock.ignoreCollision, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, luminousRock.lootDrop, 0, 0);
 				mobsArray.push(newLuminousRock);
 			}
 		}
@@ -547,7 +558,7 @@
 				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-                let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpirit.ignoreCollision, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, 0, 0);
+                let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpirit.ignoreCollision, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, luminousSpirit.lootDrop, 0, 0);
 				mobsArray.push(newLuminousSpirit);
 				console.log(mobsArray);
 			}
@@ -558,7 +569,7 @@
 				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
 				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
-                let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specter.ignoreCollision, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, 0, 0);
+                let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specter.ignoreCollision, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, specter.lootDrop, 0, 0);
 				mobsArray.push(newSpecter);
 			}
 		}
@@ -690,9 +701,9 @@
 		/*
 		tasks:
 		7). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
-		10). make basic mob drop a new spell book
 		12). add a way to access spell books in game
-		13). add a notification type of feature when a skill is used but insufficient mana
+		13). add a notification type of feature when a skill is used to show when player has insufficient mana
+		14). add a prompt box for collected loot
 		1000). add a place where npcs will go to when their kingdom is invaded
 		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
 		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
