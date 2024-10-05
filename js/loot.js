@@ -55,6 +55,9 @@ class Loot {
 
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+		ctx.font = "15px Ubuntu";
+		ctx.fillStyle = "black";
+		ctx.fillText(this.text, 0 + 4 - this.radius , 0 - 20);
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = "red";
 		ctx.moveTo(0, 0);

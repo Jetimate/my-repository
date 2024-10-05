@@ -169,6 +169,7 @@
 		let worldY = null;
 		let mobsArray = [];
 		let lootsArray = [];
+        let inventoryArray = [];
 		let buttonsArray = [];
 		let spellBooksArray = [];
 		let spellsArray = [];
@@ -374,6 +375,7 @@
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
+            inventoryArray = [];
 			maxExperience = 20;
 			biome1 = new Background(10, 10, 2500, 1000, "gridBG.jpg");
 			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", false, 90, 200, 0, 0, 0, 0.01, 0.02);
@@ -395,6 +397,7 @@
 			addButton(new Button(5, 60, 200, 50, [5], "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience));
 			addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
+            addButton(new Button(5, 225, 200, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
 		}
 		function spellBooksKeeper() {
 			addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, 30, "cast", "castSpike"));
@@ -408,6 +411,7 @@
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
+            //console.log(window.innerWidth / 2 + " " + window.innerHeight / 2);
 			ctx.fillStyle = "gray";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			camera.follow(myGameCharacter);
@@ -443,9 +447,9 @@
 				myGameCharacter.playerNewPos();
 			}
 			// player and loot collision
-			//if (playerCollideWithLoot(myGameCharacter, lootsArray)) {
-            //    myGameCharacter.playerNewPos();
-			//}
+			if (playerCollideWithLoot(myGameCharacter, lootsArray)) {
+                myGameCharacter.playerNewPos();
+			}
 			// mob to mob collision
 			if (crashWith(mobsArray, mobsArray)) {
 				myGameCharacter.playerNewPos();
@@ -500,6 +504,7 @@
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
+            inventoryArray = [];
 			startGame();
 		}
 		function levelUp() {
@@ -560,7 +565,7 @@
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
                 let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpirit.ignoreCollision, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, luminousSpirit.lootDrop, 0, 0);
 				mobsArray.push(newLuminousSpirit);
-				console.log(mobsArray);
+				//console.log(mobsArray);
 			}
 		}
 		function spawnSpecter() {
@@ -605,6 +610,21 @@
 				});
 			});
 			return result;
+		}
+        function playerCollideWithLoot(mob1, lootsArray) {
+            let result = false;
+            lootsArray.forEach(loot => {
+                let radii = mob1.radius + loot.radius;
+                let distance = getDistance(mob1, loot);
+                let hasCrashed = distance < radii;
+                if (hasCrashed) {
+                    result = hasCrashed;
+					let lootIndex = lootsArray.indexOf(loot);
+					inventoryArray.push(loot);
+                    lootsArray.splice(lootIndex, 1);
+                }
+            });
+            return result;
 		}
 		function playerCrashWith(mob1, mob2Array) {
 			let result = false;

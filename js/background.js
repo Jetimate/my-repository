@@ -40,7 +40,7 @@ class Background {
 			worldY >= this.y && worldY <= this.y + this.height) {
 			//console.log("x: " + (worldX - this.x) + " y: " + (worldY - this.y));
 		} else {
-			console.log("Mouse clicked outside the image.");
+			//console.log("Mouse clicked outside the image.");
 		}
 	}
 }

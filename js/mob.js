@@ -139,12 +139,11 @@ class LuminousRock extends Mob {
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
 				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1700 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				console.log(luminousRockRandomX + " " + luminousRockRandomY);
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
 				let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRock.ignoreCollision, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, luminousRock.lootDrop, 0, 0);
 				mobsArray.push(newLuminousRock);
-				console.log(mobsArray);
+				//console.log(mobsArray);
 			}
 		}, luminousRock.respawnTime);
 	}
@@ -165,7 +164,7 @@ class LuminousSpirit extends Mob {
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
 				let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpirit.ignoreCollision, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, luminousSpirit.lootDrop, 0, 0);
 				mobsArray.push(newLuminousSpirit);
-				console.log(mobsArray);
+				//console.log(mobsArray);
 			}
 		}, luminousSpirit.respawnTime);
 	}
