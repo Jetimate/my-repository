@@ -21,10 +21,51 @@ class Button {
 		ctx.stroke();
 		ctx.font = "25px Ubuntu";
 		ctx.fillStyle = "black";
-		ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		if (this.name == "levelBarButton") {
+			this.text = "level: " + myGameCharacter.level;
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "experienceBarButton") {
+			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "healthBarButton") {
+			this.text = "health: " + myGameCharacter.health + "/" + myGameCharacter.maxHealth;
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "manaBarButton") {
+			this.text = "mana: " + myGameCharacter.mana;
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "inventoryButton") {
+			this.text = "inventory";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "showInventory") {
+			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
+			this.text1 = "spike pages: " + totalCastSpikeLootDropCount;
+			ctx.fillText(this.text1, this.x + 5, this.y + 30);
+
+			let totalSummonSpiritLootDropCount = inventoryArray.filter(element => element.name === "summonSpiritLootDrop").length;
+			this.text2 = "spirit pages: " + totalSummonSpiritLootDropCount;
+			ctx.fillText(this.text2, this.x + 5, this.y + 60);
+
+			let totalSummonSpecterLootDropCount = inventoryArray.filter(element => element.name === "summonSpecterLootDrop").length;
+			this.text3 = "specter pages: " + totalSummonSpecterLootDropCount;
+			ctx.fillText(this.text3, this.x + 5, this.y + 90);
+
+			let totalTeleportLootDropCount = inventoryArray.filter(element => element.name === "teleportLootDrop").length;
+			this.text4 = "teleport pages: " + totalTeleportLootDropCount;
+			ctx.fillText(this.text4, this.x + 5, this.y + 120);
+
+			let totalSmashLootDropCount = inventoryArray.filter(element => element.name === "smashLootDrop").length;
+			this.text5 = "smash pages: " + totalSmashLootDropCount;
+			ctx.fillText(this.text5, this.x + 5, this.y + 150);
+		}
         ctx.closePath();
 	}
 	update() {
+		/*
 		if (this.name == "levelBarButton") {
 			this.text = "level: " + myGameCharacter.level;
 		}
@@ -41,6 +82,7 @@ class Button {
 			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
 			this.text = "spike: " + totalCastSpikeLootDropCount;
 		}
+		*/
 	}
 	
 	clickButton(xmouse, ymouse) {

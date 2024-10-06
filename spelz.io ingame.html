@@ -181,10 +181,43 @@
 		const castSpikeLootDrop = {
 			radius: 20,
 			name: "castSpikeLootDrop",
-            appearance: "spike.png",
+			spellName: "castSpike",
+            appearance: "enchantedBook.png",
             ignoreCollision: false,
             text: "spike"
 		};
+        const summonSpiritLootDrop = {
+            radius: 20,
+			name: "summonSpiritLootDrop",
+            spellName: "summonSpirit",
+            appearance: "enchantedBook.png",
+            ignoreCollision: false,
+            text: "spirit"
+		};
+        const summonSpecterLootDrop = {
+            radius: 20,
+			name: "summonSpecterLootDrop",
+            spellName: "summonSpecter",
+            appearance: "enchantedBook.png",
+            ignoreCollision: false,
+            text: "specter"
+		};
+        const teleportLootDrop = {
+            radius: 20,
+			name: "teleportLootDrop",
+            spellName: "teleport",
+            appearance: "enchantedBook.png",
+            ignoreCollision: false,
+            text: "teleport"
+		};
+        const smashLootDrop = {
+            radius: 20,
+			name: "smashLootDrop",
+            spellName: "smash",
+            appearance: "enchantedBook.png",
+            ignoreCollision: false,
+            text: "smash"
+        };
         // mobs
         const luminousRock = {
             maxAmount: 10,
@@ -206,7 +239,7 @@
             damage: 1,
             type: "passive",
             ability: "nothing",
-            lootDrop: castSpikeLootDrop,
+            lootDrop: summonSpiritLootDrop,
             intelligence: 1,
             respawnTime: 4000
         };
@@ -218,7 +251,7 @@
             damage: 3,
             type: "hostile",
             ability: "nothing",
-            lootDrop: castSpikeLootDrop,
+            lootDrop: summonSpecterLootDrop,
             intelligence: 1,
             respawnTime: 8000
         };
@@ -254,7 +287,7 @@
 			respawnTime: 1000
 		};
 		const summonSpecter = {
-			castAmount: 50,
+			castAmount: 5,
 			maxAmount: 2,
 			ignoreCollision: false,
 			name: "summonSpecter",
@@ -537,7 +570,7 @@
 			spellBooksArray.push(newSpellBook);
 		}
         function dropLoot(loot) {
-			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.appearance, loot.ignoreCollision, loot.text)
+			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellName, loot.appearance, loot.ignoreCollision, loot.text)
 			lootsArray.push(newLoot);
         }
 		function castSpell(spell, delay) {

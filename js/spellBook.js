@@ -4,6 +4,8 @@ class SpellBook {
 		this.image.src = appearance;
 		this.cooldownTimer = 0;
 		this.skillReady = true;
+		this.level = 1;
+		this.maxPages = 3;
 		this.x = x;
 		this.y = y;
 		this.index = index;
@@ -28,7 +30,7 @@ class SpellBook {
 		ctx.font = "15px Ubuntu";
 		ctx.fillStyle = "black";
 		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-		ctx.fillText(this.text, this.x + 1, (this.y * 5) + this.height);
+		ctx.fillText(this.text + this.level, this.x + 1, (this.y * 5) + this.height);
 		ctx.closePath();
 	}
 	interact() {
@@ -36,9 +38,10 @@ class SpellBook {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
+			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
 					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
 					spellCount++;
@@ -50,9 +53,10 @@ class SpellBook {
 		}
 		if (this.ability === "summon" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
+			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
 					this.spell.index += 1;
 					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
@@ -97,6 +101,15 @@ class SpellBook {
 	}
 
 	update() {
+		let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
+		if (totalSpellLootDropCount >= this.maxPages) {
+			let spellLootDropIndex = inventoryArray.findIndex(element => element.spellName == this.spell.name);
+			if (spellLootDropIndex !== -1) {
+				inventoryArray.splice(spellLootDropIndex, this.maxPages);
+			}
+			this.maxPages += 3;
+			this.level++;
+		}
 		if (this.index === 1) {
 			if (keys.Digit1 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
 				skill1 = true;

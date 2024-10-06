@@ -71,7 +71,7 @@ class Spell {
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);
 		ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-		
+		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);	
 		ctx.lineWidth = 1;
@@ -80,7 +80,7 @@ class Spell {
 		ctx.lineTo(0, 0 - this.radius);
         ctx.stroke();
 		ctx.closePath();
-		
+		*/
 		ctx.restore();
 	}
 	update() {

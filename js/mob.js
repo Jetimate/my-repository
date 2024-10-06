@@ -55,7 +55,7 @@ class Mob {
 	}
 	die() {
 		// Set the isDead flag to true update
-		dropLoot(new Loot(this.x, this.y, this.lootDrop.radius, this.lootDrop.name, this.lootDrop.appearance, this.lootDrop.ignoreCollision, this.lootDrop.text))
+		dropLoot(new Loot(this.x, this.y, this.lootDrop.radius, this.lootDrop.name, this.lootDrop.spellName, this.lootDrop.appearance, this.lootDrop.ignoreCollision, this.lootDrop.text))
 		// (x, y, radius, name, appearance, ignoreCollision, text)
 		this.state = 0;
 		this.frames = 0;

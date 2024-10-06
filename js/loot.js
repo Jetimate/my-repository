@@ -1,5 +1,5 @@
 class Loot {
-	constructor(x, y, radius, name, appearance, ignoreCollision, text) {
+	constructor(x, y, radius, name, spellName, appearance, ignoreCollision, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		//this.radian = 0;
@@ -10,6 +10,7 @@ class Loot {
 		this.y = y;
 		this.radius = radius;
 		this.name = name;
+		this.spellName = spellName;
 		this.appearance = appearance;
 		this.ignoreCollision = ignoreCollision;
 		this.text = text;
@@ -59,10 +60,10 @@ class Loot {
 		ctx.fillStyle = "black";
 		ctx.fillText(this.text, 0 + 4 - this.radius , 0 - 20);
 		ctx.lineWidth = 1;
-		ctx.strokeStyle = "red";
-		ctx.moveTo(0, 0);
-		ctx.lineTo(0, 0 - this.radius);
-		ctx.stroke();
+		ctx.strokeStyle = "black";
+		//ctx.moveTo(0, 0);
+		//ctx.lineTo(0, 0 - this.radius);
+		//ctx.stroke();
 		ctx.closePath();
 
 		ctx.restore();
