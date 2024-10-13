@@ -1,11 +1,7 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, cooldown, ability, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, mainSpellBook, cooldown, ability, text) {
 		this.image = new Image();
 		this.image.src = appearance;
-		this.cooldownTimer = 0;
-		this.skillReady = true;
-		this.level = 1;
-		this.maxPages = 3;
 		this.x = x;
 		this.y = y;
 		this.index = index;
@@ -16,9 +12,15 @@ class SpellBook {
 		this.appearance = appearance;
 		this.name = name;
 		this.spell = spell;
+		this.mainSpellBook = mainSpellBook;
 		this.cooldown = cooldown;
 		this.ability = ability;
 		this.text = text;
+		this.cooldownTimer = 0;
+		this.skillReady = true;
+		this.level = 1;
+		this.maxPages = 3;
+		this.activated = false;
 	}
 
 	draw(ctx) {
@@ -33,6 +35,27 @@ class SpellBook {
 		ctx.fillText(this.text + this.level, this.x + 1, (this.y * 5) + this.height);
 		ctx.closePath();
 	}
+	activate() {
+		castSpell(new Spell(
+			myGameCharacter.x,
+			myGameCharacter.y,
+			this.mainSpellBook.radius,
+			this.mainSpellBook.name,
+			this.mainSpellBook.appearance,
+			this.mainSpellBook.castAmount,
+			this.mainSpellBook.maxAmount,
+			this.mainSpellBook.ignoreSpellCollision,
+			this.mainSpellBook.ignoreMobCollision,
+			this.mainSpellBook.index,
+			this.mainSpellBook.health,
+			this.mainSpellBook.defense,
+			this.mainSpellBook.damage,
+			this.mainSpellBook.speed,
+			this.mainSpellBook.ability,
+			this.mainSpellBook.manaCost,
+			this.mainSpellBook.respawnTime), 10);
+		this.activated = true;	
+	}
 	interact() {
 		if (this.ability === "cast" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
@@ -43,7 +66,24 @@ class SpellBook {
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
-					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime), 10);
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -59,7 +99,24 @@ class SpellBook {
 				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
 					this.spell.index += 1;
-					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime), 10);
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -75,7 +132,24 @@ class SpellBook {
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
-					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius, this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime), 10);
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -90,7 +164,24 @@ class SpellBook {
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
-					castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, this.spell.radius + (spellCount * 10), this.spell.name, this.spell.appearance, this.spell.castAmount, this.spell.maxAmount, this.spell.ignoreCollision, this.spell.index, this.spell.health, this.spell.damage, this.spell.speed, this.spell.ability, this.spell.manaCost, this.spell.respawnTime), 10);
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius + (spellCount * 10),
+						this.spell.name,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime), 10);
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -179,7 +270,10 @@ class SpellBook {
 				this.cooldownTimer = 0;  // Reset the cooldown timer
 			}
 		}
-		this.draw(ctx)
+		this.draw(ctx);
+		if (this.activated == false) {
+			this.activate();
+		}
 	}
 
 	clickButton(xmouse, ymouse) {

@@ -1,5 +1,5 @@
 class Spell {
-	constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreCollision, positionIndex, health, damage, speed, ability, manaCost, respawnTime) {
+	constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.radian = 0;
@@ -16,9 +16,11 @@ class Spell {
 		this.appearance = appearance;
 		this.castAmount = castAmount;
 		this.maxAmount = maxAmount;
-		this.ignoreCollision = ignoreCollision;
+		this.ignoreSpellCollision = ignoreSpellCollision;
+		this.ignoreMobCollision = ignoreMobCollision;
 		this.positionIndex = positionIndex;
 		this.health = health;
+		this.defense = defense;
 		this.damage = damage;
 		this.speed = speed;
 		this.ability = ability;
@@ -37,29 +39,27 @@ class Spell {
 		}
 	}
 	handleCollisions() {
-		if (!this.ignoreCollision) {
-			for (let i = 0; i < spellsArray.length; i++) {
-				for (let j = i + 1; j < spellsArray.length; j++) {
-					const spellA = spellsArray[i];
-					const spellB = spellsArray[j];
+		for (let i = 0; i < spellsArray.length; i++) {
+			for (let j = i + 1; j < spellsArray.length; j++) {
+				const spellA = spellsArray[i];
+				const spellB = spellsArray[j];
+				const dx = spellB.x - spellA.x;
+				const dy = spellB.y - spellA.y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
 
-					const dx = spellB.x - spellA.x;
-					const dy = spellB.y - spellA.y;
-					const distance = Math.sqrt(dx * dx + dy * dy);
+				if (distance < spellA.radius + spellB.radius) {
+					// Calculate knockback direction
+					const angle = Math.atan2(dy, dx);
+					const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
-					if (distance < spellA.radius + spellB.radius) {
-						// Calculate knockback direction
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
-
-						// Apply knockback
-						if (!spellA.ignoreCollision) {
-							spellA.x -= Math.cos(angle) * knockbackDistance;
-							spellA.y -= Math.sin(angle) * knockbackDistance;
-						} if (!spellB.ignoreCollision) {
-							spellB.x += Math.cos(angle) * knockbackDistance;
-							spellB.y += Math.sin(angle) * knockbackDistance;
-						}
+					// Apply knockback
+					if (!spellA.ignoreSpellCollision) {
+						spellA.x -= Math.cos(angle) * knockbackDistance;
+						spellA.y -= Math.sin(angle) * knockbackDistance;	
+					}
+					if (!spellB.ignoreSpellCollision) {
+						spellB.x += Math.cos(angle) * knockbackDistance;
+						spellB.y += Math.sin(angle) * knockbackDistance;
 					}
 				}
 			}
@@ -84,6 +84,28 @@ class Spell {
 		ctx.restore();
 	}
 	update() {
+		if (this.ability === "book") {
+			// Calculate target orbit position
+			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
+			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
+
+			// Calculate distance to target orbit position
+			const dx = targetX - this.x;
+			const dy = targetY - this.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			// Adjust speed based on the distance (e.g., speed scales with distance)
+			const minSpeed = this.speed / 4;
+			const maxSpeed = this.speed;
+			const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
+			const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
+
+			// Calculate the movement angle and update position
+			this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
+			this.positionIndex += 0.01;
+			this.x += adjustedSpeed * Math.sin(this.angle);
+			this.y -= adjustedSpeed * Math.cos(this.angle);
+		}
 		if (this.ability === "summon") {
 			if (isMouseDown) {
 				let summoningSpells = spellsArray.filter(element => element.ability === "summon");

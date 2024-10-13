@@ -1,13 +1,15 @@
 class Mob {
-	constructor(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
 	this.image = new Image();
 	this.image.src = appearance;
 	this.x = x;
 	this.y = y;
 	this.radius = radius;
 	this.appearance = appearance;  
-	this.ignoreCollision = ignoreCollision;
+	this.ignoreSpellCollision = ignoreSpellCollision;
+	this.ignoreMobCollision = ignoreMobCollision;
 	this.health = health;
+	this.defense = defense;
 	this.damage = damage;
 	this.mobName = mobName;
 	this.type = type;
@@ -130,8 +132,8 @@ class Mob {
 	}
 }
 class LuminousRock extends Mob {
-	constructor(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 	}
 	spawn() {
 		setTimeout(function () {
@@ -141,7 +143,22 @@ class LuminousRock extends Mob {
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
-				let newLuminousRock = new LuminousRock(luminousRockRandomX, luminousRockRandomY, luminousRockRandomRadiusXHealth, luminousRock.appearance, luminousRock.ignoreCollision, luminousRockRandomRadiusXHealth, luminousRock.damage, luminousRock.mobName, luminousRock.type, luminousRock.ability, luminousRock.intelligence, luminousRockRandomExperienceDrop, luminousRock.lootDrop, 0, 0);
+				let newLuminousRock = new LuminousRock(
+					luminousRockRandomX,
+					luminousRockRandomY,
+					luminousRockRandomRadiusXHealth,
+					luminousRock.appearance,
+					luminousRock.ignoreSpellCollision,
+					luminousRock.ignoreMobCollision,
+					luminousRockRandomRadiusXHealth,
+					luminousRock.defense,
+					luminousRock.damage,
+					luminousRock.mobName,
+					luminousRock.type,
+					luminousRock.ability,
+					luminousRock.intelligence,
+					luminousRockRandomExperienceDrop,
+					luminousRock.lootDrop, 0, 0);
 				mobsArray.push(newLuminousRock);
 				//console.log(mobsArray);
 			}
@@ -150,8 +167,8 @@ class LuminousRock extends Mob {
 }
 
 class LuminousSpirit extends Mob {
-	constructor(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
@@ -162,7 +179,22 @@ class LuminousSpirit extends Mob {
 				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
 				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
-				let newLuminousSpirit = new LuminousSpirit(luminousSpiritRandomX, luminousSpiritRandomY, luminousSpiritRandomRadiusXHealth, luminousSpirit.appearance, luminousSpirit.ignoreCollision, luminousSpiritRandomRadiusXHealth, luminousSpirit.damage, luminousSpirit.mobName, luminousSpirit.type, luminousSpirit.ability, luminousSpirit.intelligence, luminousSpiritRandomExperienceDrop, luminousSpirit.lootDrop, 0, 0);
+				let newLuminousSpirit = new LuminousSpirit(
+					luminousSpiritRandomX,
+					luminousSpiritRandomY,
+					luminousSpiritRandomRadiusXHealth,
+					luminousSpirit.appearance,
+					luminousSpirit.ignoreSpellCollision,
+					luminousSpirit.ignoreMobCollision,
+					luminousSpiritRandomRadiusXHealth,
+					luminousSpirit.defense,
+					luminousSpirit.damage,
+					luminousSpirit.mobName,
+					luminousSpirit.type,
+					luminousSpirit.ability,
+					luminousSpirit.intelligence,
+					luminousSpiritRandomExperienceDrop,
+					luminousSpirit.lootDrop, 0, 0);
 				mobsArray.push(newLuminousSpirit);
 				//console.log(mobsArray);
 			}
@@ -170,8 +202,8 @@ class LuminousSpirit extends Mob {
 	}
 }
 class Specter extends Mob {
-	constructor(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreCollision, health, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 		this.FOVRadius = 250;
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
@@ -183,7 +215,22 @@ class Specter extends Mob {
 				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
 				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
-				let newSpecter = new Specter(specterRandomX, specterRandomY, specterRandomRadiusXHealth, specter.appearance, specter.ignoreCollision, specterRandomRadiusXHealth, specter.damage, specter.mobName, specter.type, specter.ability, specter.intelligence, specterRandomExperienceDrop, specter.lootDrop, 0, 0);
+				let newSpecter = new Specter(
+					specterRandomX,
+					specterRandomY,
+					specterRandomRadiusXHealth,
+					specter.appearance,
+					specter.ignoreSpellCollision,
+					specter.ignoreMobCollision,
+					specter.specterRandomRadiusXHealth,
+					specter.defense,
+					specter.damage,
+					specter.mobName,
+					specter.type,
+					specter.ability,
+					specter.intelligence,
+					specterRandomExperienceDrop,
+					specter.lootDrop, 0, 0);
 				mobsArray.push(newSpecter);
 			}
 		}, specter.respawnTime);
