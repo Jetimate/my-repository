@@ -222,7 +222,7 @@ class Specter extends Mob {
 					specter.appearance,
 					specter.ignoreSpellCollision,
 					specter.ignoreMobCollision,
-					specter.specterRandomRadiusXHealth,
+					specterRandomRadiusXHealth,
 					specter.defense,
 					specter.damage,
 					specter.mobName,

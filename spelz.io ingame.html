@@ -220,7 +220,7 @@
         };
         // mobs
         const luminousRock = {
-            maxAmount: 10,
+            maxAmount: 0,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
 			ignoreSpellCollision: true,
@@ -234,7 +234,7 @@
             respawnTime: 3000
         };
         const luminousSpirit = {
-            maxAmount: 5,
+            maxAmount: 0,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             ignoreSpellCollision: false,
@@ -248,18 +248,18 @@
             respawnTime: 4000
         };
         const specter = {
-            maxAmount: 2,
+            maxAmount: 1,
             mobName: "specter",
             appearance: "specter.png",
             ignoreSpellCollision: false,
 			ignoreMobCollision: false,
             defense: 0,
-            damage: 3,
+            damage: 0.1,
             type: "hostile",
             ability: "nothing",
             lootDrop: summonSpecterLootDrop,
             intelligence: 1,
-            respawnTime: 8000
+            respawnTime: 80
         };
 		// spells
         const castSpike = {
@@ -271,8 +271,8 @@
             radius: 12,
             appearance: "spike.png",
             index: 1,
-			health: 2,
-            defense: 2,
+			health: 5,
+            defense: 0,
             damage: 5,
             speed: 12,
             ability: "cast",
@@ -297,7 +297,7 @@
 			respawnTime: 1000
 		};
 		const summonSpecter = {
-			castAmount: 5,
+			castAmount: 20,
 			maxAmount: 2,
             ignoreSpellCollision: false,
             ignoreMobCollision: false,
@@ -305,9 +305,9 @@
 			radius: 15,
 			appearance: "specter.png",
 			index: 1,
-			health: 10,
+			health: 30,
 			defense: 0,
-			damage: 5,
+			damage: 0.1,
 			speed: 5,
 			ability: "summon",
 			manaCost: 30,
@@ -445,7 +445,7 @@
             inventoryArray = [];
 			maxExperience = 20;
 			biome1 = new Background(10, 10, 2500, 1000, "gridBG.jpg");
-			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", false, 90, 0, 200, 0, 0, 0, 0.01, 0.02);
+			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", false, false, 90, 0, 200, 0, 0, 0, 0.01, 0.02);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
@@ -474,6 +474,7 @@
 		function spellsKeeper() {
 		}
 		function updateGameArea() {
+            console.log(mobsArray);
 			// always updating
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
@@ -535,30 +536,31 @@
 			myGameCharacter.speed = 0;
 
 			function updatePlayerPosition() {
+                let newSpeed = 5;
 				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
 					myGameCharacter.angle = (1.75 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
 					myGameCharacter.angle = (2.25 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
 					myGameCharacter.angle = (1.25 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
 					myGameCharacter.angle = (0.75 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if (keys.KeyW || keys.ArrowUp) { // Up
 					myGameCharacter.angle = (2 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if (keys.KeyS || keys.ArrowDown) { // Down
 					myGameCharacter.angle = (1 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if (keys.KeyA || keys.ArrowLeft) { // Left
 					myGameCharacter.angle = (1.5 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				} else if (keys.KeyD || keys.ArrowRight) { // Right
 					myGameCharacter.angle = (0.5 * Math.PI);
-					myGameCharacter.speed = 1.5;
+                    myGameCharacter.speed = newSpeed;
 				}
 			}
 		}
@@ -774,24 +776,21 @@
 						if (!mob1.ignoreMobCollision) {
 							mob1.x -= Math.cos(angle) * knockbackDistance;
 							mob1.y -= Math.sin(angle) * knockbackDistance;
-                        } if (!mob2.ignoreMobCollision) {
+						}
+						if (!mob2.ignoreMobCollision) {
 							mob2.x += Math.cos(angle) * knockbackDistance;
 							mob2.y += Math.sin(angle) * knockbackDistance;
 						}
 					}
-					// calculate mob 2 damage
-                    let calculatedMob2Damage = mob2.damage - mob1.defense;
-                    if (calculatedMob2Damage <= 0) {
-                        calculatedMob2Damage = 0;
-                    }
-					mob1.health -= calculatedMob2Damage;
-					// calculate mob 1 damage
-                    let calculatedMob1Damage = mob1.damage - mob2.defense;
-                    if (calculatedMob1Damage <= 0) {
-                        calculatedMob1Damage = 0;
-                    }
-                    mob2.health -= calculatedMob1Damage;
+                    // Calculate mob 2 damage
+                    let calculatedMob2Damage = Math.max(0, mob2.damage - mob1.defense);
+                    mob1.health = Math.max(0, mob1.health - calculatedMob2Damage);
+
+                    // Calculate mob 1 damage
+                    let calculatedMob1Damage = Math.max(0, mob1.damage - mob2.defense);
+                    mob2.health = Math.max(0, mob2.health - calculatedMob1Damage);
 					mob2.radius = mob2.health;
+                    myGameCharacter.health = mob1.health;
 					// player to mob collision
 					if (myGameCharacter.health <= 0) {
 						//death
@@ -818,27 +817,28 @@
 							if (calculatedMobDamage <= 0) {
 								calculatedMobDamage = 0;
 							}
-                            //console.log("hi: " + mob2.damage + " but: " + calculatedMobDamage);
-                            spell.health -= calculatedMobDamage;
+							//console.log("hi: " + mob2.damage + " but: " + calculatedMobDamage);
+							spell.health -= calculatedMobDamage;
 
-						} else if (mob2.health <= spell.damage || mob2.health <= 15) {
-							// bugged part
-							myGameCharacter.experience += mob2.experienceDrop;
-							levelUp();
-							mob2.die();
-							mob2Array.splice(mob2Index, 1);
-							mob2.spawn();
-						}
-						if (spell.health <= 0) {
-							let spellIndex = spellsArray.indexOf(spell);
-							spellsArray.splice(spellIndex, 1);
-							/*
-							let currentSpellName = spell.name;
-							let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
-							if (totalThisSpellCount < spell.maxAmount) {
-								castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.ignoreCollision, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
+							if (mob2.health <= spell.damage || mob2.health <= 15) {
+								// bugged part
+								myGameCharacter.experience += mob2.experienceDrop;
+								levelUp();
+								mob2.spawn();
+								mob2.die();
+								mob2Array.splice(mob2Index, 1);
 							}
-							*/
+                            if (spell.health <= 0) {
+                                let spellIndex = spellsArray.indexOf(spell);
+                                spellsArray.splice(spellIndex, 1);
+                                /*
+                                let currentSpellName = spell.name;
+                                let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
+                                if (totalThisSpellCount < spell.maxAmount) {
+                                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.ignoreCollision, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
+                                }
+                                */
+                            }
 						}
 						const dx = mob2.x - spell.x;
 						const dy = mob2.y - spell.y;
@@ -850,7 +850,10 @@
 							spell.x -= Math.cos(angle) * knockbackDistance;
 							spell.y -= Math.sin(angle) * knockbackDistance;
 						}
-                        if (!mob2.ignoreSpellCollision) {
+                        if (spell.ability == "book") {
+
+                        }
+                        else if (!mob2.ignoreSpellCollision) {
 							mob2.x += Math.cos(angle) * knockbackDistance;
 							mob2.y += Math.sin(angle) * knockbackDistance;
 						}
