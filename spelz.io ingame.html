@@ -219,7 +219,7 @@
         };
         // mobs
         const luminousRock = {
-            maxAmount: 10,
+            maxAmount: 20,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
 			ignoreSpellCollision: true,
@@ -233,7 +233,7 @@
             respawnTime: 3000
         };
         const luminousSpirit = {
-            maxAmount: 5,
+            maxAmount: 10,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             ignoreSpellCollision: false,
@@ -247,7 +247,7 @@
             respawnTime: 4000
         };
         const specter = {
-            maxAmount: 3,
+            maxAmount: 5,
             mobName: "specter",
             appearance: "specter.png",
             ignoreSpellCollision: false,
@@ -861,58 +861,50 @@
 			});
 			return result;
 		}
-		function crashWithSpell(spellsArray, mob2Array) {
-			let result = false;
-			spellsArray.forEach(spell => {
-                let spellRemoved = false; // Track if the spell has been removed
-				for (let mob2Index = 0; mob2Index < mob2Array.length; mob2Index++) {
-					if (spellRemoved) break; // Stop checking further collisions if spell has been removed
+        function crashWithSpell(spellsArray, mob2Array) {
+            let result = false;
+            spellsArray.forEach(spell => {
+                let totalDamageDealt = false; // Track if the spell has dealt any damage to any mob
+                for (let mob2Index = 0; mob2Index < mob2Array.length; mob2Index++) {
+                    let mob2 = mob2Array[mob2Index];
+                    let radii = spell.radius + mob2.radius;
+                    let distance = getDistance(spell, mob2);
+                    let hasCrashed = distance < radii;
 
-					let mob2 = mob2Array[mob2Index];
-					let radii = spell.radius + mob2.radius;
-					let distance = getDistance(spell, mob2);
-					let hasCrashed = distance < radii;
+                    if (hasCrashed) {
+                        result = true;
+                        totalDamageDealt = true;
 
-					if (hasCrashed) {
-						result = true;
-						if (mob2.health > spell.damage && mob2.health > 15) {
-                            let calculatedSpellDamage = spell.damage - mob2.defense;
-                            if (calculatedSpellDamage <= 0) {
-                                calculatedSpellDamage = 0;
+                        // Apply damage to the mob
+                        if (mob2.health > spell.damage && mob2.health > 15) {
+                            mob2.health -= spell.damage;
+                            mob2.radius = mob2.health;
+                            let calculatedMobDamage = mob2.damage - spell.defense;
+                            if (calculatedMobDamage <= 0) {
+                                calculatedMobDamage = 0;
                             }
-                            mob2.health -= calculatedSpellDamage;
-							mob2.radius = mob2.health;
-
-							let calculatedMobDamage = mob2.damage - spell.defense;
-							if (calculatedMobDamage <= 0) {
-								calculatedMobDamage = 0;
-							}
-							//console.log("hi: " + mob2.damage + " but: " + calculatedMobDamage);
-                            if (spell.ability != "book") {
+                            // Apply damage to the spell
+                            if (spell.ability !== "book") {
                                 spell.health -= calculatedMobDamage;
                             }
 
-							if (mob2.health <= spell.damage || mob2.health <= 15) {
-								// bugged part
-								myGameCharacter.experience += mob2.experienceDrop;
-								levelUp();
-								mob2.spawn();
-								mob2.die();
-								mob2Array.splice(mob2Index, 1);
+                            // Check if the mob should die and be removed
+                            if (mob2.health <= spell.damage || mob2.health <= 15) {
+                                myGameCharacter.experience += mob2.experienceDrop;
+                                levelUp();
+                                mob2.spawn();
+                                mob2.die();
+                                mob2Array.splice(mob2Index, 1);
                                 mob2Index--; // Adjust index after removal
-							}
-                            if (spell.health <= 0) {
-								let spellIndex = spellsArray.indexOf(spell);
-								spellsArray.splice(spellIndex, 1);
-                                spellRemoved = true; // Mark the spell as removed
                             }
-						}
-						const dx = mob2.x - spell.x;
-						const dy = mob2.y - spell.y;
-						// Calculate knockback direction
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = 2;
-						// Apply knockback
+                        }
+
+                        // Apply knockback to both spell and mob
+                        const dx = mob2.x - spell.x;
+                        const dy = mob2.y - spell.y;
+                        const angle = Math.atan2(dy, dx);
+                        const knockbackDistance = 2;
+
                         if (!spell.ignoreMobCollision) {
                             spell.x -= Math.cos(angle) * knockbackDistance;
                             spell.y -= Math.sin(angle) * knockbackDistance;
@@ -921,11 +913,17 @@
                             mob2.x += Math.cos(angle) * knockbackDistance;
                             mob2.y += Math.sin(angle) * knockbackDistance;
                         }
-					}
-				}
-			});
-			return result;
-		}
+                    }
+                }
+
+                // Remove the spell only if its health is <= 0 after damaging all mobs
+                if (totalDamageDealt && spell.health <= 0) {
+                    let spellIndex = spellsArray.indexOf(spell);
+                    spellsArray.splice(spellIndex, 1);
+                }
+            });
+            return result;
+        }
 		function getDistance(circle1, circle2) {
 			let a = circle2.y - circle1.y;
 			let b = circle2.x - circle1.x;

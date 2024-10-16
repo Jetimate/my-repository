@@ -171,7 +171,7 @@ class SpellBook {
 					castSpell(new Spell(
 						myGameCharacter.x,
 						myGameCharacter.y,
-						this.spell.radius + (spellCount * 10),
+						this.spell.radius + (spellCount * 15),
 						this.spell.name,
 						this.spell.appearance,
 						this.spell.castAmount,
