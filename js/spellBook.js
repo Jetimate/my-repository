@@ -53,10 +53,13 @@ class SpellBook {
 			this.mainSpellBook.speed,
 			this.mainSpellBook.ability,
 			this.mainSpellBook.manaCost,
-			this.mainSpellBook.respawnTime), 10);
+			this.mainSpellBook.respawnTime));
 		this.activated = true;	
 	}
 	interact() {
+		let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name);
+		//console.log(spellsArray[mainSpellBookIndex].health);
+
 		if (this.ability === "cast" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
@@ -66,9 +69,10 @@ class SpellBook {
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
+					
 					castSpell(new Spell(
-						myGameCharacter.x,
-						myGameCharacter.y,
+						spellsArray[mainSpellBookIndex].x,
+						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.spell.appearance,
@@ -83,7 +87,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
-						this.spell.respawnTime), 10);
+						this.spell.respawnTime));
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -116,7 +120,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
-						this.spell.respawnTime), 10);
+						this.spell.respawnTime));
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -133,8 +137,8 @@ class SpellBook {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
 					castSpell(new Spell(
-						myGameCharacter.x,
-						myGameCharacter.y,
+						spellsArray[mainSpellBookIndex].x,
+						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.spell.appearance,
@@ -149,7 +153,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
-						this.spell.respawnTime), 10);
+						this.spell.respawnTime));
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -181,7 +185,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
-						this.spell.respawnTime), 10);
+						this.spell.respawnTime));
 					spellCount++;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
@@ -192,6 +196,10 @@ class SpellBook {
 	}
 
 	update() {
+		//console.log(this.mainSpellBook.x);
+		//let mainSpellBookIndex = spellsArray.findIndex(element => element.name == "summonSpecterBook");
+		//console.log(spellsArray[mainSpellBookIndex]);
+		//
 		let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
 		if (totalSpellLootDropCount >= this.maxPages) {
 			let spellLootDropIndex = inventoryArray.findIndex(element => element.spellName == this.spell.name);

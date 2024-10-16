@@ -35,6 +35,7 @@ class Spell {
 	destroy() {
 		let spellIndex = spellsArray.indexOf(this);
 		if (spellIndex > -1) {
+			console.log(this);
 			spellsArray.splice(spellIndex, 1);
 		}
 	}

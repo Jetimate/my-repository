@@ -173,7 +173,6 @@
 		let buttonsArray = [];
 		let spellBooksArray = [];
 		let spellsArray = [];
-		let castSpellTimeout = [];
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
 		const ctx = canvas.getContext("2d");
@@ -220,7 +219,7 @@
         };
         // mobs
         const luminousRock = {
-            maxAmount: 0,
+            maxAmount: 10,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
 			ignoreSpellCollision: true,
@@ -234,7 +233,7 @@
             respawnTime: 3000
         };
         const luminousSpirit = {
-            maxAmount: 0,
+            maxAmount: 5,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             ignoreSpellCollision: false,
@@ -248,18 +247,18 @@
             respawnTime: 4000
         };
         const specter = {
-            maxAmount: 1,
+            maxAmount: 3,
             mobName: "specter",
             appearance: "specter.png",
             ignoreSpellCollision: false,
 			ignoreMobCollision: false,
             defense: 0,
-            damage: 0.1,
+            damage: 3,
             type: "hostile",
             ability: "nothing",
             lootDrop: summonSpecterLootDrop,
             intelligence: 1,
-            respawnTime: 80
+            respawnTime: 8000
         };
 		// spells
         const castSpike = {
@@ -273,7 +272,7 @@
             index: 1,
 			health: 5,
             defense: 0,
-            damage: 5,
+            damage: 3,
             speed: 12,
             ability: "cast",
             manaCost: 5,
@@ -297,7 +296,7 @@
 			respawnTime: 1000
 		};
 		const summonSpecter = {
-			castAmount: 20,
+			castAmount: 5,
 			maxAmount: 2,
             ignoreSpellCollision: false,
             ignoreMobCollision: false,
@@ -305,9 +304,9 @@
 			radius: 15,
 			appearance: "specter.png",
 			index: 1,
-			health: 30,
+			health: 15,
 			defense: 0,
-			damage: 0.1,
+			damage: 3,
 			speed: 5,
 			ability: "summon",
 			manaCost: 30,
@@ -334,7 +333,7 @@
 			castAmount: 15,
 			maxAmount: 0,
             ignoreSpellCollision: true,
-            ignoreMobCollision: true,
+            ignoreMobCollision: false,
 			name: "smash",
 			radius: 50,
 			appearance: "smash.png",
@@ -344,10 +343,10 @@
 			damage: 3,
 			speed: 0,
 			ability: "smash",
-			manaCost: 25,
+			manaCost: 2.5,
 			respawnTime: 500
 		};
-        // spell books constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreCollision, positionIndex, health, damage, speed, ability, manaCost, respawnTime)
+        // spell books 
 		const castSpikeBook = {
 			radius: 12,
             name: "castSpikeBook",
@@ -365,8 +364,76 @@
             manaCost: 1,
             respawnTime: null
 		}
+        const summonSpiritBook = {
+            radius: 12,
+            name: "summonSpiritBook",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
+		}
+        const summonSpecterBook = {
+            radius: 12,
+            name: "summonSpecterBook",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
+        }
+        const teleportBook = {
+            radius: 12,
+            name: "teleportBook",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
+        }
+        const smashBook = {
+            radius: 12,
+            name: "smashBook",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
+        }
 		var myGameArea = {
-			canvas: document.getElementById("mycanvas"),
+			canvas: document.getElementById("mycanvas"), // splice
 			start: function () {
 				this.context = this.canvas.getContext("2d");
 				this.interval = setInterval(updateGameArea, 16.67);
@@ -433,9 +500,7 @@
 			}
 		});
 		function startGame() {
-			for (var i = 0; i < castSpellTimeout.length; i++) {
-				clearTimeout(castSpellTimeout[i]);
-			}
+			// hiii
 			castSpellTimeout = [];
 			buttonsArray = [];
 			spellBooksArray = [];
@@ -474,7 +539,6 @@
 		function spellsKeeper() {
 		}
 		function updateGameArea() {
-            console.log(mobsArray);
 			// always updating
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
@@ -584,16 +648,16 @@
 				myGameCharacter.maxHealth += 5;
 				myGameCharacter.manaRegen += 0.001;
 				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, castSpikeBook, 300, "summon", "summonSpirit"));
+                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, summonSpiritBook, 300, "summon", "summonSpirit"));
 				}
 				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, castSpikeBook, 420, "summon", "summonSpecter"));
+                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, summonSpecterBook, 420, "summon", "summonSpecter"));
 				}
 				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, castSpikeBook, 180, "teleport", "teleport"));
+                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport", "teleport"));
 				}
 				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "smash.png", "smashBook", smash, castSpikeBook, 120, "smash", "smash"));
+                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash", "smash"));
 				}
 			}
 		}
@@ -609,36 +673,33 @@
 			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellName, loot.appearance, loot.ignoreCollision, loot.text)
 			lootsArray.push(newLoot);
         }
-		function castSpell(spell, delay) {
-			castSpellTimeout.push(setTimeout(function () {
-				let newSpell = new Spell(
-					myGameCharacter.x,
-					myGameCharacter.y,
-					spell.radius,
-					spell.name,
-					spell.appearance,
-					spell.castAmount,
-					spell.maxAmount,
-                    spell.ignoreSpellCollision,
-                    spell.ignoreMobCollision,
-					spell.positionIndex,
-					spell.health,
-					spell.defense,
-					spell.damage,
-					spell.speed,
-					spell.ability,
-					spell.manaCost,
-					spell.respawnTime);
-				spellsArray.push(newSpell);
-			}, delay)
-			);
+		function castSpell(spell) {
+			let newSpell = new Spell(
+				spell.x,
+				spell.y,
+				spell.radius,
+				spell.name,
+				spell.appearance,
+				spell.castAmount,
+				spell.maxAmount,
+                spell.ignoreSpellCollision,
+                spell.ignoreMobCollision,
+				spell.positionIndex,
+				spell.health,
+				spell.defense,
+				spell.damage,
+				spell.speed,
+				spell.ability,
+				spell.manaCost,
+				spell.respawnTime);
+			spellsArray.push(newSpell);
 		}
 		function spawnLuminousRock() {
 			for (let i = 0; i < luminousRock.maxAmount; i++) {
 				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
+				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 10 + 1)) + 10);
 				let newLuminousRock = new LuminousRock(
 					luminousRockRandomX,
 					luminousRockRandomY,
@@ -662,8 +723,8 @@
 			for (let i = 0; i < luminousSpirit.maxAmount; i++) {
 				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1000 + 1)) + 1000))) / camera.zoom) + camera.x;
 				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
+				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 25 + 1)) + 25);
+				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 15 + 1)) + 15);
 				let newLuminousSpirit = new LuminousSpirit(
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
@@ -689,7 +750,7 @@
 				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1500 + 1)) + 1500))) / camera.zoom) + camera.x;
 				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
-				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
+				let specterRandomExperienceDrop = Math.floor((Math.random() * (30 - 20 + 1)) + 20);
 				let newSpecter = new Specter(
 					specterRandomX,
 					specterRandomY,
@@ -803,22 +864,33 @@
 		function crashWithSpell(spellsArray, mob2Array) {
 			let result = false;
 			spellsArray.forEach(spell => {
+                let spellRemoved = false; // Track if the spell has been removed
 				for (let mob2Index = 0; mob2Index < mob2Array.length; mob2Index++) {
+					if (spellRemoved) break; // Stop checking further collisions if spell has been removed
+
 					let mob2 = mob2Array[mob2Index];
 					let radii = spell.radius + mob2.radius;
 					let distance = getDistance(spell, mob2);
 					let hasCrashed = distance < radii;
+
 					if (hasCrashed) {
-						result = hasCrashed;
+						result = true;
 						if (mob2.health > spell.damage && mob2.health > 15) {
-							mob2.health -= spell.damage;
+                            let calculatedSpellDamage = spell.damage - mob2.defense;
+                            if (calculatedSpellDamage <= 0) {
+                                calculatedSpellDamage = 0;
+                            }
+                            mob2.health -= calculatedSpellDamage;
 							mob2.radius = mob2.health;
+
 							let calculatedMobDamage = mob2.damage - spell.defense;
 							if (calculatedMobDamage <= 0) {
 								calculatedMobDamage = 0;
 							}
 							//console.log("hi: " + mob2.damage + " but: " + calculatedMobDamage);
-							spell.health -= calculatedMobDamage;
+                            if (spell.ability != "book") {
+                                spell.health -= calculatedMobDamage;
+                            }
 
 							if (mob2.health <= spell.damage || mob2.health <= 15) {
 								// bugged part
@@ -827,17 +899,12 @@
 								mob2.spawn();
 								mob2.die();
 								mob2Array.splice(mob2Index, 1);
+                                mob2Index--; // Adjust index after removal
 							}
                             if (spell.health <= 0) {
-                                let spellIndex = spellsArray.indexOf(spell);
-                                spellsArray.splice(spellIndex, 1);
-                                /*
-                                let currentSpellName = spell.name;
-                                let totalThisSpellCount = spellsArray.filter(element => element.name === currentSpellName).length;
-                                if (totalThisSpellCount < spell.maxAmount) {
-                                    castSpell(new Spell(myGameCharacter.x, myGameCharacter.y, spell.radius, spell.name, spell.appearance, spell.castAmount, spell.maxAmount, spell.ignoreCollision, spell.positionIndex, spell.health, spell.damage, spell.speed, spell.ability, spell.manaCost, spell.respawnTime), spell.respawnTime);
-                                }
-                                */
+								let spellIndex = spellsArray.indexOf(spell);
+								spellsArray.splice(spellIndex, 1);
+                                spellRemoved = true; // Mark the spell as removed
                             }
 						}
 						const dx = mob2.x - spell.x;
@@ -846,17 +913,14 @@
 						const angle = Math.atan2(dy, dx);
 						const knockbackDistance = 2;
 						// Apply knockback
-						if (!spell.ignoreMobCollision) {
-							spell.x -= Math.cos(angle) * knockbackDistance;
-							spell.y -= Math.sin(angle) * knockbackDistance;
-						}
-                        if (spell.ability == "book") {
-
+                        if (!spell.ignoreMobCollision) {
+                            spell.x -= Math.cos(angle) * knockbackDistance;
+                            spell.y -= Math.sin(angle) * knockbackDistance;
                         }
-                        else if (!mob2.ignoreSpellCollision) {
-							mob2.x += Math.cos(angle) * knockbackDistance;
-							mob2.y += Math.sin(angle) * knockbackDistance;
-						}
+                        if (!mob2.ignoreSpellCollision) {
+                            mob2.x += Math.cos(angle) * knockbackDistance;
+                            mob2.y += Math.sin(angle) * knockbackDistance;
+                        }
 					}
 				}
 			});
@@ -883,9 +947,10 @@
 		1007). a spellBook that progressively gets stronger the more mobs you kill
 
 		game issues to fix:
+		bug 2 is fixed. but im not removing it because it has existed for years and only got removed today 17/10/2024 3:37 AM
 		2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice and deletes 2 spellbooks.
-		3). mobs don't spawn properly whenever the game over feature is activated
-		4). wtf is zoom for? it doesn't work; please remove it.
+		3). the spell, when hitting 2 or more mobs at the same time, it chooses a random mob to damage rather than having both of them damaged.
+		    maybe make it so that the closest mob to the spells' center is the prioritized mob to get damaged.
 		*/
 	</script>
 </body>

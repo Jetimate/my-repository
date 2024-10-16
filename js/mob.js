@@ -141,8 +141,8 @@ class LuminousRock extends Mob {
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
 				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1700 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
 				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 5 + 1)) + 5);
+				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let luminousRockRandomExperienceDrop = Math.floor((Math.random() * (15 - 10 + 1)) + 10);
 				let newLuminousRock = new LuminousRock(
 					luminousRockRandomX,
 					luminousRockRandomY,
@@ -177,8 +177,8 @@ class LuminousSpirit extends Mob {
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
 				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000))) / camera.zoom) + camera.x;
 				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 15 + 1)) + 15);
-				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 5);
+				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 25 + 1)) + 25);
+				let luminousSpiritRandomExperienceDrop = Math.floor((Math.random() * (20 - 15 + 1)) + 15);
 				let newLuminousSpirit = new LuminousSpirit(
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
@@ -214,7 +214,7 @@ class Specter extends Mob {
 				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 1500 + 1)) + 1500))) / camera.zoom) + camera.x;
 				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
 				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
-				let specterRandomExperienceDrop = Math.floor((Math.random() * (20 - 5 + 1)) + 10);
+				let specterRandomExperienceDrop = Math.floor((Math.random() * (30 - 20 + 1)) + 20);
 				let newSpecter = new Specter(
 					specterRandomX,
 					specterRandomY,
