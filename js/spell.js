@@ -2,13 +2,6 @@ class Spell {
 	constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
-		this.radian = 0;
-		this.angle = 0;
-		this.moveAngle = 0;
-		this.targetX = null;
-		this.targetY = null;
-		this.hasTarget = false;
-		this.lifeTimer = 0;
         this.x = x;
         this.y = y;
 		this.radius = radius;
@@ -26,6 +19,15 @@ class Spell {
 		this.ability = ability;
 		this.manaCost = manaCost;
 		this.respawnTime = respawnTime;
+		this.radian = 0;
+		this.angle = 0;
+		this.moveAngle = 0;
+		this.targetX = null;
+		this.targetY = null;
+		this.hasTarget = false;
+		this.lifeTimer = 0;
+		this.turn = "clockwise";
+		this.orbitRadius = 5;
     }
 
 	setTarget(x, y) {
@@ -35,7 +37,7 @@ class Spell {
 	destroy() {
 		let spellIndex = spellsArray.indexOf(this);
 		if (spellIndex > -1) {
-			console.log(this);
+			//console.log(this);
 			spellsArray.splice(spellIndex, 1);
 		}
 	}
@@ -86,9 +88,22 @@ class Spell {
 	}
 	update() {
 		if (this.ability === "book") {
+			// let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
+			let totalSpellBookCountArray = spellsArray.filter(element => element.ability == "book");
+			// Check if the index is odd or even
+			console.log(totalSpellBookCountArray)
+			totalSpellBookCountArray.forEach((spellBook, index) => {
+				spellBook.orbitRadius = 2 + index;
+				if ((index + 1) % 2 === 0) {
+					spellBook.turn = "counterclockwise"; // Even index: counterclockwise
+				} else {
+					spellBook.turn = "clockwise"; // Odd index: clockwise
+				}
+				
+			});
 			// Calculate target orbit position
-			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
-			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
+			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 
 			// Calculate distance to target orbit position
 			const dx = targetX - this.x;
@@ -96,16 +111,26 @@ class Spell {
 			const distance = Math.sqrt(dx * dx + dy * dy);
 
 			// Adjust speed based on the distance (e.g., speed scales with distance)
-			const minSpeed = this.speed / 4;
+			const minSpeed = this.speed / 10;
 			const maxSpeed = this.speed;
 			const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
 			const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
 
+
 			// Calculate the movement angle and update position
 			this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
-			this.positionIndex += 0.01;
-			this.x += adjustedSpeed * Math.sin(this.angle);
-			this.y -= adjustedSpeed * Math.cos(this.angle);
+
+			if (this.turn == "clockwise") {
+				// clockwise
+				this.positionIndex += 0.005;
+				this.x += adjustedSpeed * Math.sin(this.angle);
+				this.y -= adjustedSpeed * Math.cos(this.angle);
+		} else if (this.turn == "counterclockwise") {
+				// counterclockwise
+				this.positionIndex -= 0.005;
+				this.x += adjustedSpeed * Math.sin(this.angle);
+				this.y -= adjustedSpeed * Math.cos(this.angle);
+			}
 		}
 		if (this.ability === "summon") {
 			if (isMouseDown) {
@@ -118,8 +143,8 @@ class Spell {
 				this.y -= this.speed * Math.cos(this.angle);
 			} else if (!isMouseDown) {
 				// Calculate target orbit position
-				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
-				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * 5);
+				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 
 				// Calculate distance to target orbit position
 				const dx = targetX - this.x;
@@ -127,14 +152,14 @@ class Spell {
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
 				// Adjust speed based on the distance (e.g., speed scales with distance)
-				const minSpeed = this.speed / 4;
+				const minSpeed = this.speed / 10;
 				const maxSpeed = this.speed;
 				const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
 				const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
 
 				// Calculate the movement angle and update position
 				this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
-				this.positionIndex += 0.01;
+				this.positionIndex += 0.008;
 				this.x += adjustedSpeed * Math.sin(this.angle);
 				this.y -= adjustedSpeed * Math.cos(this.angle);
 			}

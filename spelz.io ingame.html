@@ -905,14 +905,16 @@
                         const angle = Math.atan2(dy, dx);
                         const knockbackDistance = 2;
 
-                        if (!spell.ignoreMobCollision) {
-                            spell.x -= Math.cos(angle) * knockbackDistance;
-                            spell.y -= Math.sin(angle) * knockbackDistance;
-                        }
-                        if (!mob2.ignoreSpellCollision) {
-                            mob2.x += Math.cos(angle) * knockbackDistance;
-                            mob2.y += Math.sin(angle) * knockbackDistance;
-                        }
+						if (spell.ability !== "book") {
+							if (!spell.ignoreMobCollision) {
+								spell.x -= Math.cos(angle) * knockbackDistance;
+								spell.y -= Math.sin(angle) * knockbackDistance;
+							}
+							if (!mob2.ignoreSpellCollision) {
+								mob2.x += Math.cos(angle) * knockbackDistance;
+								mob2.y += Math.sin(angle) * knockbackDistance;
+							}
+						}
                     }
                 }
 
