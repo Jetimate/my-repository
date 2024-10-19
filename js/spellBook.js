@@ -64,7 +64,7 @@ class SpellBook {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
-			let spellBookCastAmount = this.spell.castAmount + 10 + (this.level - 1);
+			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {
@@ -97,7 +97,9 @@ class SpellBook {
 		}
 		if (this.spell.ability === "shoot2" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
+			console.log(this.spell.maxAmount);
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			this.spell.maxAmount = spellBookCastAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {

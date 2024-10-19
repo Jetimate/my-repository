@@ -42,19 +42,19 @@ class Button {
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "showInventory") {
-			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
+			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "spikeLootDrop").length;
 			this.text1 = "spike pages: " + totalCastSpikeLootDropCount;
 			ctx.fillText(this.text1, this.x + 5, this.y + 30);
 
-			let totalCastLuminousEnergyLootDropCount = inventoryArray.filter(element => element.name === "castLuminousEnergyLootDrop").length;
+			let totalCastLuminousEnergyLootDropCount = inventoryArray.filter(element => element.name === "luminousEnergyLootDrop").length;
 			this.text2 = "luminousEnergy pages: " + totalCastLuminousEnergyLootDropCount;
 			ctx.fillText(this.text2, this.x + 5, this.y + 60);
 
-			let totalSummonSpiritLootDropCount = inventoryArray.filter(element => element.name === "summonSpiritLootDrop").length;
+			let totalSummonSpiritLootDropCount = inventoryArray.filter(element => element.name === "luminousSpiritLootDrop").length;
 			this.text3 = "spirit pages: " + totalSummonSpiritLootDropCount;
 			ctx.fillText(this.text3, this.x + 5, this.y + 90);
 
-			let totalSummonSpecterLootDropCount = inventoryArray.filter(element => element.name === "summonSpecterLootDrop").length;
+			let totalSummonSpecterLootDropCount = inventoryArray.filter(element => element.name === "specterLootDrop").length;
 			this.text4 = "specter pages: " + totalSummonSpecterLootDropCount;
 			ctx.fillText(this.text4, this.x + 5, this.y + 120);
 

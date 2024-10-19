@@ -30,6 +30,7 @@ class Spell {
 		this.orbitRadius = 5;
 		this.radiusIncrease = 0;
 		this.orbitRadiusIncrease = 0;
+		this.damageIncrease = 0;
 		this.toggle = false;
 		this.state = 0;
 	}
@@ -195,6 +196,7 @@ class Spell {
 					if (!this.toggle) {
 						this.radiusIncrease = 0.1;
 						this.orbitRadiusIncrease = 0.01;
+						this.damageIncrease = 0.03;
 						this.toggle = true;
 					}
 
@@ -214,11 +216,13 @@ class Spell {
 					//console.log(this.radius + " " + radiusIncrease);
 					this.radius += this.radiusIncrease;
 					this.orbitRadius += this.orbitRadiusIncrease;
+					this.damage += this.damageIncrease;
 
 					if (this.radius >= 15) {
-						console.log(this.radius + " " + this.radiusIncrease);
+						console.log(this.radius + " " + this.damage);
 						this.radiusIncrease = 0;
 						this.orbitRadiusIncrease = 0;
+						this.damageIncrease = 0;
 						if (isMouseDown && !this.hasTarget) {
 							castMouseX = worldX - biome1.x;
 							castMouseY = worldY - biome1.y;

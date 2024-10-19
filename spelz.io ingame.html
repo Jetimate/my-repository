@@ -171,25 +171,33 @@
 		const canvas = document.getElementById("mycanvas");
 		const ctx = canvas.getContext("2d");
 		// loot drops
-		const castSpikeLootDrop = {
+		const spikeLootDrop = {
 			radius: 20,
-			name: "castSpikeLootDrop",
+			name: "spikeLootDrop",
 			spellName: "castSpike",
             appearance: "enchantedBook.png",
             ignoreCollision: false,
             text: "spike"
 		};
-        const summonSpiritLootDrop = {
+        const luminousEnergyLootDrop = {
             radius: 20,
-			name: "summonSpiritLootDrop",
+            name: "luminousEnergyLootDrop",
+            spellName: "castLuminousEnergy",
+            appearance: "enchantedBook.png",
+            ignoreCollision: false,
+            text: "lumenergy"
+        };
+        const luminousSpiritLootDrop = {
+            radius: 20,
+			name: "luminousSpiritLootDrop",
             spellName: "summonSpirit",
             appearance: "enchantedBook.png",
             ignoreCollision: false,
             text: "spirit"
 		};
-        const summonSpecterLootDrop = {
+        const specterLootDrop = {
             radius: 20,
-			name: "summonSpecterLootDrop",
+			name: "specterLootDrop",
             spellName: "summonSpecter",
             appearance: "enchantedBook.png",
             ignoreCollision: false,
@@ -222,7 +230,7 @@
             damage: 1,
             type: "passive",
             ability: "nothing",
-            lootDrop: castSpikeLootDrop,
+            lootDrop: luminousEnergyLootDrop,
             intelligence: 0,
             respawnTime: 3000
         };
@@ -236,7 +244,7 @@
             damage: 1,
             type: "passive",
             ability: "nothing",
-            lootDrop: summonSpiritLootDrop,
+            lootDrop: luminousSpiritLootDrop,
             intelligence: 1,
             respawnTime: 4000
         };
@@ -250,7 +258,7 @@
             damage: 3,
             type: "hostile",
             ability: "nothing",
-            lootDrop: summonSpecterLootDrop,
+            lootDrop: specterLootDrop,
             intelligence: 1,
             respawnTime: 8000
         };
@@ -283,7 +291,7 @@
             index: 1,
             health: 5,
             defense: 0,
-            damage: 3,
+            damage: 1,
             speed: 15,
             ability: "shoot2",
             manaCost: 15,
@@ -301,7 +309,7 @@
 			health: 10,
             defense: 0,
 			damage: 3,
-			speed: 3,
+			speed: 5,
 			ability: "summon1",
 			manaCost: 20,
 			respawnTime: 1000
@@ -318,7 +326,7 @@
 			health: 15,
 			defense: 0,
 			damage: 3,
-			speed: 5,
+			speed: 7,
 			ability: "summon1",
 			manaCost: 30,
 			respawnTime: 1500
