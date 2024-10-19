@@ -1,5 +1,5 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, mainSpellBook, cooldown, ability, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, mainSpellBook, cooldown, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -14,7 +14,6 @@ class SpellBook {
 		this.spell = spell;
 		this.mainSpellBook = mainSpellBook;
 		this.cooldown = cooldown;
-		this.ability = ability;
 		this.text = text;
 		this.cooldownTimer = 0;
 		this.level = 1;
@@ -61,11 +60,11 @@ class SpellBook {
 		let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name);
 		//console.log(spellsArray[mainSpellBookIndex].health);
 
-		if (this.ability === "cast" && myGameCharacter.mana > this.spell.manaCost) {
+		if (this.spell.ability === "shoot1" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
-			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			let spellBookCastAmount = this.spell.castAmount + 10 + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {
@@ -96,7 +95,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.ability === "summon" && myGameCharacter.mana > this.spell.manaCost) {
+		if (this.spell.ability === "shoot2" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -129,10 +128,43 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.ability === "teleport" && myGameCharacter.mana > this.spell.manaCost) {
+		if (this.spell.ability === "summon1" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			castMouseX = worldX - biome1.x;
-			castMouseY = worldY - biome1.y;
+			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < spellBookCastAmount) {
+					// Cast a spell
+					this.spell.index += 1;
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime));
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
+		}
+		if (this.spell.ability === "teleport" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+			//castMouseX = worldX - biome1.x;
+			//castMouseY = worldY - biome1.y;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
@@ -162,7 +194,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.ability === "smash" && myGameCharacter.mana > this.spell.manaCost) {
+		if (this.spell.ability === "AoE1" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
 
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -262,6 +294,50 @@ class SpellBook {
 				this.spellReady = false;
 			}
 		}
+		if (this.index === 6) {
+			if (keys.Digit6 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && this.spellActive) {
+				this.borderColor = "black";
+				this.interact();
+				this.spellActive = false;
+				this.spellReady = false;
+			}
+		}
+		if (this.index === 7) {
+			if (keys.Digit7 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && this.spellActive) {
+				this.borderColor = "black";
+				this.interact();
+				this.spellActive = false;
+				this.spellReady = false;
+			}
+		}
+		if (this.index === 8) {
+			if (keys.Digit8 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && this.spellActive) {
+				this.borderColor = "black";
+				this.interact();
+				this.spellActive = false;
+				this.spellReady = false;
+			}
+		}
+		if (this.index === 9) {
+			if (keys.Digit9 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
+				this.borderColor = "green";
+			} else if (isMouseDown && this.spellActive) {
+				this.borderColor = "black";
+				this.interact();
+				this.spellActive = false;
+				this.spellReady = false;
+			}
+		} 
 		if (!this.spellReady) {
 			this.cooldownTimer++;
 			this.borderColor = "red";
@@ -282,6 +358,7 @@ class SpellBook {
 		const distance =
 			Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
 		if (distance) {
+			/*
 			if (this.index === 1) {
 				keys.Digit1 = true;
 			}
@@ -297,6 +374,7 @@ class SpellBook {
 			if (this.index === 5) {
 				keys.Digit5 = true;
 			}
+			*/
 			//console.log(this.name + " was clicked");
 		}
 	}

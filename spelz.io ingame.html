@@ -143,6 +143,10 @@
 			Digit3: false,
 			Digit4: false,
 			Digit5: false,
+            Digit6: false,
+            Digit7: false,
+            Digit8: false,
+            Digit9: false,
 			ShiftLeft: false,
 			ShiftRight: false,
 			Space: false,
@@ -251,65 +255,82 @@
             respawnTime: 8000
         };
 		// spells
-        const castSpike = {
-            castAmount: 2,
+		const castSpike = {
+			radius: 12,
+            name: "castSpike",
+            appearance: "spike.png",
+			castAmount: 2,
             maxAmount: 0,
             ignoreSpellCollision: false,
             ignoreMobCollision: false,
-            name: "castSpike",
-            radius: 12,
-            appearance: "spike.png",
             index: 1,
 			health: 5,
             defense: 0,
             damage: 3,
             speed: 12,
-            ability: "cast",
+            ability: "shoot1",
             manaCost: 5,
             respawnTime: 500
-        };
-		const summonSpirit = {
-			castAmount: 8,
-			maxAmount: 5,
+		};
+		const castLuminousEnergy = {
+            radius: 5,
+            name: "castLuminousEnergy",
+            appearance: "luminousRock.png",
+            castAmount: 5,
+            maxAmount: 5,
             ignoreSpellCollision: false,
             ignoreMobCollision: false,
-			name: "summonSpirit",
+            index: 1,
+            health: 5,
+            defense: 0,
+            damage: 3,
+            speed: 15,
+            ability: "shoot2",
+            manaCost: 15,
+            respawnTime: 1000
+		}
+		const summonSpirit = {
 			radius: 15,
-			appearance: "luminousSpirit.png",
+            name: "summonSpirit",
+            appearance: "luminousSpirit.png",
+			castAmount: 8,
+			maxAmount: 8,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: false,
 			index: 1,
 			health: 10,
             defense: 0,
 			damage: 3,
 			speed: 3,
-			ability: "summon",
+			ability: "summon1",
 			manaCost: 20,
 			respawnTime: 1000
 		};
 		const summonSpecter = {
+			radius: 15,
+            name: "summonSpecter",
+            appearance: "specter.png",
 			castAmount: 5,
-			maxAmount: 2,
+			maxAmount: 5,
             ignoreSpellCollision: false,
             ignoreMobCollision: false,
-			name: "summonSpecter",
-			radius: 15,
-			appearance: "specter.png",
 			index: 1,
 			health: 15,
 			defense: 0,
 			damage: 3,
 			speed: 5,
-			ability: "summon",
+			ability: "summon1",
 			manaCost: 30,
 			respawnTime: 1500
 		};
 		const teleport = {
+			radius: 12,
+            name: "teleport",
+            appearance: "teleportation.png",
 			castAmount: 1,
 			maxAmount: 0,
             ignoreSpellCollision: true,
             ignoreMobCollision: true,
-			name: "teleport",
-			radius: 12,
-			appearance: "teleportation.png",
 			index: 1,
 			health: 15,
             defense: 0,
@@ -320,26 +341,26 @@
 			respawnTime: 500
 		};
 		const smash = {
+			radius: 50,
+            name: "smash",
+            appearance: "smash.png",
 			castAmount: 15,
 			maxAmount: 0,
             ignoreSpellCollision: true,
             ignoreMobCollision: false,
-			name: "smash",
-			radius: 50,
-			appearance: "smash.png",
 			index: 1,
 			health: 1,
             defense: 0,
 			damage: 3,
 			speed: 0,
-			ability: "smash",
+			ability: "AoE1",
 			manaCost: 2.5,
 			respawnTime: 500
 		};
         // spell books 
-		const castSpikeBook = {
+		const spikeBook = {
 			radius: 12,
-            name: "castSpikeBook",
+            name: "spikeBook",
             appearance: "enchantedBook.png",
             castAmount: 1,
             maxAmount: 1,
@@ -354,9 +375,9 @@
             manaCost: 1,
             respawnTime: null
 		}
-        const summonSpiritBook = {
+		const luminousEnergyBook = {
             radius: 12,
-            name: "summonSpiritBook",
+            name: "luminousEnergyBook",
             appearance: "enchantedBook.png",
             castAmount: 1,
             maxAmount: 1,
@@ -371,9 +392,26 @@
             manaCost: 1,
             respawnTime: null
 		}
-        const summonSpecterBook = {
+        const luminousSpiritBook = {
             radius: 12,
-            name: "summonSpecterBook",
+            name: "luminousSpiritBook",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
+		}
+        const specterBook = {
+            radius: 12,
+            name: "specterBook",
             appearance: "enchantedBook.png",
             castAmount: 1,
             maxAmount: 1,
@@ -449,12 +487,10 @@
 		window.addEventListener('mousedown', (event) => {
 			//console.log(event);
 			isMouseDown = true;
-            console.log(mouseX + " " + mouseY);
+            //console.log(mouseX + " " + mouseY);
 			const rect = canvas.getBoundingClientRect();
 			mouseX = event.clientX - rect.left;
 			mouseY = event.clientY - rect.top;
-			worldX = (mouseX / camera.zoom) + camera.x;
-			worldY = (mouseY / camera.zoom) + camera.y;
 			biome1.clickImage(biome1);
 		});
 
@@ -467,8 +503,6 @@
 				const rect = canvas.getBoundingClientRect();
 				mouseX = event.clientX - rect.left;
 				mouseY = event.clientY - rect.top;
-				worldX = (mouseX / camera.zoom) + camera.x;
-				worldY = (mouseY / camera.zoom) + camera.y;
 			}
 		});
 		// Key down event listener
@@ -517,9 +551,7 @@
             addButton(new Button(5, 225, 200, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
 		}
 		function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, castSpikeBook, 30, "cast", "castSpike"));
-			//addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, 120, "summon", "summonSpirit"));
-			//addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, 150, "summon", "summonSpecter"));
+            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 30, "castSpike"));
 		}
 		function spellsKeeper() {
 		}
@@ -635,16 +667,19 @@
 				myGameCharacter.maxHealth += 5;
 				myGameCharacter.manaRegen += 0.001;
 				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, summonSpiritBook, 300, "summon", "summonSpirit"));
+                    addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
 				}
-				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, summonSpecterBook, 420, "summon", "summonSpecter"));
+                if (myGameCharacter.level == 1) {
+                    addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", castLuminousEnergy, luminousEnergyBook, 45, "castLuminousEnergy"));
+                }
+				if (myGameCharacter.level == 2) {
+                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
 				}
-				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport", "teleport"));
+				if (myGameCharacter.level == 2) {
+                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport"));
 				}
-				if (myGameCharacter.level == 1) {
-                    addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash", "smash"));
+				if (myGameCharacter.level == 3) {
+                    addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
 				}
 			}
 		}
@@ -653,7 +688,7 @@
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook) {
-            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.ability, spellBook.text)
+            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
 			spellBooksArray.push(newSpellBook);
 		}
         function dropLoot(loot) {

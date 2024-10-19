@@ -46,54 +46,41 @@ class Button {
 			this.text1 = "spike pages: " + totalCastSpikeLootDropCount;
 			ctx.fillText(this.text1, this.x + 5, this.y + 30);
 
-			let totalSummonSpiritLootDropCount = inventoryArray.filter(element => element.name === "summonSpiritLootDrop").length;
-			this.text2 = "spirit pages: " + totalSummonSpiritLootDropCount;
+			let totalCastLuminousEnergyLootDropCount = inventoryArray.filter(element => element.name === "castLuminousEnergyLootDrop").length;
+			this.text2 = "luminousEnergy pages: " + totalCastLuminousEnergyLootDropCount;
 			ctx.fillText(this.text2, this.x + 5, this.y + 60);
 
-			let totalSummonSpecterLootDropCount = inventoryArray.filter(element => element.name === "summonSpecterLootDrop").length;
-			this.text3 = "specter pages: " + totalSummonSpecterLootDropCount;
+			let totalSummonSpiritLootDropCount = inventoryArray.filter(element => element.name === "summonSpiritLootDrop").length;
+			this.text3 = "spirit pages: " + totalSummonSpiritLootDropCount;
 			ctx.fillText(this.text3, this.x + 5, this.y + 90);
 
-			let totalTeleportLootDropCount = inventoryArray.filter(element => element.name === "teleportLootDrop").length;
-			this.text4 = "teleport pages: " + totalTeleportLootDropCount;
+			let totalSummonSpecterLootDropCount = inventoryArray.filter(element => element.name === "summonSpecterLootDrop").length;
+			this.text4 = "specter pages: " + totalSummonSpecterLootDropCount;
 			ctx.fillText(this.text4, this.x + 5, this.y + 120);
 
-			let totalSmashLootDropCount = inventoryArray.filter(element => element.name === "smashLootDrop").length;
-			this.text5 = "smash pages: " + totalSmashLootDropCount;
+			let totalTeleportLootDropCount = inventoryArray.filter(element => element.name === "teleportLootDrop").length;
+			this.text5 = "teleport pages: " + totalTeleportLootDropCount;
 			ctx.fillText(this.text5, this.x + 5, this.y + 150);
+
+			let totalSmashLootDropCount = inventoryArray.filter(element => element.name === "smashLootDrop").length;
+			this.text6 = "smash pages: " + totalSmashLootDropCount;
+			ctx.fillText(this.text6, this.x + 5, this.y + 180);
 		}
         ctx.closePath();
 	}
 	update() {
-		/*
-		if (this.name == "levelBarButton") {
-			this.text = "level: " + myGameCharacter.level;
-		}
-		if (this.name == "experienceBarButton") {
-			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
-		}
-		if (this.name == "healthBarButton") {
-			this.text = "health: " + myGameCharacter.health + "/" + myGameCharacter.maxHealth;
-		}
-		if (this.name == "manaBarButton") {
-			this.text = "mana: " + myGameCharacter.mana;
-		}
-		if (this.name == "showInventory") {
-			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
-			this.text = "spike: " + totalCastSpikeLootDropCount;
-		}
-		*/
+
 	}
 	
 	clickButton(xmouse, ymouse) {
 		const distance = Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
 		if (distance) {
-			console.log(this.name + " was clicked");
+			//console.log(this.name + " was clicked");
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
 				let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
 				addButton(new Button(5, 280, 250, 600, [5], "#e3a04d", "showInventory", "spike: " + totalCastSpikeLootDropCount));
-				console.log(inventoryArray);
+				//console.log(inventoryArray);
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;
 				let showInventoryButtonIndex = buttonsArray.findIndex(element => element.name === "showInventory");

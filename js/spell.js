@@ -2,8 +2,8 @@ class Spell {
 	constructor(x, y, radius, name, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
-        this.x = x;
-        this.y = y;
+		this.x = x;
+		this.y = y;
 		this.radius = radius;
 		this.name = name;
 		this.appearance = appearance;
@@ -28,7 +28,11 @@ class Spell {
 		this.lifeTimer = 0;
 		this.turn = "clockwise";
 		this.orbitRadius = 5;
-    }
+		this.radiusIncrease = 0;
+		this.orbitRadiusIncrease = 0;
+		this.toggle = false;
+		this.state = 0;
+	}
 
 	setTarget(x, y) {
 		this.targetX = x;
@@ -58,7 +62,7 @@ class Spell {
 					// Apply knockback
 					if (!spellA.ignoreSpellCollision) {
 						spellA.x -= Math.cos(angle) * knockbackDistance;
-						spellA.y -= Math.sin(angle) * knockbackDistance;	
+						spellA.y -= Math.sin(angle) * knockbackDistance;
 					}
 					if (!spellB.ignoreSpellCollision) {
 						spellB.x += Math.cos(angle) * knockbackDistance;
@@ -68,7 +72,7 @@ class Spell {
 			}
 		}
 	}
-    draw() {
+	draw() {
 		var ctx = myGameArea.context;
 		ctx.save();
 		ctx.translate(this.x, this.y);
@@ -81,7 +85,7 @@ class Spell {
 		ctx.strokeStyle = "red";
 		ctx.moveTo(0, 0);
 		ctx.lineTo(0, 0 - this.radius);
-        ctx.stroke();
+		ctx.stroke();
 		ctx.closePath();
 		*/
 		ctx.restore();
@@ -99,7 +103,7 @@ class Spell {
 				} else {
 					spellBook.turn = "clockwise"; // Odd index: clockwise
 				}
-				
+
 			});
 			// Calculate target orbit position
 			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
@@ -125,16 +129,16 @@ class Spell {
 				this.positionIndex += 0.005;
 				this.x += adjustedSpeed * Math.sin(this.angle);
 				this.y -= adjustedSpeed * Math.cos(this.angle);
-		} else if (this.turn == "counterclockwise") {
+			} else if (this.turn == "counterclockwise") {
 				// counterclockwise
 				this.positionIndex -= 0.005;
 				this.x += adjustedSpeed * Math.sin(this.angle);
 				this.y -= adjustedSpeed * Math.cos(this.angle);
 			}
 		}
-		if (this.ability === "summon") {
+		if (this.ability === "summon1") {
 			if (isMouseDown) {
-				let summoningSpells = spellsArray.filter(element => element.ability === "summon");
+				let summoningSpells = spellsArray.filter(element => element.ability === "summon1");
 				summoningSpells.forEach(spell => spell.setTarget(worldX - biome1.x, worldY - biome1.y));
 				let dx = (worldX - biome1.x) - this.x;
 				let dy = (worldY - biome1.y) - this.y;
@@ -164,7 +168,7 @@ class Spell {
 				this.y -= adjustedSpeed * Math.cos(this.angle);
 			}
 		}
-		if (this.ability === "cast") {
+		if (this.ability === "shoot1") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
 				let dx = castMouseX - this.x;
@@ -183,9 +187,67 @@ class Spell {
 				this.destroy();
 			}
 		}
+		if (this.ability === "shoot2") {
+			switch (this.state) {
+				case 0:
+					let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+					let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+					if (!this.toggle) {
+						this.radiusIncrease = 0.1;
+						this.orbitRadiusIncrease = 0.01;
+						this.toggle = true;
+					}
+
+					const dx = targetX - this.x;
+					const dy = targetY - this.y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+
+					const minSpeed = this.speed / 10;
+					const maxSpeed = this.speed;
+					const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
+					const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
+
+					this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
+					this.positionIndex += 0.008;
+					this.x += adjustedSpeed * Math.sin(this.angle);
+					this.y -= adjustedSpeed * Math.cos(this.angle);
+					//console.log(this.radius + " " + radiusIncrease);
+					this.radius += this.radiusIncrease;
+					this.orbitRadius += this.orbitRadiusIncrease;
+
+					if (this.radius >= 15) {
+						console.log(this.radius + " " + this.radiusIncrease);
+						this.radiusIncrease = 0;
+						this.orbitRadiusIncrease = 0;
+						if (isMouseDown && !this.hasTarget) {
+							castMouseX = worldX - biome1.x;
+							castMouseY = worldY - biome1.y;
+							let dx = castMouseX - this.x;
+							let dy = castMouseY - this.y;
+							this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+							this.hasTarget = true;  // Mark that the target has been set
+							this.state = 1;
+						}
+					}
+					break;
+				case 1:
+					this.x += this.speed * Math.sin(this.angle);
+					this.y -= this.speed * Math.cos(this.angle);
+					this.lifeTimer++;
+
+					// If lifeTimer exceeds maxLife, this entity will be removed
+					if (this.lifeTimer >= 600) {
+						// Call the function to remove this entity from the array
+						this.destroy();
+					}
+					break;
+			}
+		}
 		if (this.ability === "teleport") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
+				castMouseX = worldX - biome1.x;
+				castMouseY = worldY - biome1.y;
 				let dx = castMouseX - this.x;
 				let dy = castMouseY - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
@@ -201,7 +263,7 @@ class Spell {
 				this.destroy();
 			}
 		}
-		if (this.ability === "smash") {
+		if (this.ability === "AoE1") {
 			this.lifeTimer++;
 			// If lifeTimer exceeds maxLife, this entity will be removed
 			if (this.lifeTimer >= 5) {
@@ -211,5 +273,5 @@ class Spell {
 		}
 		this.handleCollisions();
 		this.draw();
-	}	
+	}
 }
