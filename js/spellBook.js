@@ -196,15 +196,12 @@ class SpellBook {
 	}
 
 	update() {
-		//console.log(this.mainSpellBook.x);
-		//let mainSpellBookIndex = spellsArray.findIndex(element => element.name == "summonSpecterBook");
-		//console.log(spellsArray[mainSpellBookIndex]);
-		//
-		let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
-		if (totalSpellLootDropCount >= this.maxPages) {
-			let spellLootDropIndex = inventoryArray.findIndex(element => element.spellName == this.spell.name);
-			if (spellLootDropIndex !== -1) {
-				inventoryArray.splice(spellLootDropIndex, this.maxPages);
+		// level up spell Book
+		let totalSpellPageCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
+		if (totalSpellPageCount >= this.maxPages) {
+			let spellPageIndex = inventoryArray.findIndex(element => element.spellName == this.spell.name);
+			if (spellPageIndex !== -1) {
+				inventoryArray.splice(spellPageIndex, this.maxPages);
 			}
 			this.maxPages += 3;
 			this.level++;
