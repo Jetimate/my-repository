@@ -149,16 +149,6 @@
 			KeyB: false
 		};
 		let isMouseDown = false;
-		let skill1 = false;
-		let skill2 = false;
-		let skill3 = false;
-		let skill4 = false;
-		let skill5 = false;
-		let skill1Used = false
-		let skill2Used = false;
-		let skill3Used = false;
-		let skill4Used = false;
-		let skill5Used = false;
 		let mouseX = 0;
 		let mouseY = 0;
 		let castMouseX = 0;
@@ -459,11 +449,7 @@
 		window.addEventListener('mousedown', (event) => {
 			//console.log(event);
 			isMouseDown = true;
-			skill1Used = false;
-			skill2Used = false;
-			skill3Used = false;
-			skill4Used = false;
-			skill5Used = false;
+            console.log(mouseX + " " + mouseY);
 			const rect = canvas.getBoundingClientRect();
 			mouseX = event.clientX - rect.left;
 			mouseY = event.clientY - rect.top;
@@ -500,7 +486,6 @@
 			}
 		});
 		function startGame() {
-			// hiii
 			castSpellTimeout = [];
 			buttonsArray = [];
 			spellBooksArray = [];
@@ -540,6 +525,8 @@
 		}
 		function updateGameArea() {
 			// always updating
+            worldX = (mouseX / camera.zoom) + camera.x;
+            worldY = (mouseY / camera.zoom) + camera.y;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;

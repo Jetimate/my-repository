@@ -91,7 +91,7 @@ class Spell {
 			// let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
 			let totalSpellBookCountArray = spellsArray.filter(element => element.ability == "book");
 			// Check if the index is odd or even
-			console.log(totalSpellBookCountArray)
+			//console.log(totalSpellBookCountArray)
 			totalSpellBookCountArray.forEach((spellBook, index) => {
 				spellBook.orbitRadius = 2 + index;
 				if ((index + 1) % 2 === 0) {

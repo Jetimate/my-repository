@@ -17,10 +17,11 @@ class SpellBook {
 		this.ability = ability;
 		this.text = text;
 		this.cooldownTimer = 0;
-		this.skillReady = true;
 		this.level = 1;
 		this.maxPages = 3;
-		this.activated = false;
+		this.spawned = false;
+		this.spellReady = true;
+		this.spellActive = false;
 	}
 
 	draw(ctx) {
@@ -54,7 +55,7 @@ class SpellBook {
 			this.mainSpellBook.ability,
 			this.mainSpellBook.manaCost,
 			this.mainSpellBook.respawnTime));
-		this.activated = true;	
+		this.spawned = true;	
 	}
 	interact() {
 		let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name);
@@ -207,76 +208,71 @@ class SpellBook {
 			this.level++;
 		}
 		if (this.index === 1) {
-			if (keys.Digit1 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
-				skill1 = true;
+			if (keys.Digit1 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && skill1 && !skill1Used) {
+			} else if (isMouseDown && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
-				skill1 = false;
-				skill1Used = true;
-				this.skillReady = false;
+				this.spellActive = false;
+				this.spellReady = false;
 			}
 		}
 		if (this.index === 2) {
-			if (keys.Digit2 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
-				skill2 = true;
+			if (keys.Digit2 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && skill2 && !skill2Used) {
+			} else if (isMouseDown && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
-				skill2 = false;
-				skill2Used = true;
-				this.skillReady = false;
+				this.spellActive = false;
+				this.spellReady = false;
 			}
 		}
 		if (this.index === 3) {
-			if (keys.Digit3 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
-				skill3 = true;
+			if (keys.Digit3 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && skill3 && !skill3Used) {
+			} else if (isMouseDown && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
-				skill3 = false;
-				skill3Used = true;
-				this.skillReady = false;
+				this.spellActive = false;
+				this.spellReady = false;
 			}
 		}
 		if (this.index === 4) {
-			if (keys.Digit4 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
-				skill4 = true;
+			if (keys.Digit4 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && skill4 && !skill4Used) {
+			} else if (isMouseDown && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
-				skill4 = false;
-				skill4Used = true;
-				this.skillReady = false;
+				this.spellActive = false;				
+				this.spellReady = false;
 			}
 		}
 		if (this.index === 5) {
-			if (keys.Digit5 && this.skillReady && myGameCharacter.mana > this.spell.manaCost) {
-				skill5 = true;
+			if (keys.Digit5 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && skill5 && !skill5Used) {
+			} else if (isMouseDown && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
-				skill5 = false;
-				skill5Used = true;
-				this.skillReady = false;
+				this.spellActive = false;
+				this.spellReady = false;
 			}
 		}
-		if (!this.skillReady) {
+		if (!this.spellReady) {
 			this.cooldownTimer++;
 			this.borderColor = "red";
 			if (this.cooldownTimer >= this.cooldown) {
 				this.borderColor = "black";
-				this.skillReady = true;  // Skill becomes ready again
+				this.spellReady = true;  // Skill becomes ready again
 				this.cooldownTimer = 0;  // Reset the cooldown timer
 			}
 		}
 		this.draw(ctx);
-		if (this.activated == false) {
+		if (this.spawned == false) {
 			this.activate();
 		}
 	}
@@ -286,7 +282,22 @@ class SpellBook {
 		const distance =
 			Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
 		if (distance) {
-			console.log(this.name + " was clicked");
+			if (this.index === 1) {
+				keys.Digit1 = true;
+			}
+			if (this.index === 2) {
+				keys.Digit2 = true;
+			}
+			if (this.index === 3) {
+				keys.Digit3 = true;
+			}
+			if (this.index === 4) {
+				keys.Digit4 = true;
+			}
+			if (this.index === 5) {
+				keys.Digit5 = true;
+			}
+			//console.log(this.name + " was clicked");
 		}
 	}
 }
