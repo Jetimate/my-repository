@@ -93,10 +93,8 @@ class Spell {
 	}
 	update() {
 		if (this.ability === "book") {
-			// let totalSpellLootDropCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
 			let totalSpellBookCountArray = spellsArray.filter(element => element.ability == "book");
 			// Check if the index is odd or even
-			//console.log(totalSpellBookCountArray)
 			totalSpellBookCountArray.forEach((spellBook, index) => {
 				spellBook.orbitRadius = 2 + index;
 				if ((index + 1) % 2 === 0) {
@@ -240,7 +238,7 @@ class Spell {
 					this.lifeTimer++;
 
 					// If lifeTimer exceeds maxLife, this entity will be removed
-					if (this.lifeTimer >= 600) {
+					if (this.lifeTimer >= 120) {
 						// Call the function to remove this entity from the array
 						this.destroy();
 					}
