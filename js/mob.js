@@ -1,10 +1,11 @@
 class Mob {
-	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
 	this.image = new Image();
 	this.image.src = appearance;
 	this.x = x;
 	this.y = y;
 	this.radius = radius;
+	this.radiusAdjust = radiusAdjust;
 	this.appearance = appearance;  
 	this.ignoreSpellCollision = ignoreSpellCollision;
 	this.ignoreMobCollision = ignoreMobCollision;
@@ -35,11 +36,11 @@ class Mob {
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
-		ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-	    //draw FOVRadius
+		ctx.drawImage(this.image, -this.radius - this.radiusAdjust, -this.radius - this.radiusAdjust, (this.radius + this.radiusAdjust) * 2, (this.radius + this.radiusAdjust) * 2);
+	    //draw FOVRadius or radius
 		/*
 		ctx.beginPath();
-		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI);
+		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
 		ctx.strokeStyle = "red";
 		ctx.stroke();
 		ctx.closePath();
@@ -132,8 +133,8 @@ class Mob {
 	}
 }
 class LuminousRock extends Mob {
-	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 	}
 	spawn() {
 		setTimeout(function () {
@@ -147,6 +148,7 @@ class LuminousRock extends Mob {
 					luminousRockRandomX,
 					luminousRockRandomY,
 					luminousRockRandomRadiusXHealth,
+					luminousRock.radiusAdjust,
 					luminousRock.appearance,
 					luminousRock.ignoreSpellCollision,
 					luminousRock.ignoreMobCollision,
@@ -167,8 +169,8 @@ class LuminousRock extends Mob {
 }
 
 class LuminousSpirit extends Mob {
-	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
@@ -183,6 +185,7 @@ class LuminousSpirit extends Mob {
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
 					luminousSpiritRandomRadiusXHealth,
+					luminousSpirit.radiusAdjust,
 					luminousSpirit.appearance,
 					luminousSpirit.ignoreSpellCollision,
 					luminousSpirit.ignoreMobCollision,
@@ -202,8 +205,8 @@ class LuminousSpirit extends Mob {
 	}
 }
 class Specter extends Mob {
-	constructor(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
-		super(x, y, radius, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
 		this.FOVRadius = 250;
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
@@ -219,6 +222,7 @@ class Specter extends Mob {
 					specterRandomX,
 					specterRandomY,
 					specterRandomRadiusXHealth,
+					specter.radiusAdjust,
 					specter.appearance,
 					specter.ignoreSpellCollision,
 					specter.ignoreMobCollision,
@@ -234,5 +238,76 @@ class Specter extends Mob {
 				mobsArray.push(newSpecter);
 			}
 		}, specter.respawnTime);
+	}
+}
+
+class DarkForestTree extends Mob {
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	}
+	spawn() {
+		setTimeout(function () {
+			let totalDarkForestTreeCount = mobsArray.filter(element => element.mobName === "darkForestTree").length;
+			if (totalDarkForestTreeCount < darkForestTree.maxAmount) {
+				let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1700 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
+				let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
+				let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let darkForestTreeRandomExperienceDrop = Math.floor((Math.random() * (15 - 10 + 1)) + 10);
+				let newDarkForestTree = new DarkForestTree(
+					darkForestTreeRandomX,
+					darkForestTreeRandomY,
+					darkForestTreeRandomRadiusXHealth,
+					darkForestTree.radiusAdjust,
+					darkForestTree.appearance,
+					darkForestTree.ignoreSpellCollision,
+					darkForestTree.ignoreMobCollision,
+					darkForestTreeRandomRadiusXHealth,
+					darkForestTree.defense,
+					darkForestTree.damage,
+					darkForestTree.mobName,
+					darkForestTree.type,
+					darkForestTree.ability,
+					darkForestTree.intelligence,
+					darkForestTreeRandomExperienceDrop,
+					darkForestTree.lootDrop, 0, 0);
+				mobsArray.push(newDarkForestTree);
+				//console.log(mobsArray);
+			}
+		}, darkForestTree.respawnTime);
+	}
+}
+class DarkForestTreant extends Mob {
+	constructor(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames) {
+		super(x, y, radius, radiusAdjust, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames);
+	}
+	spawn() {
+		setTimeout(function () {
+			let totalDarkForestTreantCount = mobsArray.filter(element => element.mobName === "darkForestTreant").length;
+			if (totalDarkForestTreantCount < darkForestTreant.maxAmount) {
+				let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (1700 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
+				let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
+				let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let darkForestTreantRandomExperienceDrop = Math.floor((Math.random() * (15 - 10 + 1)) + 10);
+				let newDarkForestTreant = new DarkForestTreant(
+					darkForestTreantRandomX,
+					darkForestTreantRandomY,
+					darkForestTreantRandomRadiusXHealth,
+					darkForestTreant.radiusAdjust,
+					darkForestTreant.appearance,
+					darkForestTreant.ignoreSpellCollision,
+					darkForestTreant.ignoreMobCollision,
+					darkForestTreantRandomRadiusXHealth,
+					darkForestTreant.defense,
+					darkForestTreant.damage,
+					darkForestTreant.mobName,
+					darkForestTreant.type,
+					darkForestTreant.ability,
+					darkForestTreant.intelligence,
+					darkForestTreantRandomExperienceDrop,
+					darkForestTreant.lootDrop, 0, 0);
+				mobsArray.push(newDarkForestTreant);
+				//console.log(mobsArray);
+			}
+		}, darkForestTreant.respawnTime);
 	}
 }

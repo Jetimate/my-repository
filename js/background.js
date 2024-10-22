@@ -12,6 +12,7 @@ class Background {
 		ctx.beginPath();
 		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 		//ctx.rect(this.x, this.y, this.width, this.height);
+		/*
 		ctx.rect(10, 10, 2000 - 10, 1000 - 10);
 		ctx.strokeStyle = "green";
 		ctx.lineWidth = "1";
@@ -31,6 +32,7 @@ class Background {
 		ctx.lineWidth = "1";
 		ctx.stroke();
 		ctx.closePath();
+		*/
 	}
 	clickImage(biome) {
 		//console.log("Mouse clicked at world position X:", worldX, "Y:", worldY);

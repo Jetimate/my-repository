@@ -225,7 +225,8 @@
             text: "smash"
         };
         // mobs
-        const luminousRock = {
+		const luminousRock = {
+			radiusAdjust: 0,
             maxAmount: 20,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
@@ -239,7 +240,8 @@
             intelligence: 0,
             respawnTime: 3000
         };
-        const luminousSpirit = {
+		const luminousSpirit = {
+            radiusAdjust: 0,
             maxAmount: 10,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
@@ -253,7 +255,8 @@
             intelligence: 1,
             respawnTime: 4000
         };
-        const specter = {
+		const specter = {
+            radiusAdjust: 0,
             maxAmount: 5,
             mobName: "specter",
             appearance: "specter.png",
@@ -265,6 +268,36 @@
             ability: "nothing",
             lootDrop: specterLootDrop,
             intelligence: 1,
+            respawnTime: 8000
+		};
+        const darkForestTree = {
+            radiusAdjust: 20,
+            maxAmount: 20,
+            mobName: "darkForestTree",
+            appearance: "darkForestTree.png",
+            ignoreSpellCollision: true,
+            ignoreMobCollision: false,
+            defense: 1,
+            damage: 1,
+            type: "passive",
+            ability: "nothing",
+            lootDrop: spikeLootDrop,
+            intelligence: 0,
+            respawnTime: 8000
+		};
+        const darkForestTreant = {
+            radiusAdjust: 20,
+            maxAmount: 5,
+            mobName: "darkForestTreant",
+            appearance: "darkForestTreant.png",
+            ignoreSpellCollision: true,
+            ignoreMobCollision: false,
+            defense: 1,
+            damage: 3,
+            type: "neutral", // keep in mind
+            ability: "nothing", // treant should have an ability
+            lootDrop: spikeLootDrop,
+            intelligence: 0,
             respawnTime: 8000
         };
 		// spells
@@ -354,7 +387,7 @@
 			respawnTime: 500
 		};
 		const smash = {
-			radius: 50,
+			radius: 100,
             name: "smash",
             appearance: "smash.png",
 			castAmount: 15,
@@ -542,11 +575,13 @@
             inventoryArray = [];
 			maxExperience = 20;
 			biome1 = new Background(10, 10, 2500, 1000, "gridBG.jpg");
-			myGameCharacter = new PlayableCharacter(300, 300, 20, "smileyy.webp", false, false, 90, 0, 5, 0, 0, 0, 0.01, 0.0005);
+			myGameCharacter = new PlayableCharacter(300, 300, 20, 0, "smileyy.webp", false, false, 90, 0, 5, 0, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
 			spawnSpecter();
+			spawnDarkForestTree()
+            spawnDarkForestTreant()
 			myGameArea.start();
 			buttonsKeeper();
 			spellBooksKeeper();
@@ -748,6 +783,7 @@
 					luminousRockRandomX,
 					luminousRockRandomY,
 					luminousRockRandomRadiusXHealth,
+                    luminousRock.radiusAdjust,
 					luminousRock.appearance,
 					luminousRock.ignoreSpellCollision,
                     luminousRock.ignoreMobCollision,
@@ -773,6 +809,7 @@
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
 					luminousSpiritRandomRadiusXHealth,
+                    luminousSpirit.radiusAdjust,
 					luminousSpirit.appearance,
 					luminousSpirit.ignoreSpellCollision,
                     luminousSpirit.ignoreMobCollision,
@@ -799,6 +836,7 @@
 					specterRandomX,
 					specterRandomY,
 					specterRandomRadiusXHealth,
+                    specter.radiusAdjust,
 					specter.appearance,
 					specter.ignoreSpellCollision,
                     specter.ignoreMobCollision,
@@ -815,6 +853,58 @@
 				mobsArray.push(newSpecter);
 			}
 		}
+        function spawnDarkForestTree() {
+            for (let i = 0; i < luminousRock.maxAmount; i++) {
+                let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
+                let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
+                let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+                let darkForestTreeRandomExperienceDrop = Math.floor((Math.random() * (20 - 15 + 1)) + 15);
+                let newDarkForestTree = new DarkForestTree(
+                    darkForestTreeRandomX,
+                    darkForestTreeRandomY,
+                    darkForestTreeRandomRadiusXHealth,
+                    darkForestTree.radiusAdjust,
+                    darkForestTree.appearance,
+                    darkForestTree.ignoreSpellCollision,
+                    darkForestTree.ignoreMobCollision,
+                    darkForestTreeRandomRadiusXHealth,
+                    darkForestTree.defense,
+                    darkForestTree.damage,
+                    darkForestTree.mobName,
+                    darkForestTree.type,
+                    darkForestTree.ability,
+                    darkForestTree.intelligence,
+                    darkForestTreeRandomExperienceDrop,
+                    darkForestTree.lootDrop, 0, 0);
+                mobsArray.push(newDarkForestTree);
+            }
+		}
+        function spawnDarkForestTreant() {
+            for (let i = 0; i < luminousRock.maxAmount; i++) {
+                let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
+                let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
+                let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+                let darkForestTreantRandomExperienceDrop = Math.floor((Math.random() * (30 - 20 + 1)) + 20);
+                let newDarkForestTreant = new DarkForestTreant(
+                    darkForestTreantRandomX,
+                    darkForestTreantRandomY,
+                    darkForestTreantRandomRadiusXHealth,
+                    darkForestTreant.radiusAdjust,
+                    darkForestTreant.appearance,
+                    darkForestTreant.ignoreSpellCollision,
+                    darkForestTreant.ignoreMobCollision,
+                    darkForestTreantRandomRadiusXHealth,
+                    darkForestTreant.defense,
+                    darkForestTreant.damage,
+                    darkForestTreant.mobName,
+                    darkForestTreant.type,
+                    darkForestTreant.ability,
+                    darkForestTreant.intelligence,
+                    darkForestTreantRandomExperienceDrop,
+                    darkForestTreant.lootDrop, 0, 0);
+                mobsArray.push(newDarkForestTreant);
+            }
+        }
 		function crashWith(mob1Array, mob2Array) {
 			let result = false;
 			mob1Array.forEach(mob1 => {
@@ -851,7 +941,7 @@
         function playerCollideWithLoot(mob1, lootsArray) {
             let result = false;
             lootsArray.forEach(loot => {
-                let radii = mob1.radius + loot.radius;
+                let radii = (mob1.radius + 2000) + loot.radius; // temporary magnet for loot
                 let distance = getDistance(mob1, loot);
                 let hasCrashed = distance < radii;
                 if (hasCrashed) {
@@ -980,7 +1070,7 @@
 		7). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
 		12). add a way to access spell books in game
 		13). add a notification type of feature when a skill is used to show when player has insufficient mana
-		14). add a prompt box for collected loot
+		15).
 		1000). add a place where npcs will go to when their kingdom is invaded
 		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
 		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
