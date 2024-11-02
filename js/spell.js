@@ -33,6 +33,7 @@ class Spell {
 		this.damageIncrease = 0;
 		this.toggle = false;
 		this.state = 0;
+		this.width = 5;
 	}
 
 	setTarget(x, y) {
