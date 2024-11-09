@@ -41,6 +41,8 @@ class SpellBook {
 			myGameCharacter.y,
 			this.mainSpellBook.radius,
 			this.mainSpellBook.name,
+			this.mainSpellBook.art,
+			this.mainSpellBook.shape,
 			this.mainSpellBook.appearance,
 			this.mainSpellBook.castAmount,
 			this.mainSpellBook.maxAmount,
@@ -75,6 +77,8 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
 						this.spell.appearance,
 						this.spell.castAmount,
 						this.spell.maxAmount,
@@ -110,6 +114,8 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius,
 						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
 						this.spell.appearance,
 						this.spell.castAmount,
 						this.spell.maxAmount,
@@ -143,6 +149,8 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius,
 						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
 						this.spell.appearance,
 						this.spell.castAmount,
 						this.spell.maxAmount,
@@ -176,6 +184,8 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
 						this.spell.appearance,
 						this.spell.castAmount,
 						this.spell.maxAmount,
@@ -208,6 +218,42 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius + (spellCount * 15),
 						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime));
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 15);
+		}
+		if (this.spell.ability === "beam1" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					castSpell(new Spell(
+						spellsArray[mainSpellBookIndex].x,
+						spellsArray[mainSpellBookIndex].y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
 						this.spell.appearance,
 						this.spell.castAmount,
 						this.spell.maxAmount,
