@@ -145,8 +145,8 @@ class SpellBook {
 					// Cast a spell
 					this.spell.index += 1;
 					castSpell(new Spell(
-						myGameCharacter.x,
-						myGameCharacter.y,
+						spellsArray[mainSpellBookIndex].x,
+						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.spell.art,
@@ -273,6 +273,43 @@ class SpellBook {
 					clearInterval(interval);
 				}
 			}, 15);
+		}
+		if (this.spell.ability === "beam2" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+
+			castMouseX = worldX - biome1.x;
+			castMouseY = worldY - biome1.y;
+
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < this.spell.castAmount) {
+					// Cast a spell
+					castSpell(new Spell(
+						spellsArray[mainSpellBookIndex].x,
+						spellsArray[mainSpellBookIndex].y,
+						this.spell.radius,
+						this.spell.name,
+						this.spell.art,
+						this.spell.shape,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.respawnTime));
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 300);
 		}
 	}
 

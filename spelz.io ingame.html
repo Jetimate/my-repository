@@ -435,6 +435,26 @@
             ability: "beam1",
             manaCost: 1,
             respawnTime: 500
+		};
+
+        const castLightningBolt = {
+            radius: 0,
+            name: "castLightningBolt",
+            art: "beams",
+            shape: "line",
+            appearance: "lightningBolt.png",
+            castAmount: 5,
+            maxAmount: 0,
+            ignoreSpellCollision: true,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 0,
+            damage: 3,
+            speed: 10,
+            ability: "beam2",
+            manaCost: 2,
+            respawnTime: 500
         };
         // spell books 
 		const spikeBook = {
@@ -569,6 +589,25 @@
             ability: "book",
             manaCost: 1,
             respawnTime: null
+		}
+        const lightningBoltBook = {
+            radius: 12,
+            name: "lightningBoltBook",
+            art: "books",
+            shape: "circle",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
         }
 		var myGameArea = {
 			canvas: document.getElementById("mycanvas"), // splice
@@ -663,7 +702,8 @@
 		}
 		function spellBooksKeeper() {
             addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
-            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
+			addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
+            addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
 		}
 		function spellsKeeper() {
 		}
@@ -801,7 +841,10 @@
                         addSpellBook(new SpellBook(1130, 5, 7, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
                         slot7Active = true;
 					}
-					
+                //    if (!slot8Active && myGameCharacter.level >= 4) {
+                //        addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+                //        slot8Active = true;
+                //    }
                 }
                 while (myGameCharacter.experience >= maxExperience);
 			}

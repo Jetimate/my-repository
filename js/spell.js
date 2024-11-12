@@ -152,36 +152,56 @@ class Spell {
 			this.angle = Math.atan2(dy, dx);
 
 			// Rotate the context to face the target angle
-			ctx.rotate(this.angle);
 
-			// Draw the beam as a rectangle centered around the character
-			ctx.beginPath();
-			ctx.strokeStyle = "blue";
-			ctx.drawImage(this.image, 0, -this.height / 2, this.width, this.height);
-			ctx.stroke();
-			ctx.closePath();
-			/*
-			// Draw the line
-			ctx.moveTo(0, this.height / 2);
-			ctx.lineTo(this.width, this.height / 2);
-			ctx.stroke();
-			ctx.closePath();
-			
-			ctx.moveTo(0, -this.height / 2);
-			ctx.lineTo(this.width, -this.height / 2);
-			ctx.stroke();
-			ctx.closePath();
-			*/
-			// Calculate the endpoints based on the rotation
-			// this.y = this.y + (-this.height / 2);
-			let length = this.width;
-			this.x2 = this.x + (length * Math.cos(this.angle));
-			this.y2 = this.y + (length * Math.sin(this.angle));
-			//this.x2 = castMouseX;
-			//this.y2 = castMouseY;
+			if (this.ability === "beam1") {
+				ctx.rotate(this.angle);
+				ctx.beginPath();
+				ctx.strokeStyle = "blue";
+				ctx.drawImage(this.image, 0, -this.height / 2, this.width, this.height);
+				ctx.stroke();
+				ctx.closePath();
+				/*
+				// Draw the line
+				ctx.moveTo(0, this.height / 2);
+				ctx.lineTo(this.width, this.height / 2);
+				ctx.stroke();
+				ctx.closePath();
+				
+				ctx.moveTo(0, -this.height / 2);
+				ctx.lineTo(this.width, -this.height / 2);
+				ctx.stroke();
+				ctx.closePath();
+				*/
+				// Calculate the endpoints based on the rotation
+				// this.y = this.y + (-this.height / 2);
+				let length = this.width;
+				this.x2 = this.x + (length * Math.cos(this.angle));
+				this.y2 = this.y + (length * Math.sin(this.angle));
+				//this.x2 = castMouseX;
+				//this.y2 = castMouseY;
+			}
+			if (this.ability === "beam2") {
+				// Calculate the angle from this.x, this.y to this.x2, this.y2
+				let beamAngle = Math.atan2(this.y2 - this.y, this.x2 - this.x);
+				let beamLength = Math.sqrt((this.x2 - this.x) ** 2 + (this.y2 - this.y) ** 2);
+
+				//let beamLength = Math.sqrt(((this.x2 - this.x) * (this.x2 - this.x)) + ((this.y2 + this.y) * (this.y2 + this.y)));
+
+				ctx.rotate(beamAngle);
+				ctx.beginPath();
+				ctx.drawImage(this.image, 0, -this.height / 2, beamLength, this.height);
+				/*
+				ctx.rotate(-beamAngle);
+				ctx.beginPath();
+				ctx.moveTo(0, 0);
+				ctx.lineTo(this.x2 - this.x, this.y2 - this.y);
+				ctx.stroke();
+				ctx.closePath();
+				*/
+			}
 			
 
-			console.log(this.angle, "moveTo:", this.x, this.y, "lineTo:", this.x2, this.y2); // position
+			//console.log(this.angle, "moveTo:", this.x, this.y, "lineTo:", this.x2, this.y2); // position
 			ctx.restore();
 		} else {
 			var ctx = myGameArea.context;
@@ -384,7 +404,7 @@ class Spell {
 				this.destroy();
 			}
 		}
-		if (this.art === "beams") {
+		if (this.ability === "beam1") {
 			// Calculate the destination based on mouse position
 			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamBook");
 			this.x = spellsArray[beamBookIndex].x;
@@ -399,6 +419,20 @@ class Spell {
 			// Life timer logic
 			this.lifeTimer++;
 			if (this.lifeTimer >= 300) {
+				this.destroy(); // Call destroy method after the beam's life ends
+			}
+		}
+		if (this.ability === "beam2") {
+			// Calculate the destination based on mouse position
+			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamBook");
+			this.x = spellsArray[beamBookIndex].x;
+			this.y = spellsArray[beamBookIndex].y;
+			this.x2 = castMouseX;
+			this.y2 = castMouseY;
+
+			// Life timer logic
+			this.lifeTimer++;
+			if (this.lifeTimer >= 10) {
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
