@@ -10,12 +10,13 @@ class PlayableCharacter extends Mob {
 		this.maxHealth = 100;
 		this.movementX = 0;
 		this.movementY = 0;
-		this.speed = 0;		
+		this.speed = 3;	
+		this.newSpeed = 0;
 	}		
 	playerNewPos() {
 		this.angle += this.moveAngle * Math.PI / 180;
-		this.x += this.speed * Math.sin(this.angle);
-		this.y -= this.speed * Math.cos(this.angle);
+		this.x += this.newSpeed * Math.sin(this.angle);
+		this.y -= this.newSpeed * Math.cos(this.angle);
 		myGameCharacter.x += myGameCharacter.movementX;
 		myGameCharacter.y += myGameCharacter.movementY;
 		// Ensure the entity stays within the canvas boundaries

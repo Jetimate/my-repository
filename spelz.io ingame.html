@@ -436,7 +436,6 @@
             manaCost: 1,
             respawnTime: 500
 		};
-
         const castLightningBolt = {
             radius: 0,
             name: "castLightningBolt",
@@ -454,6 +453,25 @@
             speed: 10,
             ability: "beam2",
             manaCost: 2,
+            respawnTime: 500
+		};
+        const castEnergyBall = {
+            radius: 450,
+            name: "castEnergyBall",
+            art: "projectile",
+            shape: "circle",
+            appearance: "energyBall.png",
+            castAmount: 1,
+            maxAmount: 0,
+            ignoreSpellCollision: true,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 2500,
+            defense: 0,
+            damage: 3,
+            speed: 10,
+            ability: "shoot1",
+            manaCost: 1,
             respawnTime: 500
         };
         // spell books 
@@ -608,6 +626,25 @@
             ability: "book",
             manaCost: 1,
             respawnTime: null
+		}
+        const energyBallBook = {
+            radius: 12,
+            name: "energyBallBook",
+            art: "books",
+            shape: "circle",
+            appearance: "enchantedBook.png",
+            castAmount: 1,
+            maxAmount: 1,
+            ignoreSpellCollision: false,
+            ignoreMobCollision: true,
+            index: 1,
+            health: 100,
+            defense: 100,
+            damage: 0,
+            speed: 12,
+            ability: "book",
+            manaCost: 1,
+            respawnTime: null
         }
 		var myGameArea = {
 			canvas: document.getElementById("mycanvas"), // splice
@@ -676,7 +713,7 @@
 			lootsArray = [];
             inventoryArray = [];
 			maxExperience = 20;
-			biome1 = new Background(10, 10, 2500, 1000, "gridBG.jpg");
+			biome1 = new Background(10, 10, 2500, 1000, "grayBG.png");
 			myGameCharacter = new PlayableCharacter(300, 300, 20, 0, "smileyy.webp", false, false, 90, 0, 5, 0, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
@@ -698,12 +735,13 @@
 			addButton(new Button(5, 60, 200, 50, [5], "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience));
 			addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
-            addButton(new Button(5, 225, 200, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
+            addButton(new Button(5, 225, 110, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
 		}
 		function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
-			addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
-            addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", castEnergyBall, energyBallBook, 15, "castEnergyBall"));
+            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
+			addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
+            addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
 		}
 		function spellsKeeper() {
 		}
@@ -768,34 +806,34 @@
 			myGameCharacter.movementX = 0;
 			myGameCharacter.movementY = 0;
 			myGameCharacter.moveAngle = 0;
-			myGameCharacter.speed = 0;
+			myGameCharacter.newSpeed = 0;
 
 			function updatePlayerPosition() {
-                let newSpeed = 3;
+  
 				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
 					myGameCharacter.angle = (1.75 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
 					myGameCharacter.angle = (2.25 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
 					myGameCharacter.angle = (1.25 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
 					myGameCharacter.angle = (0.75 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyW || keys.ArrowUp) { // Up
 					myGameCharacter.angle = (2 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyS || keys.ArrowDown) { // Down
 					myGameCharacter.angle = (1 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyA || keys.ArrowLeft) { // Left
 					myGameCharacter.angle = (1.5 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyD || keys.ArrowRight) { // Right
 					myGameCharacter.angle = (0.5 * Math.PI);
-                    myGameCharacter.speed = newSpeed;
+                    myGameCharacter.newSpeed = myGameCharacter.speed;
 				}
 			}
 		}
@@ -808,7 +846,14 @@
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
-            inventoryArray = [];
+			inventoryArray = [];
+            slot3Active = false;
+            slot4Active = false;
+            slot5Active = false;
+            slot6Active = false;
+            slot7Active = false;
+            slot8Active = false;
+            slot9Active = false;
 			startGame();
 		}
 		function levelUp() {
@@ -821,29 +866,29 @@
                     myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
 					
-                    if (!slot3Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
-						slot3Active = true;
-					}
                     if (!slot4Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", castLuminousEnergy, luminousEnergyBook, 45, "castLuminousEnergy"));
-                        slot4Active = true;
+                        addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
+						slot4Active = true;
 					}
-                    if (!slot5Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
+                    if (!slot5Active && myGameCharacter.level >= 1) {
+                        addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", castLuminousEnergy, luminousEnergyBook, 45, "castLuminousEnergy"));
                         slot5Active = true;
 					}
                     if (!slot6Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport"));
+                        addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
                         slot6Active = true;
 					}
-                    if (!slot7Active && myGameCharacter.level >= 3) {
-                        addSpellBook(new SpellBook(1130, 5, 7, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
+                    if (!slot7Active && myGameCharacter.level >= 2) {
+                        addSpellBook(new SpellBook(1130, 5, 7, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport"));
                         slot7Active = true;
 					}
-                //    if (!slot8Active && myGameCharacter.level >= 4) {
-                //        addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
-                //        slot8Active = true;
+                    if (!slot8Active && myGameCharacter.level >= 3) {
+                        addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
+                        slot8Active = true;
+					}
+                //    if (!slot9Active && myGameCharacter.level >= 4) {
+                //        addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+                //        slot9Active = true;
                 //    }
                 }
                 while (myGameCharacter.experience >= maxExperience);

@@ -411,28 +411,34 @@ class Spell {
 			this.y = spellsArray[beamBookIndex].y;
 			if (isMouseDown && this.width <= 400) {
 				this.width += 20;
+				myGameCharacter.speed = 1.5;
 			}
 			
 			if (!isMouseDown && this.width > 10) {
 				this.width -= 40;
+				myGameCharacter.speed = 3;
 			}
 			// Life timer logic
 			this.lifeTimer++;
 			if (this.lifeTimer >= 300) {
+				myGameCharacter.speed = 3;
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
 		if (this.ability === "beam2") {
 			// Calculate the destination based on mouse position
-			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamBook");
+			let beamBookIndex = spellsArray.findIndex(element => element.name == "lightningBoltBook");
 			this.x = spellsArray[beamBookIndex].x;
 			this.y = spellsArray[beamBookIndex].y;
 			this.x2 = castMouseX;
 			this.y2 = castMouseY;
 
+			myGameCharacter.speed = 1.5;
+
 			// Life timer logic
 			this.lifeTimer++;
 			if (this.lifeTimer >= 10) {
+				myGameCharacter.speed = 3;
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
