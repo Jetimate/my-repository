@@ -1,5 +1,9 @@
 class Mob {
 	constructor(
+		setMinX,
+		setMaxX,
+		setMinY,
+		setMaxY,
 		x, y, appearance,
 		ignoreSpellCollision,
 		ignoreMobCollision,
@@ -15,36 +19,44 @@ class Mob {
 		ability,
 		intelligence,
 		experienceDrop,
-		lootDrop, state, frames) {
-	this.image = new Image();
-	this.image.src = appearance;
-	this.x = x;
-	this.y = y;
-	this.radius = radius;
-	this.radiusAdjust = radiusAdjust;
-	this.appearance = appearance;  
-	this.ignoreSpellCollision = ignoreSpellCollision;
+		lootDrop,
+		state,
+		frames,
+		respawnTime) {
+		this.image = new Image();
+		this.image.src = appearance;
+		this.setMinX = setMinX;
+		this.setMaxX = setMaxX;
+		this.setMinY = setMinY;
+		this.setMaxY = setMaxY;
+		this.x = x;
+		this.y = y;
+		this.radius = radius;
+		this.radiusAdjust = radiusAdjust;
+		this.appearance = appearance;  
+		this.ignoreSpellCollision = ignoreSpellCollision;
 		this.ignoreMobCollision = ignoreMobCollision;
 		this.setMinHealth = setMinHealth;
 		this.setMaxHealth = setMaxHealth;
-	this.health = health;
-	this.defense = defense;
-	this.damage = damage;
-	this.mobName = mobName;
-	this.type = type;
-	this.ability = ability;
-	this.intelligence = intelligence;
-	this.experienceDrop = experienceDrop;
-	this.lootDrop = lootDrop;
-	this.state = state;
-	this.frames = frames;
-	this.healthRegen = 0;
-	this.speed = 0;
-	this.angle = 0;
-	this.moveAngle = 0;
-	this.FOVRadius = radius;
-	this.timeoutId = null;
-	this.isDead = false;
+		this.health = health;
+		this.defense = defense;
+		this.damage = damage;
+		this.mobName = mobName;
+		this.type = type;
+		this.ability = ability;
+		this.intelligence = intelligence;
+		this.experienceDrop = experienceDrop;
+		this.lootDrop = lootDrop;
+		this.state = state;
+		this.frames = frames;
+		this.respawnTime = respawnTime;
+		this.healthRegen = 0;
+		this.speed = 0;
+		this.angle = 0;
+		this.moveAngle = 0;
+		this.FOVRadius = radius;
+		this.timeoutId = null;
+		this.isDead = false;
 	}		
 	update() {
 		if (this.isDead) {
@@ -65,6 +77,49 @@ class Mob {
 		*/
 		ctx.restore();
 	}      
+	test() {
+		console.log("i know my class");
+		// update: it doesn't know lolz.
+	}
+	WIPFirstSpawn() {
+		// i don't think that this is gonna be possible
+		for (let i = 0; i < luminousRock.maxAmount; i++) {
+			luminousRock.spawn();
+		}
+	}
+	WIPspawn() {
+		setTimeout(function () {
+			let totalSpecificMobCount = mobsArray.filter(element => element.mobName === this.mobName).length;
+			if (totalSpecificMobCount < this.maxAmount) {
+				let randomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) / camera.zoom) + camera.x;
+				let randomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (this.setMaxY - this.setMinY + 1)) + this.setMinY))) / camera.zoom) + camera.y;
+				let randomRadiusXHealth = Math.floor((Math.random() * (this.setMaxHealth - this.setMinHealth + 1)) + this.setMinHealth);
+				let newMob = new Mob(
+					this.setMinX, this.setMaxX, this.setMinY, this.setMaxY,
+					randomX,
+					randomY,
+					this.appearance,
+					this.ignoreSpellCollision,
+					this.ignoreMobCollision,
+					randomRadiusXHealth,
+					this.defense,
+					this.damage,
+					randomRadiusXHealth, // because radius is = health
+					this.radiusAdjust,
+					this.setMinHealth,
+					this.setMaxHealth,
+					this.mobName,
+					this.type,
+					this.ability,
+					this.intelligence,
+					this.experienceDrop,
+					this.lootDrop, 0, 0,
+					this.respawnTime);
+				mobsArray.push(newMob);
+				//console.log(mobsArray);
+			}
+		}, this.respawnTime);
+	}
 	newPos() {
 		this.angle += this.moveAngle * Math.PI / 180;
 		this.x += this.speed * Math.sin(this.angle);
@@ -151,17 +206,18 @@ class Mob {
 	}
 }
 class LuminousRock extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
 	}
 	spawn() {
 		setTimeout(function () {
 			let totalLuminousRockCount = mobsArray.filter(element => element.mobName === "luminousRock").length;
 			if (totalLuminousRockCount < luminousRock.maxAmount) {
-				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousRock.setMaxX - luminousRock.setMinX + 1)) + luminousRock.setMinX))) / camera.zoom) + camera.x;
+				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousRock.setMaxY - luminousRock.setMinY + 1)) + luminousRock.setMinY))) / camera.zoom) + camera.y;
+				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (luminousRock.setMaxHealth - luminousRock.setMinHealth + 1)) + luminousRock.setMinHealth);
 				let newLuminousRock = new LuminousRock(
+					luminousRock.setMinX, luminousRock.setMaxX, luminousRock.setMinY, luminousRock.setMaxY,
 					luminousRockRandomX,
 					luminousRockRandomY,
 					luminousRock.appearance,
@@ -189,18 +245,19 @@ class LuminousRock extends Mob {
 }
 
 class LuminousSpirit extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
 	spawn() {
 		setTimeout(function () {
 			let totalLuminousSpiritCount = mobsArray.filter(element => element.mobName === "luminousSpirit").length;
 			if (totalLuminousSpiritCount < luminousSpirit.maxAmount) {
-				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1000 + 1)) + 1000))) / camera.zoom) + camera.x;
-				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 25 + 1)) + 25);
+				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousSpirit.setMaxX - luminousSpirit.setMinX + 1)) + luminousSpirit.setMinX))) / camera.zoom) + camera.x;
+				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousSpirit.setMaxY - luminousSpirit.setMinY + 1)) + luminousSpirit.setMinY))) / camera.zoom) + camera.y;
+				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (luminousSpirit.setMaxHealth - luminousSpirit.setMinHealth + 1)) + luminousSpirit.setMinHealth);
 				let newLuminousSpirit = new LuminousSpirit(
+					luminousSpirit.setMinX, luminousSpirit.setMaxX, luminousSpirit.setMinY, luminousSpirit.setMaxY,
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
 					luminousSpirit.appearance,
@@ -227,8 +284,8 @@ class LuminousSpirit extends Mob {
 	}
 }
 class Specter extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
 			this.FOVRadius = 250;
 		this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 	}
@@ -236,10 +293,11 @@ class Specter extends Mob {
 		setTimeout(function () {
 			let totalSpecterCount = mobsArray.filter(element => element.mobName === "specter").length;
 			if (totalSpecterCount < specter.maxAmount) {
-			let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1500 + 1)) + 1500))) / camera.zoom) + camera.x;
-			let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-			let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
-			let newSpecter = new Specter(
+				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (specter.setMaxX - specter.setMinX + 1)) + specter.setMinX))) / camera.zoom) + camera.x;
+				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (specter.setMaxY - specter.setMinY + 1)) + specter.setMinY))) / camera.zoom) + camera.y;
+				let specterRandomRadiusXHealth = Math.floor((Math.random() * (specter.setMaxHealth - specter.setMinHealth + 1)) + specter.setMinHealth);
+				let newSpecter = new Specter(
+				specter.setMinX, specter.setMaxX, specter.setMinY, specter.setMaxY,
 				specterRandomX,
 				specterRandomY,
 				specter.appearance,
@@ -266,17 +324,18 @@ class Specter extends Mob {
 }
 
 class DarkForestTree extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
 	}
 	spawn() {
 		setTimeout(function () {
 			let totalDarkForestTreeCount = mobsArray.filter(element => element.mobName === "darkForestTree").length;
 			if (totalDarkForestTreeCount < darkForestTree.maxAmount) {
-				let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-				let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+				let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTree.setMaxX - darkForestTree.setMinX + 1)) + darkForestTree.setMinX))) / camera.zoom) + camera.x;
+				let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTree.setMaxY - darkForestTree.setMinY + 1)) + darkForestTree.setMinY))) / camera.zoom) + camera.y;
+				let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTree.setMaxHealth - darkForestTree.setMinHealth + 1)) + darkForestTree.setMinHealth);
 				let newDarkForestTree = new DarkForestTree(
+					darkForestTree.setMinX, darkForestTree.setMaxX, darkForestTree.setMinY, darkForestTree.setMaxY,
 					darkForestTreeRandomX,
 					darkForestTreeRandomY,
 					darkForestTree.appearance,
@@ -303,17 +362,18 @@ class DarkForestTree extends Mob {
 	}
 }
 class DarkForestTreant extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
 	}
 	spawn() {
 		setTimeout(function () {
 			let totalDarkForestTreantCount = mobsArray.filter(element => element.mobName === "darkForestTreant").length;
 			if (totalDarkForestTreantCount < darkForestTreant.maxAmount) {
-				let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-                let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-                let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
-                let newDarkForestTreant = new DarkForestTreant(
+				let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTreant.setMaxX - darkForestTreant.setMinX + 1)) + darkForestTreant.setMinX))) / camera.zoom) + camera.x;
+				let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTreant.setMaxY - darkForestTreant.setMinY + 1)) + darkForestTreant.setMinY))) / camera.zoom) + camera.y;
+				let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTreant.setMaxHealth - darkForestTreant.setMinHealth + 1)) + darkForestTreant.setMinHealth);
+				let newDarkForestTreant = new DarkForestTreant(
+					darkForestTreant.setMinX, darkForestTreant.setMaxX, darkForestTreant.setMinY, darkForestTreant.setMaxY,
                     darkForestTreantRandomX,
                     darkForestTreantRandomY,
                     darkForestTreant.appearance,

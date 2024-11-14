@@ -1,6 +1,6 @@
 class PlayableCharacter extends Mob {
-	constructor(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, mana, experience, level, healthRegen, manaRegen) {
-		super(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust,);
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, mana, experience, level, healthRegen, manaRegen) {
+		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust,);
 		this.mana = mana;
 		this.manaRegen = manaRegen;
 		this.maxMana = 5;

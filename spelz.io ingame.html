@@ -228,6 +228,10 @@
         };
 		// mobs
 		const luminousRock = {
+			setMinX: 10,
+			setMaxX: 2000,
+			setMinY: 10,
+			setMaxY: 1000,
 			radiusAdjust: 0,
             maxAmount: 20,
             mobName: "luminousRock",
@@ -246,6 +250,10 @@
             respawnTime: 3000
         };
 		const luminousSpirit = {
+            setMinX: 1000,
+            setMaxX: 2500,
+            setMinY: 10,
+            setMaxY: 1000,
             radiusAdjust: 0,
             maxAmount: 10,
             mobName: "luminousSpirit",
@@ -264,6 +272,10 @@
             respawnTime: 4000
         };
 		const specter = {
+            setMinX: 1500,
+            setMaxX: 2500,
+            setMinY: 10,
+            setMaxY: 1000,
             radiusAdjust: 0,
             maxAmount: 5,
             mobName: "specter",
@@ -281,7 +293,11 @@
             intelligence: 1,
             respawnTime: 8000
 		};
-        const darkForestTree = {
+		const darkForestTree = {
+            setMinX: 10,
+            setMaxX: 2000,
+            setMinY: 10,
+            setMaxY: 1000,
             radiusAdjust: 20,
             maxAmount: 20,
             mobName: "darkForestTree",
@@ -299,7 +315,11 @@
             intelligence: 0,
             respawnTime: 8000
 		};
-        const darkForestTreant = {
+		const darkForestTreant = {
+            setMinX: 10,
+            setMaxX: 2000,
+            setMinY: 10,
+            setMaxY: 1000,
             radiusAdjust: 20,
             maxAmount: 5,
             mobName: "darkForestTreant",
@@ -729,8 +749,7 @@
             inventoryArray = [];
 			maxExperience = 20;
 			biome1 = new Background(10, 10, 2500, 1000, "grayBG.png");
-            // r(x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, mana, experience, level, healthRegen, manaRegen
-            myGameCharacter = new PlayableCharacter(300, 300, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
+            myGameCharacter = new PlayableCharacter(300, 300, 300, 300, 300, 300, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
@@ -947,10 +966,11 @@
 		}
 		function spawnLuminousRock() {
 			for (let i = 0; i < luminousRock.maxAmount; i++) {
-				let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-				let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
+                let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousRock.setMaxX - luminousRock.setMinX + 1)) + luminousRock.setMinX))) / camera.zoom) + camera.x;
+                let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousRock.setMaxY - luminousRock.setMinY + 1)) + luminousRock.setMinY))) / camera.zoom) + camera.y;
+                let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (luminousRock.setMaxHealth - luminousRock.setMinHealth + 1)) + luminousRock.setMinHealth);
 				let newLuminousRock = new LuminousRock(
+                    luminousRock.setMinX, luminousRock.setMaxX, luminousRock.setMinY, luminousRock.setMaxY,
 					luminousRockRandomX,
 					luminousRockRandomY,
 					luminousRock.appearance,
@@ -975,10 +995,11 @@
 		}
 		function spawnLuminousSpirit() {
 			for (let i = 0; i < luminousSpirit.maxAmount; i++) {
-				let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1000 + 1)) + 1000))) / camera.zoom) + camera.x;
-				let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (70 - 25 + 1)) + 25);
+                let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousSpirit.setMaxX - luminousSpirit.setMinX + 1)) + luminousSpirit.setMinX))) / camera.zoom) + camera.x;
+                let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousSpirit.setMaxY - luminousSpirit.setMinY + 1)) + luminousSpirit.setMinY))) / camera.zoom) + camera.y;
+                let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (luminousSpirit.setMaxHealth - luminousSpirit.setMinHealth + 1)) + luminousSpirit.setMinHealth);
 				let newLuminousSpirit = new LuminousSpirit(
+                    luminousSpirit.setMinX, luminousSpirit.setMaxX, luminousSpirit.setMinY, luminousSpirit.setMaxY,
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
 					luminousSpirit.appearance,
@@ -1004,10 +1025,11 @@
 		}
 		function spawnSpecter() {
 			for (let i = 0; i < specter.maxAmount; i++) {
-				let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2500 - 1500 + 1)) + 1500))) / camera.zoom) + camera.x;
-				let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-				let specterRandomRadiusXHealth = Math.floor((Math.random() * (80 - 25 + 1)) + 25);
+                let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (specter.setMaxX - specter.setMinX + 1)) + specter.setMinX))) / camera.zoom) + camera.x;
+                let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (specter.setMaxY - specter.setMinY + 1)) + specter.setMinY))) / camera.zoom) + camera.y;
+                let specterRandomRadiusXHealth = Math.floor((Math.random() * (specter.setMaxHealth - specter.setMinHealth + 1)) + specter.setMinHealth);
 				let newSpecter = new Specter(
+                    specter.setMinX, specter.setMaxX, specter.setMinY, specter.setMaxY,
 					specterRandomX,
 					specterRandomY,
 					specter.appearance,
@@ -1032,10 +1054,11 @@
 		}
         function spawnDarkForestTree() {
             for (let i = 0; i < darkForestTree.maxAmount; i++) {
-                let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-                let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-                let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
-                let newDarkForestTree = new DarkForestTree(
+                let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTree.setMaxX - darkForestTree.setMinX + 1)) + darkForestTree.setMinX))) / camera.zoom) + camera.x;
+                let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTree.setMaxY - darkForestTree.setMinY + 1)) + darkForestTree.setMinY))) / camera.zoom) + camera.y;
+                let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTree.setMaxHealth - darkForestTree.setMinHealth + 1)) + darkForestTree.setMinHealth);
+				let newDarkForestTree = new DarkForestTree(
+                    darkForestTree.setMinX, darkForestTree.setMaxX, darkForestTree.setMinY, darkForestTree.setMaxY,
                     darkForestTreeRandomX,
                     darkForestTreeRandomY,
                     darkForestTree.appearance,
@@ -1060,10 +1083,11 @@
 		}
         function spawnDarkForestTreant() {
             for (let i = 0; i < darkForestTreant.maxAmount; i++) {
-                let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (2000 - 10 + 1)) + 10))) / camera.zoom) + camera.x;
-                let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (1000 - 10 + 1)) + 10))) / camera.zoom) + camera.y;
-                let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (70 - 20 + 1)) + 20);
-                let newDarkForestTreant = new DarkForestTreant(
+                let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTreant.setMaxX - darkForestTreant.setMinX + 1)) + darkForestTreant.setMinX))) / camera.zoom) + camera.x;
+                let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTreant.setMaxY - darkForestTreant.setMinY + 1)) + darkForestTreant.setMinY))) / camera.zoom) + camera.y;
+                let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTreant.setMaxHealth - darkForestTreant.setMinHealth + 1)) + darkForestTreant.setMinHealth);
+				let newDarkForestTreant = new DarkForestTreant(
+                    darkForestTreant.setMinX, darkForestTreant.setMaxX, darkForestTreant.setMinY, darkForestTreant.setMaxY,
                     darkForestTreantRandomX,
                     darkForestTreantRandomY,
                     darkForestTreant.appearance,
