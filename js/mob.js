@@ -15,6 +15,7 @@ class Mob {
 		setMinHealth,
 		setMaxHealth,
 		mobName,
+		maxAmount,
 		type,
 		ability,
 		intelligence,
@@ -42,6 +43,7 @@ class Mob {
 		this.defense = defense;
 		this.damage = damage;
 		this.mobName = mobName;
+		this.maxAmount = maxAmount;
 		this.type = type;
 		this.ability = ability;
 		this.intelligence = intelligence;
@@ -87,10 +89,12 @@ class Mob {
 			luminousRock.spawn();
 		}
 	}
-	WIPspawn() {
-		setTimeout(function () {
+	spawn() {
+		/*
+		//setTimeout(function () {
 			let totalSpecificMobCount = mobsArray.filter(element => element.mobName === this.mobName).length;
 			if (totalSpecificMobCount < this.maxAmount) {
+				console.log(totalSpecificMobCount, this.maxAmount, "called");
 				let randomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) / camera.zoom) + camera.x;
 				let randomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (this.setMaxY - this.setMinY + 1)) + this.setMinY))) / camera.zoom) + camera.y;
 				let randomRadiusXHealth = Math.floor((Math.random() * (this.setMaxHealth - this.setMinHealth + 1)) + this.setMinHealth);
@@ -109,6 +113,7 @@ class Mob {
 					this.setMinHealth,
 					this.setMaxHealth,
 					this.mobName,
+					this.maxAmount,
 					this.type,
 					this.ability,
 					this.intelligence,
@@ -118,7 +123,74 @@ class Mob {
 				mobsArray.push(newMob);
 				//console.log(mobsArray);
 			}
-		}, this.respawnTime);
+		//}, this.respawnTime);
+		*/
+		let totalSpecificMobCount = mobsArray.filter(element => element.mobName === this.mobName).length;
+		if ((totalSpecificMobCount - 1) < this.maxAmount) {
+			console.log(totalSpecificMobCount, this.maxAmount, "called");
+
+			// Capture the current context's values
+			let randomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) / camera.zoom) + camera.x;
+			let randomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (this.setMaxY - this.setMinY + 1)) + this.setMinY))) / camera.zoom) + camera.y;
+			let randomRadiusXHealth = Math.floor((Math.random() * (this.setMaxHealth - this.setMinHealth + 1)) + this.setMinHealth);
+
+			let mobConfig = {
+				setMinX: this.setMinX,
+				setMaxX: this.setMaxX,
+				setMinY: this.setMinY,
+				setMaxY: this.setMaxY,
+				randomX: randomX,
+				randomY: randomY,
+				appearance: this.appearance,
+				ignoreSpellCollision: this.ignoreSpellCollision,
+				ignoreMobCollision: this.ignoreMobCollision,
+				randomRadiusXHealth: randomRadiusXHealth,
+				defense: this.defense,
+				damage: this.damage,
+				radiusAdjust: this.radiusAdjust,
+				setMinHealth: this.setMinHealth,
+				setMaxHealth: this.setMaxHealth,
+				mobName: this.mobName,
+				maxAmount: this.maxAmount,
+				type: this.type,
+				ability: this.ability,
+				intelligence: this.intelligence,
+				experienceDrop: this.experienceDrop,
+				lootDrop: this.lootDrop,
+				respawnTime: this.respawnTime
+			};
+
+			let mobRespawnCooldown = this.respawnTime;
+
+			setTimeout(function () {
+				let newMob = new Mob(
+					mobConfig.setMinX, mobConfig.setMaxX, mobConfig.setMinY, mobConfig.setMaxY,
+					mobConfig.randomX,
+					mobConfig.randomY,
+					mobConfig.appearance,
+					mobConfig.ignoreSpellCollision,
+					mobConfig.ignoreMobCollision,
+					mobConfig.randomRadiusXHealth,
+					mobConfig.defense,
+					mobConfig.damage,
+					mobConfig.randomRadiusXHealth, // because radius = health
+					mobConfig.radiusAdjust,
+					mobConfig.setMinHealth,
+					mobConfig.setMaxHealth,
+					mobConfig.mobName,
+					mobConfig.maxAmount,
+					mobConfig.type,
+					mobConfig.ability,
+					mobConfig.intelligence,
+					mobConfig.experienceDrop,
+					mobConfig.lootDrop, 0, 0,
+					mobConfig.respawnTime
+				);
+
+				mobsArray.push(newMob);
+				console.log(totalSpecificMobCount, mobConfig.maxAmount, "update");
+			}, mobRespawnCooldown);
+		}
 	}
 	newPos() {
 		this.angle += this.moveAngle * Math.PI / 180;
@@ -187,7 +259,7 @@ class Mob {
 			console.log("hi");
 		}
 		if (this.type == "hostile") {
-			let radii = this.FOVRadius + myGameCharacter.radius;
+			let radii = (this.FOVRadius * 5) + myGameCharacter.radius;
 			let distance = getDistance(this, myGameCharacter);
 			let withinRadius = distance < radii;
 			if (withinRadius) {
@@ -205,6 +277,7 @@ class Mob {
 		}
 	}
 }
+/*
 class LuminousRock extends Mob {
 	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime) {
 		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, setMinHealth, setMaxHealth, mobName, type, ability, intelligence, experienceDrop, lootDrop, state, frames, respawnTime);
@@ -399,3 +472,4 @@ class DarkForestTreant extends Mob {
 		}, darkForestTreant.respawnTime);
 	}
 }
+*/

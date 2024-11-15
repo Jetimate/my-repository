@@ -312,7 +312,7 @@ class Spell {
 			this.lifeTimer++;
 
 			// If lifeTimer exceeds maxLife, this entity will be removed
-			if (this.lifeTimer >= 1200) {
+			if (this.lifeTimer >= 120) {
 				// Call the function to remove this entity from the array
 				this.destroy();
 			}

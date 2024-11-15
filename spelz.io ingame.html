@@ -233,7 +233,7 @@
 			setMinY: 10,
 			setMaxY: 1000,
 			radiusAdjust: 0,
-            maxAmount: 20,
+            maxAmount: 3,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
 			ignoreSpellCollision: true,
@@ -255,7 +255,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 0,
-            maxAmount: 10,
+            maxAmount: 3,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             ignoreSpellCollision: false,
@@ -277,7 +277,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 0,
-            maxAmount: 5,
+            maxAmount: 3,
             mobName: "specter",
             appearance: "specter.png",
             ignoreSpellCollision: false,
@@ -299,7 +299,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 20,
-            maxAmount: 20,
+            maxAmount: 3,
             mobName: "darkForestTree",
             appearance: "darkForestTree.png",
             ignoreSpellCollision: true,
@@ -321,7 +321,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 20,
-            maxAmount: 5,
+            maxAmount: 3,
             mobName: "darkForestTreant",
             appearance: "darkForestTreant.png",
             ignoreSpellCollision: true,
@@ -428,7 +428,7 @@
 			health: 15,
             defense: 0,
 			damage: 0,
-			speed: 15,
+			speed: 30,
 			ability: "teleport",
 			manaCost: 2,
 			respawnTime: 500
@@ -748,8 +748,8 @@
 			lootsArray = [];
             inventoryArray = [];
 			maxExperience = 20;
-			biome1 = new Background(10, 10, 2500, 1000, "grayBG.png");
-            myGameCharacter = new PlayableCharacter(300, 300, 300, 300, 300, 300, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
+			biome1 = new Background(10, 10, 5000, 2000, "grayBG.png");
+            myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 900, 900, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnLuminousRock();
 			spawnLuminousSpirit();
@@ -969,7 +969,7 @@
                 let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousRock.setMaxX - luminousRock.setMinX + 1)) + luminousRock.setMinX))) / camera.zoom) + camera.x;
                 let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousRock.setMaxY - luminousRock.setMinY + 1)) + luminousRock.setMinY))) / camera.zoom) + camera.y;
                 let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (luminousRock.setMaxHealth - luminousRock.setMinHealth + 1)) + luminousRock.setMinHealth);
-				let newLuminousRock = new LuminousRock(
+				let newLuminousRock = new Mob(
                     luminousRock.setMinX, luminousRock.setMaxX, luminousRock.setMinY, luminousRock.setMaxY,
 					luminousRockRandomX,
 					luminousRockRandomY,
@@ -984,6 +984,7 @@
                     luminousRock.setMinHealth,
                     luminousRock.setMaxHealth,
 					luminousRock.mobName,
+                    luminousRock.maxAmount,
 					luminousRock.type,
 					luminousRock.ability,
 					luminousRock.intelligence,
@@ -998,7 +999,7 @@
                 let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousSpirit.setMaxX - luminousSpirit.setMinX + 1)) + luminousSpirit.setMinX))) / camera.zoom) + camera.x;
                 let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousSpirit.setMaxY - luminousSpirit.setMinY + 1)) + luminousSpirit.setMinY))) / camera.zoom) + camera.y;
                 let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (luminousSpirit.setMaxHealth - luminousSpirit.setMinHealth + 1)) + luminousSpirit.setMinHealth);
-				let newLuminousSpirit = new LuminousSpirit(
+                let newLuminousSpirit = new Mob(
                     luminousSpirit.setMinX, luminousSpirit.setMaxX, luminousSpirit.setMinY, luminousSpirit.setMaxY,
 					luminousSpiritRandomX,
 					luminousSpiritRandomY,
@@ -1013,6 +1014,7 @@
                     luminousSpirit.setMinHealth,
                     luminousSpirit.setMaxHealth,
 					luminousSpirit.mobName,
+                    luminousSpirit.maxAmount,
 					luminousSpirit.type,
 					luminousSpirit.ability,
 					luminousSpirit.intelligence,
@@ -1028,7 +1030,7 @@
                 let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (specter.setMaxX - specter.setMinX + 1)) + specter.setMinX))) / camera.zoom) + camera.x;
                 let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (specter.setMaxY - specter.setMinY + 1)) + specter.setMinY))) / camera.zoom) + camera.y;
                 let specterRandomRadiusXHealth = Math.floor((Math.random() * (specter.setMaxHealth - specter.setMinHealth + 1)) + specter.setMinHealth);
-				let newSpecter = new Specter(
+                let newSpecter = new Mob(
                     specter.setMinX, specter.setMaxX, specter.setMinY, specter.setMaxY,
 					specterRandomX,
 					specterRandomY,
@@ -1043,6 +1045,7 @@
                     specter.setMinHealth,
                     specter.setMaxHealth,
 					specter.mobName,
+                    specter.maxAmount,
 					specter.type,
 					specter.ability,
 					specter.intelligence,
@@ -1057,7 +1060,7 @@
                 let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTree.setMaxX - darkForestTree.setMinX + 1)) + darkForestTree.setMinX))) / camera.zoom) + camera.x;
                 let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTree.setMaxY - darkForestTree.setMinY + 1)) + darkForestTree.setMinY))) / camera.zoom) + camera.y;
                 let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTree.setMaxHealth - darkForestTree.setMinHealth + 1)) + darkForestTree.setMinHealth);
-				let newDarkForestTree = new DarkForestTree(
+                let newDarkForestTree = new Mob(
                     darkForestTree.setMinX, darkForestTree.setMaxX, darkForestTree.setMinY, darkForestTree.setMaxY,
                     darkForestTreeRandomX,
                     darkForestTreeRandomY,
@@ -1071,7 +1074,8 @@
 					darkForestTree.radiusAdjust,
                     darkForestTree.setMinHealth,
                     darkForestTree.setMaxHealth,
-                    darkForestTree.mobName,
+					darkForestTree.mobName,
+                    darkForestTree.maxAmount,
                     darkForestTree.type,
                     darkForestTree.ability,
                     darkForestTree.intelligence,
@@ -1086,7 +1090,7 @@
                 let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTreant.setMaxX - darkForestTreant.setMinX + 1)) + darkForestTreant.setMinX))) / camera.zoom) + camera.x;
                 let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTreant.setMaxY - darkForestTreant.setMinY + 1)) + darkForestTreant.setMinY))) / camera.zoom) + camera.y;
                 let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTreant.setMaxHealth - darkForestTreant.setMinHealth + 1)) + darkForestTreant.setMinHealth);
-				let newDarkForestTreant = new DarkForestTreant(
+                let newDarkForestTreant = new Mob(
                     darkForestTreant.setMinX, darkForestTreant.setMaxX, darkForestTreant.setMinY, darkForestTreant.setMaxY,
                     darkForestTreantRandomX,
                     darkForestTreantRandomY,
@@ -1100,7 +1104,8 @@
 					darkForestTreant.radiusAdjust,
                     darkForestTreant.setMinHealth,
                     darkForestTreant.setMaxHealth,
-                    darkForestTreant.mobName,
+					darkForestTreant.mobName,
+                    darkForestTreant.maxAmount,
                     darkForestTreant.type,
                     darkForestTreant.ability,
                     darkForestTreant.intelligence,
