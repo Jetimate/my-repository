@@ -127,6 +127,10 @@
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
 	<script type="text/javascript" src="js/loot.js"></script>
+	<script type="text/javascript" src="js/lootDropLibrary.js"></script>
+	<script type="text/javascript" src="js/mobLibrary.js"></script>
+	<script type="text/javascript" src="js/spellsLibrary.js"></script>
+	<script type="text/javascript" src="js/spellBooksLibrary.js"></script>
 
 	<script>
 		const keys = {
@@ -143,10 +147,10 @@
 			Digit3: false,
 			Digit4: false,
 			Digit5: false,
-            Digit6: false,
-            Digit7: false,
-            Digit8: false,
-            Digit9: false,
+			Digit6: false,
+			Digit7: false,
+			Digit8: false,
+			Digit9: false,
 			ShiftLeft: false,
 			ShiftRight: false,
 			Space: false,
@@ -161,526 +165,22 @@
 		let mouseClickY = 0;
 		let worldX = null;
 		let worldY = null;
-        let slot3Active = false;
-        let slot4Active = false;
-        let slot5Active = false;
+		let slot3Active = false;
+		let slot4Active = false;
+		let slot5Active = false;
 		let slot6Active = false;
-        let slot7Active = false;
-        let slot8Active = false;
-        let slot9Active = false;
+		let slot7Active = false;
+		let slot8Active = false;
+		let slot9Active = false;
 		let mobsArray = [];
 		let lootsArray = [];
-        let inventoryArray = [];
+		let inventoryArray = [];
 		let buttonsArray = [];
 		let spellBooksArray = [];
 		let spellsArray = [];
 		let maxExperience = 20;
 		const canvas = document.getElementById("mycanvas");
 		const ctx = canvas.getContext("2d");
-		// loot drops
-		const spikeLootDrop = {
-			radius: 20,
-			name: "spikeLootDrop",
-			spellName: "castSpike",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "spike"
-		};
-        const luminousEnergyLootDrop = {
-            radius: 20,
-            name: "luminousEnergyLootDrop",
-            spellName: "castLuminousEnergy",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "lumenergy"
-        };
-        const luminousSpiritLootDrop = {
-            radius: 20,
-			name: "luminousSpiritLootDrop",
-            spellName: "summonSpirit",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "spirit"
-		};
-        const specterLootDrop = {
-            radius: 20,
-			name: "specterLootDrop",
-            spellName: "summonSpecter",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "specter"
-		};
-        const teleportLootDrop = {
-            radius: 20,
-			name: "teleportLootDrop",
-            spellName: "teleport",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "teleport"
-		};
-        const smashLootDrop = {
-            radius: 20,
-			name: "smashLootDrop",
-            spellName: "smash",
-            appearance: "enchantedBook.png",
-            ignoreCollision: false,
-            text: "smash"
-        };
-		// mobs
-		const luminousRock = {
-			setMinX: 10,
-			setMaxX: 2000,
-			setMinY: 10,
-			setMaxY: 1000,
-			radiusAdjust: 0,
-            maxAmount: 15,
-            mobName: "luminousRock",
-            appearance: "luminousRock.png",
-			ignoreSpellCollision: true,
-			ignoreMobCollision: false,
-			setMinHealth: 20,
-			setMaxHealth: 70,
-			defense: 0,
-            damage: 1,
-            type: "passive",
-			ability: "nothing",
-            experienceDrop: 10,
-            lootDrop: luminousEnergyLootDrop,
-            intelligence: 0,
-            respawnTime: 3000
-        };
-		const luminousSpirit = {
-            setMinX: 1000,
-            setMaxX: 2500,
-            setMinY: 10,
-            setMaxY: 1000,
-            radiusAdjust: 0,
-            maxAmount: 5,
-            mobName: "luminousSpirit",
-            appearance: "luminousSpirit.png",
-            ignoreSpellCollision: false,
-			ignoreMobCollision: false,
-            setMinHealth: 25,
-            setMaxHealth: 70,
-            defense: 0,
-            damage: 1,
-            type: "passive",
-			ability: "nothing",
-            experienceDrop: 15,
-            lootDrop: luminousSpiritLootDrop,
-            intelligence: 1,
-            respawnTime: 4000
-        };
-		const specter = {
-            setMinX: 1500,
-            setMaxX: 2500,
-            setMinY: 10,
-            setMaxY: 1000,
-            radiusAdjust: 0,
-            maxAmount: 5,
-            mobName: "specter",
-            appearance: "specter.png",
-            ignoreSpellCollision: false,
-			ignoreMobCollision: false,
-            setMinHealth: 25,
-            setMaxHealth: 80,
-            defense: 0,
-            damage: 3,
-            type: "hostile",
-			ability: "nothing",
-            experienceDrop: 20,
-            lootDrop: specterLootDrop,
-            intelligence: 1,
-            respawnTime: 8000
-		};
-		const darkForestTree = {
-            setMinX: 10,
-            setMaxX: 2000,
-            setMinY: 10,
-            setMaxY: 1000,
-            radiusAdjust: 20,
-            maxAmount: 20,
-            mobName: "darkForestTree",
-            appearance: "darkForestTree.png",
-            ignoreSpellCollision: true,
-			ignoreMobCollision: false,
-            setMinHealth: 20,
-            setMaxHealth: 70,
-            defense: 1,
-            damage: 1,
-            type: "passive",
-			ability: "nothing",
-            experienceDrop: 15,
-            lootDrop: spikeLootDrop,
-            intelligence: 0,
-            respawnTime: 8000
-		};
-		const darkForestTreant = {
-            setMinX: 10,
-            setMaxX: 2000,
-            setMinY: 10,
-            setMaxY: 1000,
-            radiusAdjust: 20,
-            maxAmount: 5,
-            mobName: "darkForestTreant",
-            appearance: "darkForestTreant.png",
-            ignoreSpellCollision: true,
-			ignoreMobCollision: false,
-            setMinHealth: 20,
-            setMaxHealth: 70,
-            defense: 1,
-            damage: 3,
-            type: "neutral", // keep in mind that they should be hostile
-			ability: "nothing", // treant should have an ability
-            experienceDrop: 20,
-            lootDrop: spikeLootDrop,
-            intelligence: 0,
-            respawnTime: 8000
-        };
-		// spells
-		const castSpike = {
-			radius: 12,
-			name: "castSpike",
-			art: "projectile",
-            shape: "circle",
-            appearance: "spike.png",
-			castAmount: 1,
-            maxAmount: 0,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: false,
-            index: 1,
-			health: 5,
-            defense: 0,
-            damage: 3,
-            speed: 10,
-            ability: "shoot1",
-            manaCost: 0.1,
-            respawnTime: 500
-		};
-		const castLuminousEnergy = {
-            radius: 5,
-			name: "castLuminousEnergy",
-			art: "projecting",
-            shape: "circle",
-            appearance: "luminousRock.png",
-            castAmount: 5,
-            maxAmount: 5,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: false,
-            index: 1,
-            health: 5,
-            defense: 0,
-            damage: 1,
-            speed: 15,
-            ability: "shoot2",
-            manaCost: 1.25,
-            respawnTime: 1000
-		}
-		const summonSpirit = {
-			radius: 15,
-			name: "summonSpirit",
-			art: "summoning",
-            shape: "circle",
-            appearance: "luminousSpirit.png",
-			castAmount: 8,
-			maxAmount: 8,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: false,
-			index: 1,
-			health: 10,
-            defense: 0,
-			damage: 3,
-			speed: 5,
-			ability: "summon1",
-			manaCost: 1.75,
-			respawnTime: 1000
-		};
-		const summonSpecter = {
-			radius: 15,
-			name: "summonSpecter",
-			art: "summoning",
-            shape: "circle",
-            appearance: "specter.png",
-			castAmount: 5,
-			maxAmount: 5,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: false,
-			index: 1,
-			health: 15,
-			defense: 0,
-			damage: 3,
-			speed: 7,
-			ability: "summon1",
-			manaCost: 2.5,
-			respawnTime: 1500
-		};
-		const teleport = {
-			radius: 12,
-			name: "teleport",
-			art: "evading",
-            shape: "circle",
-            appearance: "teleportation.png",
-			castAmount: 1,
-			maxAmount: 0,
-            ignoreSpellCollision: true,
-            ignoreMobCollision: true,
-			index: 1,
-			health: 15,
-            defense: 0,
-			damage: 0,
-			speed: 30,
-			ability: "teleport",
-			manaCost: 2,
-			respawnTime: 500
-		};
-		const smash = {
-			radius: 30,
-			name: "smash",
-			art: "AoE",
-            shape: "circle",
-            appearance: "smash.png",
-			castAmount: 15,
-			maxAmount: 0,
-            ignoreSpellCollision: true,
-            ignoreMobCollision: false,
-			index: 1,
-			health: 1,
-            defense: 0,
-			damage: 2.5,
-			speed: 0,
-			ability: "AoE1",
-			manaCost: 3,
-			respawnTime: 500
-		};
-        const castBeam = {
-            radius: 0,
-			name: "castBeam",
-			art: "beams",
-            shape: "line",
-            appearance: "beam.webp",
-            castAmount: 1,
-            maxAmount: 0,
-            ignoreSpellCollision: true,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 10000,
-            defense: 0,
-            damage: 0.5,
-            speed: 10,
-            ability: "beam1",
-            manaCost: 1,
-            respawnTime: 500
-		};
-        const castLightningBolt = {
-            radius: 0,
-            name: "castLightningBolt",
-            art: "beams",
-            shape: "line",
-            appearance: "lightningBolt.png",
-            castAmount: 5,
-            maxAmount: 0,
-            ignoreSpellCollision: true,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 0,
-            damage: 3,
-            speed: 10,
-            ability: "beam2",
-            manaCost: 2,
-            respawnTime: 500
-		};
-        const castEnergyBall = {
-            radius: 450,
-            name: "castEnergyBall",
-            art: "projectile",
-            shape: "circle",
-            appearance: "energyBall.png",
-            castAmount: 1,
-            maxAmount: 0,
-            ignoreSpellCollision: true,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 2500,
-            defense: 0,
-            damage: 3,
-            speed: 10,
-            ability: "shoot1",
-            manaCost: 1,
-            respawnTime: 500
-        };
-        // spell books 
-		const spikeBook = {
-			radius: 12,
-			name: "spikeBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-			ignoreSpellCollision: false,
-			ignoreMobCollision: true,
-            index: 1,
-			health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-		const luminousEnergyBook = {
-            radius: 12,
-			name: "luminousEnergyBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-        const luminousSpiritBook = {
-            radius: 12,
-			name: "luminousSpiritBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-        const specterBook = {
-            radius: 12,
-			name: "specterBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-        }
-        const teleportBook = {
-            radius: 12,
-			name: "teleportBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-        }
-        const smashBook = {
-            radius: 12,
-			name: "smashBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-        const beamBook = {
-            radius: 12,
-			name: "beamBook",
-			art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-        const lightningBoltBook = {
-            radius: 12,
-            name: "lightningBoltBook",
-            art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
-        const energyBallBook = {
-            radius: 12,
-            name: "energyBallBook",
-            art: "books",
-            shape: "circle",
-            appearance: "enchantedBook.png",
-            castAmount: 1,
-            maxAmount: 1,
-            ignoreSpellCollision: false,
-            ignoreMobCollision: true,
-            index: 1,
-            health: 100,
-            defense: 100,
-            damage: 0,
-            speed: 12,
-            ability: "book",
-            manaCost: 1,
-            respawnTime: null
-		}
 		const starterMobsArray = [luminousRock, luminousSpirit, specter, darkForestTree, darkForestTreant];
 
 		var myGameArea = {
@@ -748,10 +248,10 @@
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
-            inventoryArray = [];
+			inventoryArray = [];
 			maxExperience = 20;
 			biome1 = new Background(10, 10, 5000, 2000, "grayBG.png");
-            myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 900, 900, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
+			myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 900, 900, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnMobs();
 			myGameArea.start();
@@ -768,26 +268,25 @@
 			addButton(new Button(5, 60, 200, 50, [5], "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience));
 			addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
-            addButton(new Button(5, 225, 110, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
+			addButton(new Button(5, 225, 110, 50, [5], "#e3a04d", "inventoryButton", "inventory"));
 		}
 		function spellBooksKeeper() {
-            addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", castEnergyBall, energyBallBook, 15, "castEnergyBall"));
-            addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
+			addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", castEnergyBall, energyBallBook, 15, "castEnergyBall"));
+			addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
 			addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
-            addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+			addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
 		}
 		function spellsKeeper() {
 		}
 
 		function updateGameArea() {
-			//spawnMobs();
 			// always updating
-            worldX = (mouseX / camera.zoom) + camera.x;
-            worldY = (mouseY / camera.zoom) + camera.y;
+			worldX = (mouseX / camera.zoom) + camera.x;
+			worldY = (mouseY / camera.zoom) + camera.y;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
-            //console.log(window.innerWidth / 2 + " " + window.innerHeight / 2);
+			//console.log(window.innerWidth / 2 + " " + window.innerHeight / 2);
 			ctx.fillStyle = "gray";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			camera.follow(myGameCharacter);
@@ -824,7 +323,7 @@
 			}
 			// player and loot collision
 			if (playerCollideWithLoot(myGameCharacter, lootsArray)) {
-                myGameCharacter.playerNewPos();
+				myGameCharacter.playerNewPos();
 			}
 			// mob to mob collision
 			if (crashWith(mobsArray, mobsArray)) {
@@ -844,31 +343,31 @@
 			myGameCharacter.newSpeed = 0;
 
 			function updatePlayerPosition() {
-  
+
 				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
 					myGameCharacter.angle = (1.75 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
 					myGameCharacter.angle = (2.25 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
 					myGameCharacter.angle = (1.25 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
 					myGameCharacter.angle = (0.75 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyW || keys.ArrowUp) { // Up
 					myGameCharacter.angle = (2 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyS || keys.ArrowDown) { // Down
 					myGameCharacter.angle = (1 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyA || keys.ArrowLeft) { // Left
 					myGameCharacter.angle = (1.5 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				} else if (keys.KeyD || keys.ArrowRight) { // Right
 					myGameCharacter.angle = (0.5 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 				}
 			}
 		}
@@ -882,51 +381,51 @@
 			mobsArray = [];
 			lootsArray = [];
 			inventoryArray = [];
-            slot3Active = false;
-            slot4Active = false;
-            slot5Active = false;
-            slot6Active = false;
-            slot7Active = false;
-            slot8Active = false;
-            slot9Active = false;
+			slot3Active = false;
+			slot4Active = false;
+			slot5Active = false;
+			slot6Active = false;
+			slot7Active = false;
+			slot8Active = false;
+			slot9Active = false;
 			startGame();
 		}
 		function levelUp() {
 			if (myGameCharacter.experience >= maxExperience) {
 				do {
-                    myGameCharacter.experience -= maxExperience;
-                    maxExperience += 20;
-                    myGameCharacter.level += 1;
-                    myGameCharacter.maxHealth += 5;
-                    myGameCharacter.maxMana += 1;
+					myGameCharacter.experience -= maxExperience;
+					maxExperience += 20;
+					myGameCharacter.level += 1;
+					myGameCharacter.maxHealth += 5;
+					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
-					
-                    if (!slot4Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
+
+					if (!slot4Active && myGameCharacter.level >= 1) {
+						addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
 						slot4Active = true;
 					}
-                    if (!slot5Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", castLuminousEnergy, luminousEnergyBook, 45, "castLuminousEnergy"));
-                        slot5Active = true;
+					if (!slot5Active && myGameCharacter.level >= 1) {
+						addSpellBook(new SpellBook(920, 5, 5, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", castLuminousEnergy, luminousEnergyBook, 45, "castLuminousEnergy"));
+						slot5Active = true;
 					}
-                    if (!slot6Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
-                        slot6Active = true;
+					if (!slot6Active && myGameCharacter.level >= 2) {
+						addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
+						slot6Active = true;
 					}
-                    if (!slot7Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(1130, 5, 7, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport"));
-                        slot7Active = true;
+					if (!slot7Active && myGameCharacter.level >= 2) {
+						addSpellBook(new SpellBook(1130, 5, 7, 100, 100, [5], "black", "teleportation.png", "teleportBook", teleport, teleportBook, 180, "teleport"));
+						slot7Active = true;
 					}
-                    if (!slot8Active && myGameCharacter.level >= 3) {
-                        addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
-                        slot8Active = true;
+					if (!slot8Active && myGameCharacter.level >= 3) {
+						addSpellBook(new SpellBook(1235, 5, 8, 100, 100, [5], "black", "smash.png", "smashBook", smash, smashBook, 15, "smash"));
+						slot8Active = true;
 					}
-                //    if (!slot9Active && myGameCharacter.level >= 4) {
-                //        addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
-                //        slot9Active = true;
-                //    }
-                }
-                while (myGameCharacter.experience >= maxExperience);
+					//    if (!slot9Active && myGameCharacter.level >= 4) {
+					//        addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+					//        slot9Active = true;
+					//    }
+				}
+				while (myGameCharacter.experience >= maxExperience);
 			}
 		}
 		function addButton(button) {
@@ -934,13 +433,13 @@
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook) {
-            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
+			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
 			spellBooksArray.push(newSpellBook);
 		}
-        function dropLoot(loot) {
+		function dropLoot(loot) {
 			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellName, loot.appearance, loot.ignoreCollision, loot.text)
 			lootsArray.push(newLoot);
-        }
+		}
 		function castSpell(spell) {
 			let newSpell = new Spell(
 				spell.x,
@@ -952,8 +451,8 @@
 				spell.appearance,
 				spell.castAmount,
 				spell.maxAmount,
-                spell.ignoreSpellCollision,
-                spell.ignoreMobCollision,
+				spell.ignoreSpellCollision,
+				spell.ignoreMobCollision,
 				spell.positionIndex,
 				spell.health,
 				spell.defense,
@@ -967,7 +466,7 @@
 		function spawnMobs() {
 			for (let i = 0; i < starterMobsArray.length; i++) {
 				//console.log(starterMobsArray[i].mobName);
-                for (let j = 0; j < starterMobsArray[i].maxAmount; j++) {
+				for (let j = 0; j < starterMobsArray[i].maxAmount; j++) {
 					let mobRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxX - starterMobsArray[i].setMinX + 1)) + starterMobsArray[i].setMinX))) / camera.zoom) + camera.x;
 					let mobRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxY - starterMobsArray[i].setMinY + 1)) + starterMobsArray[i].setMinY))) / camera.zoom) + camera.y;
 					let mobRandomRadiusXHealth = Math.floor((Math.random() * (starterMobsArray[i].setMaxHealth - starterMobsArray[i].setMinHealth + 1)) + starterMobsArray[i].setMinHealth);
@@ -1030,20 +529,20 @@
 			});
 			return result;
 		}
-        function playerCollideWithLoot(mob1, lootsArray) {
-            let result = false;
-            lootsArray.forEach(loot => {
-                let radii = (mob1.radius + 200) + loot.radius; // temporary magnet for loot
-                let distance = getDistance(mob1, loot);
-                let hasCrashed = distance < radii;
-                if (hasCrashed) {
-                    result = hasCrashed;
+		function playerCollideWithLoot(mob1, lootsArray) {
+			let result = false;
+			lootsArray.forEach(loot => {
+				let radii = (mob1.radius + 200) + loot.radius; // temporary magnet for loot
+				let distance = getDistance(mob1, loot);
+				let hasCrashed = distance < radii;
+				if (hasCrashed) {
+					result = hasCrashed;
 					let lootIndex = lootsArray.indexOf(loot);
 					inventoryArray.push(loot);
-                    lootsArray.splice(lootIndex, 1);
-                }
-            });
-            return result;
+					lootsArray.splice(lootIndex, 1);
+				}
+			});
+			return result;
 		}
 		function playerCrashWith(mob1, mob2Array) {
 			let result = false;
@@ -1055,7 +554,7 @@
 					result = hasCrashed;
 					const dx = mob2.x - mob1.x;
 					const dy = mob2.y - mob1.y;
-                    // Calculate knockback direction
+					// Calculate knockback direction
 					const angle = Math.atan2(dy, dx);
 					const knockbackDistance = 1;
 					// Apply knockback
@@ -1069,15 +568,15 @@
 							mob2.y += Math.sin(angle) * knockbackDistance;
 						}
 					}
-                    // Calculate mob 2 damage
-                    let calculatedMob2Damage = Math.max(0, mob2.damage - mob1.defense);
-                    mob1.health = Math.max(0, mob1.health - calculatedMob2Damage);
+					// Calculate mob 2 damage
+					let calculatedMob2Damage = Math.max(0, mob2.damage - mob1.defense);
+					mob1.health = Math.max(0, mob1.health - calculatedMob2Damage);
 
-                    // Calculate mob 1 damage
-                    let calculatedMob1Damage = Math.max(0, mob1.damage - mob2.defense);
-                    mob2.health = Math.max(0, mob2.health - calculatedMob1Damage);
+					// Calculate mob 1 damage
+					let calculatedMob1Damage = Math.max(0, mob1.damage - mob2.defense);
+					mob2.health = Math.max(0, mob2.health - calculatedMob1Damage);
 					mob2.radius = mob2.health;
-                    myGameCharacter.health = mob1.health;
+					myGameCharacter.health = mob1.health;
 					// player to mob collision
 					if (myGameCharacter.health <= 0) {
 						//death
@@ -1087,54 +586,54 @@
 			});
 			return result;
 		}
-        function crashWithSpell(spellsArray, mobArray) {
-            let result = false;
-            spellsArray.forEach(spell => {
-                let totalDamageDealt = false; // Track if the spell has dealt any damage to any mob
+		function crashWithSpell(spellsArray, mobArray) {
+			let result = false;
+			spellsArray.forEach(spell => {
+				let totalDamageDealt = false; // Track if the spell has dealt any damage to any mob
 				for (let mobIndex = 0; mobIndex < mobArray.length; mobIndex++) {
 					let mob = mobArray[mobIndex];
-					if (spell.shape == "circle") { 
-					let radii = spell.radius + mob.radius;
-					let distance = getDistance(spell, mob);
+					if (spell.shape == "circle") {
+						let radii = spell.radius + mob.radius;
+						let distance = getDistance(spell, mob);
 						let hasCrashed = distance < radii;
 						if (hasCrashed) {
 							simulateCollision();
 						}
 					}
 					if (spell.shape == "line") {
-                        // Calculate the closest point on the line segment to the circle center
-                        const lineStart = { x: spell.x, y: spell.y };
-                        const lineEnd = { x: spell.x2, y: spell.y2 };
-                        const circleCenter = { x: mob.x, y: mob.y };
+						// Calculate the closest point on the line segment to the circle center
+						const lineStart = { x: spell.x, y: spell.y };
+						const lineEnd = { x: spell.x2, y: spell.y2 };
+						const circleCenter = { x: mob.x, y: mob.y };
 
-                        // Vector from line start to circle center
-                        const lineToCircle = {
-                            x: circleCenter.x - lineStart.x,
-                            y: circleCenter.y - lineStart.y
-                        };
+						// Vector from line start to circle center
+						const lineToCircle = {
+							x: circleCenter.x - lineStart.x,
+							y: circleCenter.y - lineStart.y
+						};
 
-                        // Line segment vector
-                        const lineVector = {
-                            x: lineEnd.x - lineStart.x,
-                            y: lineEnd.y - lineStart.y
-                        };
+						// Line segment vector
+						const lineVector = {
+							x: lineEnd.x - lineStart.x,
+							y: lineEnd.y - lineStart.y
+						};
 
-                        // Calculate projection of lineToCircle onto lineVector
-                        const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
-                        let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
+						// Calculate projection of lineToCircle onto lineVector
+						const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
+						let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
 
-                        // Clamp t to stay within the segment bounds
-                        t = Math.max(0, Math.min(1, t));
+						// Clamp t to stay within the segment bounds
+						t = Math.max(0, Math.min(1, t));
 
-                        // Find the closest point on the line segment
-                        const closestPoint = {
-                            x: lineStart.x + t * lineVector.x,
-                            y: lineStart.y + t * lineVector.y
-                        };
+						// Find the closest point on the line segment
+						const closestPoint = {
+							x: lineStart.x + t * lineVector.x,
+							y: lineStart.y + t * lineVector.y
+						};
 
-                        // Distance from circle center to closest point
-                        const dx = closestPoint.x - circleCenter.x;
-                        const dy = closestPoint.y - circleCenter.y;
+						// Distance from circle center to closest point
+						const dx = closestPoint.x - circleCenter.x;
+						const dy = closestPoint.y - circleCenter.y;
 						const distance = Math.sqrt(dx * dx + dy * dy);
 
 						if (distance < mob.radius) {
@@ -1142,40 +641,40 @@
 						}
 					}
 					function simulateCollision() {
-                        result = true;
-                        totalDamageDealt = true;
+						result = true;
+						totalDamageDealt = true;
 
-                        // Apply damage to the mob
+						// Apply damage to the mob
 						let calculatedSpellDamage = spell.damage - mob.defense;
-                        if (calculatedSpellDamage <= 0) {
-                            calculatedSpellDamage = 0;
-                        }
-                        mob.health -= calculatedSpellDamage;
-                        mob.radius = mob.health;
-                        let calculatedMobDamage = mob.damage - spell.defense;
-                        if (calculatedMobDamage <= 0) {
-                            calculatedMobDamage = 0;
-                        }
-                        // Apply damage to the spell
-                        if (spell.ability !== "book") {
-                            spell.health -= calculatedMobDamage;
-                        }
+						if (calculatedSpellDamage <= 0) {
+							calculatedSpellDamage = 0;
+						}
+						mob.health -= calculatedSpellDamage;
+						mob.radius = mob.health;
+						let calculatedMobDamage = mob.damage - spell.defense;
+						if (calculatedMobDamage <= 0) {
+							calculatedMobDamage = 0;
+						}
+						// Apply damage to the spell
+						if (spell.ability !== "book") {
+							spell.health -= calculatedMobDamage;
+						}
 
-                        // Check if the mob should die and be removed
-                        if (mob.health <= 15) {
-                            myGameCharacter.experience += mob.experienceDrop;
-                            levelUp();
-                            mob.spawn();
-                            mob.die();
-                            mobArray.splice(mobIndex, 1);
-                            mobIndex--; // Adjust index after removal
-                        }
+						// Check if the mob should die and be removed
+						if (mob.health <= 15) {
+							myGameCharacter.experience += mob.experienceDrop;
+							levelUp();
+							mob.spawn();
+							mob.die();
+							mobArray.splice(mobIndex, 1);
+							mobIndex--; // Adjust index after removal
+						}
 
-                        // Apply knockback to both spell and mob
-                        const dx = mob.x - spell.x;
-                        const dy = mob.y - spell.y;
-                        const angle = Math.atan2(dy, dx);
-                        const knockbackDistance = 2;
+						// Apply knockback to both spell and mob
+						const dx = mob.x - spell.x;
+						const dy = mob.y - spell.y;
+						const angle = Math.atan2(dy, dx);
+						const knockbackDistance = 2;
 
 						if (spell.ability !== "book") {
 							if (!spell.ignoreMobCollision) {
@@ -1187,17 +686,17 @@
 								mob.y += Math.sin(angle) * knockbackDistance;
 							}
 						}
-                    }
-                }
+					}
+				}
 
-                // Remove the spell only if its health is <= 0 after damaging all mobs
-                if (totalDamageDealt && spell.health <= 0) {
-                    let spellIndex = spellsArray.indexOf(spell);
-                    spellsArray.splice(spellIndex, 1);
-                }
-            });
-            return result;
-        }
+				// Remove the spell only if its health is <= 0 after damaging all mobs
+				if (totalDamageDealt && spell.health <= 0) {
+					let spellIndex = spellsArray.indexOf(spell);
+					spellsArray.splice(spellIndex, 1);
+				}
+			});
+			return result;
+		}
 		function getDistance(circle1, circle2) {
 			let a = circle2.y - circle1.y;
 			let b = circle2.x - circle1.x;
@@ -1221,6 +720,9 @@
 		game issues to fix:
 		bug 2 is fixed. but im not removing it because it has existed for years and only got removed today 17/10/2024 3:37 AM
 		2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice and deletes 2 spellbooks.
+		3). on the spell aoe ability, the player speed reverting back to normal value doesn't work when the spell 
+		finishes its job because it gets destroyed by a mob before it can even apply the code line.
+		this also applies to the beams, we just didn't notice.
 		*/
 	</script>
 </body>

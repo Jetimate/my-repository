@@ -398,8 +398,10 @@ class Spell {
 		}
 		if (this.ability === "AoE1") {
 			this.lifeTimer++;
+			myGameCharacter.speed = 0.1;
 			// If lifeTimer exceeds maxLife, this entity will be removed
 			if (this.lifeTimer >= 5) {
+				myGameCharacter.speed = 3;
 				// Call the function to remove this entity from the array
 				this.destroy();
 			}
