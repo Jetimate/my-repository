@@ -233,7 +233,7 @@
 			setMinY: 10,
 			setMaxY: 1000,
 			radiusAdjust: 0,
-            maxAmount: 3,
+            maxAmount: 15,
             mobName: "luminousRock",
             appearance: "luminousRock.png",
 			ignoreSpellCollision: true,
@@ -255,7 +255,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 0,
-            maxAmount: 3,
+            maxAmount: 5,
             mobName: "luminousSpirit",
             appearance: "luminousSpirit.png",
             ignoreSpellCollision: false,
@@ -277,7 +277,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 0,
-            maxAmount: 3,
+            maxAmount: 5,
             mobName: "specter",
             appearance: "specter.png",
             ignoreSpellCollision: false,
@@ -299,7 +299,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 20,
-            maxAmount: 3,
+            maxAmount: 20,
             mobName: "darkForestTree",
             appearance: "darkForestTree.png",
             ignoreSpellCollision: true,
@@ -321,7 +321,7 @@
             setMinY: 10,
             setMaxY: 1000,
             radiusAdjust: 20,
-            maxAmount: 3,
+            maxAmount: 5,
             mobName: "darkForestTreant",
             appearance: "darkForestTreant.png",
             ignoreSpellCollision: true,
@@ -680,7 +680,9 @@
             ability: "book",
             manaCost: 1,
             respawnTime: null
-        }
+		}
+		const starterMobsArray = [luminousRock, luminousSpirit, specter, darkForestTree, darkForestTreant];
+
 		var myGameArea = {
 			canvas: document.getElementById("mycanvas"), // splice
 			start: function () {
@@ -751,11 +753,7 @@
 			biome1 = new Background(10, 10, 5000, 2000, "grayBG.png");
             myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 900, 900, "smileyy.webp", false, false, 90, 0, 0, 20, 0, 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
-			spawnLuminousRock();
-			spawnLuminousSpirit();
-			spawnSpecter();
-			spawnDarkForestTree()
-            spawnDarkForestTreant()
+			spawnMobs();
 			myGameArea.start();
 			buttonsKeeper();
 			spellBooksKeeper();
@@ -780,7 +778,9 @@
 		}
 		function spellsKeeper() {
 		}
+
 		function updateGameArea() {
+			//spawnMobs();
 			// always updating
             worldX = (mouseX / camera.zoom) + camera.x;
             worldY = (mouseY / camera.zoom) + camera.y;
@@ -964,157 +964,39 @@
 				spell.respawnTime);
 			spellsArray.push(newSpell);
 		}
-		function spawnLuminousRock() {
-			for (let i = 0; i < luminousRock.maxAmount; i++) {
-                let luminousRockRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousRock.setMaxX - luminousRock.setMinX + 1)) + luminousRock.setMinX))) / camera.zoom) + camera.x;
-                let luminousRockRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousRock.setMaxY - luminousRock.setMinY + 1)) + luminousRock.setMinY))) / camera.zoom) + camera.y;
-                let luminousRockRandomRadiusXHealth = Math.floor((Math.random() * (luminousRock.setMaxHealth - luminousRock.setMinHealth + 1)) + luminousRock.setMinHealth);
-				let newLuminousRock = new Mob(
-                    luminousRock.setMinX, luminousRock.setMaxX, luminousRock.setMinY, luminousRock.setMaxY,
-					luminousRockRandomX,
-					luminousRockRandomY,
-					luminousRock.appearance,
-					luminousRock.ignoreSpellCollision,
-					luminousRock.ignoreMobCollision,
-					luminousRockRandomRadiusXHealth,
-                    luminousRock.defense,
-					luminousRock.damage,
-                    luminousRockRandomRadiusXHealth,
-					luminousRock.radiusAdjust,
-                    luminousRock.setMinHealth,
-                    luminousRock.setMaxHealth,
-					luminousRock.mobName,
-                    luminousRock.maxAmount,
-					luminousRock.type,
-					luminousRock.ability,
-					luminousRock.intelligence,
-					luminousRock.experienceDrop,
-					luminousRock.lootDrop, 0, 0,
-					luminousRock.respawnTime);
-				mobsArray.push(newLuminousRock);
+		function spawnMobs() {
+			for (let i = 0; i < starterMobsArray.length; i++) {
+				//console.log(starterMobsArray[i].mobName);
+                for (let j = 0; j < starterMobsArray[i].maxAmount; j++) {
+					let mobRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxX - starterMobsArray[i].setMinX + 1)) + starterMobsArray[i].setMinX))) / camera.zoom) + camera.x;
+					let mobRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxY - starterMobsArray[i].setMinY + 1)) + starterMobsArray[i].setMinY))) / camera.zoom) + camera.y;
+					let mobRandomRadiusXHealth = Math.floor((Math.random() * (starterMobsArray[i].setMaxHealth - starterMobsArray[i].setMinHealth + 1)) + starterMobsArray[i].setMinHealth);
+					let newMob = new Mob(
+						starterMobsArray[i].setMinX, starterMobsArray[i].setMaxX, starterMobsArray[i].setMinY, starterMobsArray[i].setMaxY,
+						mobRandomX,
+						mobRandomY,
+						starterMobsArray[i].appearance,
+						starterMobsArray[i].ignoreSpellCollision,
+						starterMobsArray[i].ignoreMobCollision,
+						mobRandomRadiusXHealth,
+						starterMobsArray[i].defense,
+						starterMobsArray[i].damage,
+						mobRandomRadiusXHealth,
+						starterMobsArray[i].radiusAdjust,
+						starterMobsArray[i].setMinHealth,
+						starterMobsArray[i].setMaxHealth,
+						starterMobsArray[i].mobName,
+						starterMobsArray[i].maxAmount,
+						starterMobsArray[i].type,
+						starterMobsArray[i].ability,
+						starterMobsArray[i].intelligence,
+						starterMobsArray[i].experienceDrop,
+						starterMobsArray[i].lootDrop, 0, 0,
+						starterMobsArray[i].respawnTime);
+					mobsArray.push(newMob);
+				}
 			}
 		}
-		function spawnLuminousSpirit() {
-			for (let i = 0; i < luminousSpirit.maxAmount; i++) {
-                let luminousSpiritRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (luminousSpirit.setMaxX - luminousSpirit.setMinX + 1)) + luminousSpirit.setMinX))) / camera.zoom) + camera.x;
-                let luminousSpiritRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (luminousSpirit.setMaxY - luminousSpirit.setMinY + 1)) + luminousSpirit.setMinY))) / camera.zoom) + camera.y;
-                let luminousSpiritRandomRadiusXHealth = Math.floor((Math.random() * (luminousSpirit.setMaxHealth - luminousSpirit.setMinHealth + 1)) + luminousSpirit.setMinHealth);
-                let newLuminousSpirit = new Mob(
-                    luminousSpirit.setMinX, luminousSpirit.setMaxX, luminousSpirit.setMinY, luminousSpirit.setMaxY,
-					luminousSpiritRandomX,
-					luminousSpiritRandomY,
-					luminousSpirit.appearance,
-					luminousSpirit.ignoreSpellCollision,
-					luminousSpirit.ignoreMobCollision,
-					luminousSpiritRandomRadiusXHealth,
-                    luminousSpirit.defense,
-					luminousSpirit.damage,
-                    luminousSpiritRandomRadiusXHealth,
-					luminousSpirit.radiusAdjust,
-                    luminousSpirit.setMinHealth,
-                    luminousSpirit.setMaxHealth,
-					luminousSpirit.mobName,
-                    luminousSpirit.maxAmount,
-					luminousSpirit.type,
-					luminousSpirit.ability,
-					luminousSpirit.intelligence,
-                    luminousSpirit.experienceDrop,
-                    luminousSpirit.lootDrop, 0, 0,
-                    luminousSpirit.respawnTime);
-				mobsArray.push(newLuminousSpirit);
-				//console.log(mobsArray);
-			}
-		}
-		function spawnSpecter() {
-			for (let i = 0; i < specter.maxAmount; i++) {
-                let specterRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (specter.setMaxX - specter.setMinX + 1)) + specter.setMinX))) / camera.zoom) + camera.x;
-                let specterRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (specter.setMaxY - specter.setMinY + 1)) + specter.setMinY))) / camera.zoom) + camera.y;
-                let specterRandomRadiusXHealth = Math.floor((Math.random() * (specter.setMaxHealth - specter.setMinHealth + 1)) + specter.setMinHealth);
-                let newSpecter = new Mob(
-                    specter.setMinX, specter.setMaxX, specter.setMinY, specter.setMaxY,
-					specterRandomX,
-					specterRandomY,
-					specter.appearance,
-					specter.ignoreSpellCollision,
-					specter.ignoreMobCollision,
-					specterRandomRadiusXHealth,
-                    specter.defense,
-					specter.damage,
-                    specterRandomRadiusXHealth,
-					specter.radiusAdjust,
-                    specter.setMinHealth,
-                    specter.setMaxHealth,
-					specter.mobName,
-                    specter.maxAmount,
-					specter.type,
-					specter.ability,
-					specter.intelligence,
-                    specter.experienceDrop,
-					specter.lootDrop, 0, 0,
-                    specter.respawnTime);
-				mobsArray.push(newSpecter);
-			}
-		}
-        function spawnDarkForestTree() {
-            for (let i = 0; i < darkForestTree.maxAmount; i++) {
-                let darkForestTreeRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTree.setMaxX - darkForestTree.setMinX + 1)) + darkForestTree.setMinX))) / camera.zoom) + camera.x;
-                let darkForestTreeRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTree.setMaxY - darkForestTree.setMinY + 1)) + darkForestTree.setMinY))) / camera.zoom) + camera.y;
-                let darkForestTreeRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTree.setMaxHealth - darkForestTree.setMinHealth + 1)) + darkForestTree.setMinHealth);
-                let newDarkForestTree = new Mob(
-                    darkForestTree.setMinX, darkForestTree.setMaxX, darkForestTree.setMinY, darkForestTree.setMaxY,
-                    darkForestTreeRandomX,
-                    darkForestTreeRandomY,
-                    darkForestTree.appearance,
-                    darkForestTree.ignoreSpellCollision,
-					darkForestTree.ignoreMobCollision,
-                    darkForestTreeRandomRadiusXHealth,
-                    darkForestTree.defense,
-					darkForestTree.damage,
-                    darkForestTreeRandomRadiusXHealth,
-					darkForestTree.radiusAdjust,
-                    darkForestTree.setMinHealth,
-                    darkForestTree.setMaxHealth,
-					darkForestTree.mobName,
-                    darkForestTree.maxAmount,
-                    darkForestTree.type,
-                    darkForestTree.ability,
-                    darkForestTree.intelligence,
-                    darkForestTree.experienceDrop,
-                    darkForestTree.lootDrop, 0, 0,
-                    darkForestTree.respawnTime);
-                mobsArray.push(newDarkForestTree);
-            }
-		}
-        function spawnDarkForestTreant() {
-            for (let i = 0; i < darkForestTreant.maxAmount; i++) {
-                let darkForestTreantRandomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (darkForestTreant.setMaxX - darkForestTreant.setMinX + 1)) + darkForestTreant.setMinX))) / camera.zoom) + camera.x;
-                let darkForestTreantRandomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (darkForestTreant.setMaxY - darkForestTreant.setMinY + 1)) + darkForestTreant.setMinY))) / camera.zoom) + camera.y;
-                let darkForestTreantRandomRadiusXHealth = Math.floor((Math.random() * (darkForestTreant.setMaxHealth - darkForestTreant.setMinHealth + 1)) + darkForestTreant.setMinHealth);
-                let newDarkForestTreant = new Mob(
-                    darkForestTreant.setMinX, darkForestTreant.setMaxX, darkForestTreant.setMinY, darkForestTreant.setMaxY,
-                    darkForestTreantRandomX,
-                    darkForestTreantRandomY,
-                    darkForestTreant.appearance,
-                    darkForestTreant.ignoreSpellCollision,
-					darkForestTreant.ignoreMobCollision,
-                    darkForestTreantRandomRadiusXHealth,
-                    darkForestTreant.defense,
-					darkForestTreant.damage,
-                    darkForestTreantRandomRadiusXHealth,
-					darkForestTreant.radiusAdjust,
-                    darkForestTreant.setMinHealth,
-                    darkForestTreant.setMaxHealth,
-					darkForestTreant.mobName,
-                    darkForestTreant.maxAmount,
-                    darkForestTreant.type,
-                    darkForestTreant.ability,
-                    darkForestTreant.intelligence,
-                    darkForestTreant.experienceDrop,
-                    darkForestTreant.lootDrop, 0, 0,
-                    darkForestTreant.respawnTime);
-                mobsArray.push(newDarkForestTreant);
-            }
-        }
 		function crashWith(mob1Array, mob2Array) {
 			let result = false;
 			mob1Array.forEach(mob1 => {
@@ -1339,8 +1221,6 @@
 		game issues to fix:
 		bug 2 is fixed. but im not removing it because it has existed for years and only got removed today 17/10/2024 3:37 AM
 		2). the spell book issue happens when a spell book hits 2 basic mob at the same time because the crashWith function is called twice and deletes 2 spellbooks.
-		3). the spell, when hitting 2 or more mobs at the same time, it chooses a random mob to damage rather than having both of them damaged.
-		    maybe make it so that the closest mob to the spells' center is the prioritized mob to get damaged.
 		*/
 	</script>
 </body>
