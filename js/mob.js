@@ -95,8 +95,8 @@ class Mob {
 			console.log(totalSpecificMobCount, this.maxAmount, "called");
 
 			// Capture the current context's values
-			let randomX = (((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) / camera.zoom) + camera.x;
-			let randomY = (((biome1.y - camera.y) + (Math.floor((Math.random() * (this.setMaxY - this.setMinY + 1)) + this.setMinY))) / camera.zoom) + camera.y;
+			let randomX = ((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) + camera.x;
+			let randomY = ((biome1.y - camera.y) + (Math.floor((Math.random() * (this.setMaxY - this.setMinY + 1)) + this.setMinY))) + camera.y;
 			let randomRadiusXHealth = Math.floor((Math.random() * (this.setMaxHealth - this.setMinHealth + 1)) + this.setMinHealth);
 
 			let mobConfig = {
