@@ -13,35 +13,61 @@ class Button {
 
 	draw(ctx) {
         ctx.beginPath();
-		ctx.roundRect(this.x, this.y, this.width, this.height, this.radii);
+		ctx.roundRect(this.x, this.y, this.width, this.height, window.innerHeight / 300);
+		//window.innerWidth / 128
 		ctx.strokeStyle = "black";
-		ctx.lineWidth = "2";
+		ctx.lineWidth = window.innerHeight / 500;
 		ctx.fillStyle = this.color;
 		ctx.fill();
 		ctx.stroke();
-		ctx.font = "25px Ubuntu";
+		ctx.font = window.innerHeight / 40 + "px ubuntu";
 		ctx.fillStyle = "black";
 		if (this.name == "levelBarButton") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
+			this.width = window.innerWidth / 8;
+			this.height = window.innerHeight / 20;
+			console.log(this, this.radii);
 			this.text = "level: " + myGameCharacter.level;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "experienceBarButton") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 1;
+			this.width = window.innerWidth / 8;
+			this.height = window.innerHeight / 20;
 			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "healthBarButton") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 2;
+			this.width = window.innerWidth / 8;
+			this.height = window.innerHeight / 20;
 			this.text = "health: " + myGameCharacter.health + "/" + myGameCharacter.maxHealth;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "manaBarButton") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 3;
+			this.width = window.innerWidth / 8;
+			this.height = window.innerHeight / 20;
 			this.text = "mana: " + myGameCharacter.mana;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "inventoryButton") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 4;
+			this.width = window.innerWidth / 8;
+			this.height = window.innerHeight / 20;
 			this.text = "inventory";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "showInventory") {
+			this.x = window.innerWidth / 128;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 5;
+			this.width = window.innerWidth / 6;
+			this.height = window.innerHeight / 3;
 			let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "spikeLootDrop").length;
 			this.text1 = "spike pages: " + totalCastSpikeLootDropCount;
 			ctx.fillText(this.text1, this.x + 5, this.y + 30);
@@ -79,7 +105,13 @@ class Button {
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
 				let totalCastSpikeLootDropCount = inventoryArray.filter(element => element.name === "castSpikeLootDrop").length;
-				addButton(new Button(5, 280, 250, 600, [5], "#e3a04d", "showInventory", "spike: " + totalCastSpikeLootDropCount));
+				addButton(new Button(
+					window.innerWidth / 128,
+					(window.innerHeight / 64) + (window.innerHeight / 18) * 5,
+					window.innerWidth / 6,
+					window.innerHeight / 3,
+					[5],
+					"#e3a04d", "showInventory", "bug 101"));
 				//console.log(inventoryArray);
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;

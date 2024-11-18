@@ -24,15 +24,33 @@ class SpellBook {
 	}
 
 	draw(ctx) {
+		const slotSize = window.innerWidth / 16;
+		const slotMargin = window.innerHeight / 64;
+		const radiiSize = window.innerHeight / 300;
+		const xDistance = window.innerWidth / 6 + (slotSize * this.index) + (slotMargin * this.index)
+		const yDistance = window.innerHeight - slotMargin - slotSize;
 		ctx.beginPath();
-		ctx.roundRect(this.x, this.y, this.width, this.height, this.radii);
+		ctx.roundRect(
+			xDistance,
+			yDistance,
+			slotSize,
+			slotSize,
+			radiiSize);
 		ctx.strokeStyle = this.borderColor;
-		ctx.lineWidth = "3";
+		ctx.lineWidth = window.innerHeight / 500;
 		ctx.stroke();
-		ctx.font = "15px Ubuntu";
+		ctx.font = window.innerHeight / 64 + "px ubuntu";
 		ctx.fillStyle = "black";
-		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-		ctx.fillText(this.text + this.level, this.x + 1, (this.y * 5) + this.height);
+		ctx.drawImage(
+			this.image,
+			xDistance,
+			yDistance,
+			slotSize,
+			slotSize);
+		ctx.fillText(
+			this.text + " " + this.level,
+			xDistance,
+			yDistance - slotMargin)
 		ctx.closePath();
 	}
 	activate() {

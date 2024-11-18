@@ -264,7 +264,7 @@
 			}
 		}
 		function buttonsKeeper() {
-			addButton(new Button(5, 5, 200, 50, [5], "#5fa7e5", "levelBarButton", "level: " + myGameCharacter.level));
+            addButton(new Button(5, 5, 200, 50, [5], "#5fa7e5", "levelBarButton", "level: " + myGameCharacter.level));
 			addButton(new Button(5, 60, 200, 50, [5], "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience));
 			addButton(new Button(5, 115, 200, 50, [5], "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health));
 			addButton(new Button(5, 170, 200, 50, [5], "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana));
@@ -279,37 +279,46 @@
 		function spellsKeeper() {
 		}
 
-		function updateGameArea() {
-			// always updating
-			worldX = (mouseX / camera.zoom) + camera.x;
-			worldY = (mouseY / camera.zoom) + camera.y;
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			myGameArea.context.canvas.width = window.innerWidth - 3;
-			myGameArea.context.canvas.height = window.innerHeight - 3;
-			//console.log(window.innerWidth / 2 + " " + window.innerHeight / 2);
-			ctx.fillStyle = "gray";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			camera.follow(myGameCharacter);
-			ctx.save();
-			camera.applyTransform(ctx)
-			biome1.draw(ctx);
-			mobsArray.forEach(mob => {
-				mob.update();
-				mob.newPos();
-				mob.interact();
-			});
-			lootsArray.forEach(loot => {
-				loot.draw();
-			});
-			spellsArray.forEach(spell => {
-				spell.update();
-			});
-			myGameCharacter.playerNewPos();
-			myGameCharacter.update();
-			myGameCharacter.regenerateHealth();
-			myGameCharacter.regenerateMana();
-			updatePlayerPosition();
-			ctx.restore();
+        function updateGameArea() {
+            myGameArea.context.canvas.width = window.innerWidth - 3;
+            myGameArea.context.canvas.height = window.innerHeight - 3;
+            const canvasWidth = myGameArea.context.canvas.width;
+            const canvasHeight = myGameArea.context.canvas.height;
+
+            // Calculate world coordinates
+            worldX = (mouseX / camera.zoom) + camera.x;
+            worldY = (mouseY / camera.zoom) + camera.y;
+
+            // Clear and resize canvas
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            myGameArea.context.canvas.width = window.innerWidth - 3;
+            myGameArea.context.canvas.height = window.innerHeight - 3;
+
+            ctx.fillStyle = "gray";
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // Update camera to follow the player
+            camera.follow(myGameCharacter, canvasWidth, canvasHeight);
+            camera.applyTransform(ctx);
+
+            // Draw game objects
+            biome1.draw(ctx);
+            mobsArray.forEach(mob => {
+                mob.update();
+                mob.newPos();
+                mob.interact();
+            });
+            lootsArray.forEach(loot => loot.draw());
+            spellsArray.forEach(spell => spell.update());
+            myGameCharacter.playerNewPos();
+            myGameCharacter.update();
+            myGameCharacter.regenerateHealth();
+            myGameCharacter.regenerateMana();
+            updatePlayerPosition();
+
+            // Reset transformations
+            camera.resetTransform(ctx);
+
 			spellBooksArray.forEach(spellBook => {
 				spellBook.update();
 			});
@@ -692,6 +701,8 @@
 				// Remove the spell only if its health is <= 0 after damaging all mobs
 				if (totalDamageDealt && spell.health <= 0) {
 					let spellIndex = spellsArray.indexOf(spell);
+					//temporary solution to bug number 3. make sure to finalize this
+					myGameCharacter.speed = 3;
 					spellsArray.splice(spellIndex, 1);
 				}
 			});
