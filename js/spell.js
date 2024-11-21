@@ -62,6 +62,11 @@ class Spell {
 				const spellA = spellsArray[i];
 				const spellB = spellsArray[j];
 
+				// Skip collision handling if either spell has the ability "book"
+				if (spellA.ability === "book" || spellB.ability === "book") {
+					continue;
+				}
+
 				// If both are circles, handle circle-circle collision
 				if (spellA.shape === "circle" && spellB.shape === "circle") {
 					const dx = spellB.x - spellA.x;
@@ -74,14 +79,16 @@ class Spell {
 						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
 						// Apply knockback
-						if (!spellA.ignoreSpellCollision) {
-							spellA.x -= Math.cos(angle) * knockbackDistance;
-							spellA.y -= Math.sin(angle) * knockbackDistance;
-						}
-						if (!spellB.ignoreSpellCollision) {
-							spellB.x += Math.cos(angle) * knockbackDistance;
-							spellB.y += Math.sin(angle) * knockbackDistance;
-						}
+						//if (!spellA.ability == "book" && !spellB.ability == "book") {
+							if (!spellA.ignoreSpellCollision) {
+								spellA.x -= Math.cos(angle) * knockbackDistance;
+								spellA.y -= Math.sin(angle) * knockbackDistance;
+							}
+							if (!spellB.ignoreSpellCollision) {
+								spellB.x += Math.cos(angle) * knockbackDistance;
+								spellB.y += Math.sin(angle) * knockbackDistance;
+							}
+						//}
 					}
 				}
 				// If one is a circle and the other is a line, handle circle-line collision
@@ -308,8 +315,9 @@ class Spell {
 				if (this.casterName == "player1") {
 					this.newTargetX = worldX - biome1.x;
 					this.newTargetY = worldY - biome1.y;
-				} else if (this.casterName == "hostileMob") {
-					console.log("hi");
+				} else if (this.casterName == "darkForestTreant") {
+					this.newTargetX = myGameCharacter.x;
+					this.newTargetY = myGameCharacter.y;
 				}
 				let dx = this.newTargetX - this.x;
 				let dy = this.newTargetY - this.y;

@@ -282,7 +282,39 @@
 				//console.log("Current Angle:", currentAngle, "Target Angle:", targetAngle, "Angle Difference:", angleDifference);
 				this.attackTimer++
 				if (this.attackTimer >= 60) {
+					let spellBookCastAmount = 1;
+					let spellCount = 0; // Keep track of how many spells have been cast
+					const interval = setInterval(() => {
+						if (spellCount < spellBookCastAmount) {
+							// Cast a spell
 
+							castSpell(new Spell(
+								this.x,
+								this.y,
+								castSpike.radius,
+								castSpike.name,
+								this.mobName,
+								castSpike.art,
+								castSpike.shape,
+								castSpike.appearance,
+								castSpike.castAmount,
+								castSpike.maxAmount,
+								castSpike.ignoreSpellCollision,
+								castSpike.ignoreMobCollision,
+								castSpike.index,
+								castSpike.health,
+								castSpike.defense,
+								castSpike.damage,
+								castSpike.speed,
+								castSpike.ability,
+								castSpike.manaCost,
+								castSpike.respawnTime));
+							spellCount++;
+						} else {
+							// Stop the interval once the desired amount of spells is cast
+							clearInterval(interval);
+						}
+					}, 50);
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}
