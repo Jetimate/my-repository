@@ -2,6 +2,7 @@
 const spikeBook = {
 	radius: 12,
 	name: "spikeBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -21,6 +22,7 @@ const spikeBook = {
 const luminousEnergyBook = {
 	radius: 12,
 	name: "luminousEnergyBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -40,6 +42,7 @@ const luminousEnergyBook = {
 const luminousSpiritBook = {
 	radius: 12,
 	name: "luminousSpiritBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -59,6 +62,7 @@ const luminousSpiritBook = {
 const specterBook = {
 	radius: 12,
 	name: "specterBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -78,6 +82,7 @@ const specterBook = {
 const teleportBook = {
 	radius: 12,
 	name: "teleportBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -97,6 +102,7 @@ const teleportBook = {
 const smashBook = {
 	radius: 12,
 	name: "smashBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -116,6 +122,7 @@ const smashBook = {
 const beamBook = {
 	radius: 12,
 	name: "beamBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -135,6 +142,7 @@ const beamBook = {
 const lightningBoltBook = {
 	radius: 12,
 	name: "lightningBoltBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",
@@ -154,6 +162,7 @@ const lightningBoltBook = {
 const energyBallBook = {
 	radius: 12,
 	name: "energyBallBook",
+	casterName: "player1", //myGameCharacter.name
 	art: "books",
 	shape: "circle",
 	appearance: "enchantedBook.png",

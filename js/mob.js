@@ -1,4 +1,4 @@
-class Mob {
+﻿class Mob {
 	constructor(
 		setMinX,
 		setMaxX,
@@ -12,6 +12,7 @@ class Mob {
 		damage,
 		radius,
 		radiusAdjust,
+		FOVRadius,
 		setMinHealth,
 		setMaxHealth,
 		mobName,
@@ -56,9 +57,11 @@ class Mob {
 		this.speed = 0;
 		this.angle = 0;
 		this.moveAngle = 0;
-		this.FOVRadius = radius;
+		this.FOVRadius = FOVRadius;
 		this.timeoutId = null;
 		this.isDead = false;
+		this.attackTimer = 0;
+		this.secondsTracker = 0;
 	}		
 	update() {
 		if (this.isDead) {
@@ -70,25 +73,27 @@ class Mob {
 		ctx.rotate(this.angle);	
 		ctx.drawImage(this.image, -this.radius - this.radiusAdjust, -this.radius - this.radiusAdjust, (this.radius + this.radiusAdjust) * 2, (this.radius + this.radiusAdjust) * 2);
 	    //draw FOVRadius or radius
-		/*
+		///*
+		ctx.beginPath();
+		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI);
+		ctx.strokeStyle = "blue";
+		ctx.stroke();
+		ctx.closePath();
+
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+		ctx.strokeStyle = "green";
+		ctx.stroke();
+		ctx.closePath();
+
+		ctx.beginPath();
+		ctx.arc(0, 0, this.radius + this.FOVRadius, 0, 2 * Math.PI);
 		ctx.strokeStyle = "red";
 		ctx.stroke();
 		ctx.closePath();
-		*/
+		//*/
 		ctx.restore();
 	}      
-	test() {
-		console.log("i know my class");
-		// update: it doesn't know lolz.
-	}
-	WIPFirstSpawn() {
-		// i don't think that this is gonna be possible
-		for (let i = 0; i < luminousRock.maxAmount; i++) {
-			luminousRock.spawn();
-		}
-	}
 	spawn() {
 		let totalSpecificMobCount = mobsArray.filter(element => element.mobName === this.mobName).length;
 		if ((totalSpecificMobCount - 1) < this.maxAmount) {
@@ -113,6 +118,7 @@ class Mob {
 				defense: this.defense,
 				damage: this.damage,
 				radiusAdjust: this.radiusAdjust,
+				FOVRadius: this.FOVRadius,
 				setMinHealth: this.setMinHealth,
 				setMaxHealth: this.setMaxHealth,
 				mobName: this.mobName,
@@ -140,6 +146,7 @@ class Mob {
 					mobConfig.damage,
 					mobConfig.randomRadiusXHealth, // because radius = health
 					mobConfig.radiusAdjust,
+					mobConfig.FOVRadius,
 					mobConfig.setMinHealth,
 					mobConfig.setMaxHealth,
 					mobConfig.mobName,
@@ -181,7 +188,6 @@ class Mob {
 			return;
 		}
 		if (this.intelligence == -1) {
-			console.log("called");
 			this.state = 0;
 			this.frames = 0;
 			this.moveAngle = 0;
@@ -221,10 +227,10 @@ class Mob {
 		}
 		else if (this.intelligence == 2) {
 			//this means that the stage 2 mob attacks
-			console.log("hi");
+			console.log("hi, im smart enough?");
 		}
-		if (this.type == "hostile") {
-			let radii = (this.FOVRadius * 5) + myGameCharacter.radius;
+		if (this.ability == "chases") {
+			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
 			let distance = getDistance(this, myGameCharacter);
 			let withinRadius = distance < radii;
 			if (withinRadius) {
@@ -238,6 +244,49 @@ class Mob {
 				if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
 				if (this.y < this.radius) this.y = this.radius;
 				if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+			}
+		}
+		// aimed shooting part
+		if (this.ability == "aimedShooting") {
+			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
+			let distance = getDistance(this, myGameCharacter);
+			let withinRadius = distance < radii;
+			if (withinRadius) {
+				this.setTarget(myGameCharacter.x, myGameCharacter.y);
+
+				// Calculate the target angle
+				let dx = myGameCharacter.x - this.x;
+				let dy = myGameCharacter.y - this.y;
+				let targetAngle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+
+				// Normalize current and target angles to the range -π to π
+				let currentAngle = this.angle % (2 * Math.PI);
+				if (currentAngle > Math.PI) currentAngle -= 2 * Math.PI;
+				if (currentAngle < -Math.PI) currentAngle += 2 * Math.PI;
+
+				let angleDifference = targetAngle - currentAngle;
+
+				// Normalize angleDifference to the range -π to π
+				if (angleDifference > Math.PI) angleDifference -= 2 * Math.PI;
+				if (angleDifference < -Math.PI) angleDifference += 2 * Math.PI;
+
+				// Turn towards the target angle
+				let turnSpeed = 0.01; // Adjust turn speed as needed
+				if (angleDifference > 0) {
+					this.angle += Math.min(turnSpeed, angleDifference);
+				} else if (angleDifference < 0) {
+					this.angle += Math.max(-turnSpeed, angleDifference);
+				}
+
+				// Log angles for debugging
+				//console.log("Current Angle:", currentAngle, "Target Angle:", targetAngle, "Angle Difference:", angleDifference);
+				this.attackTimer++
+				if (this.attackTimer >= 60) {
+
+					this.attackTimer = 0;
+					this.secondsTracker++;
+				}
+				console.log(this.attackTimer, this.secondsTracker)
 			}
 		}
 	}

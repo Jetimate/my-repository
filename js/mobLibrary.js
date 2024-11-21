@@ -5,7 +5,8 @@ const luminousRock = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 0,
-    maxAmount: 15,
+    FOVRadius: 0,
+    maxAmount: 0,//15
     mobName: "luminousRock",
     appearance: "luminousRock.png",
     ignoreSpellCollision: true,
@@ -27,7 +28,8 @@ const luminousSpirit = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 0,
-    maxAmount: 5,
+    FOVRadius: 0,
+    maxAmount: 0,//5
     mobName: "luminousSpirit",
     appearance: "luminousSpirit.png",
     ignoreSpellCollision: false,
@@ -49,7 +51,8 @@ const specter = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 0,
-    maxAmount: 5,
+    FOVRadius: 200,
+    maxAmount: 0,//5
     mobName: "specter",
     appearance: "specter.png",
     ignoreSpellCollision: false,
@@ -59,7 +62,7 @@ const specter = {
     defense: 0,
     damage: 3,
     type: "hostile",
-    ability: "nothing",
+    ability: "chases",
     experienceDrop: 20,
     lootDrop: specterLootDrop,
     intelligence: 1,
@@ -71,7 +74,8 @@ const darkForestTree = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 20,
-    maxAmount: 20,
+    FOVRadius: 0,
+    maxAmount: 0,//20
     mobName: "darkForestTree",
     appearance: "darkForestTree.png",
     ignoreSpellCollision: true,
@@ -93,6 +97,7 @@ const darkForestTreant = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 20,
+    FOVRadius: 250,
     maxAmount: 5,
     mobName: "darkForestTreant",
     appearance: "darkForestTreant.png",
@@ -102,8 +107,8 @@ const darkForestTreant = {
     setMaxHealth: 70,
     defense: 1,
     damage: 3,
-    type: "neutral", // keep in mind that they should be hostile
-    ability: "nothing", // treant should have an ability
+    type: "hostile",
+    ability: "aimedShooting",
     experienceDrop: 20,
     lootDrop: spikeLootDrop,
     intelligence: 0,

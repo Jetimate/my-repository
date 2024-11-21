@@ -59,6 +59,7 @@ class SpellBook {
 			myGameCharacter.y,
 			this.mainSpellBook.radius,
 			this.mainSpellBook.name,
+			this.mainSpellBook.casterName,
 			this.mainSpellBook.art,
 			this.mainSpellBook.shape,
 			this.mainSpellBook.appearance,
@@ -82,8 +83,6 @@ class SpellBook {
 
 		if (this.spell.ability === "shoot1" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			castMouseX = worldX - biome1.x;
-			castMouseY = worldY - biome1.y;
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
@@ -95,6 +94,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -132,6 +132,7 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -167,6 +168,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -202,6 +204,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -236,6 +239,7 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius + (spellCount * 15),
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -270,6 +274,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -307,6 +312,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						spellsArray[mainSpellBookIndex].casterName,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,

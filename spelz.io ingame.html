@@ -455,6 +455,7 @@
 				spell.y,
 				spell.radius,
 				spell.name,
+                spell.casterName, 
 				spell.art,
 				spell.shape,
 				spell.appearance,
@@ -491,6 +492,7 @@
 						starterMobsArray[i].damage,
 						mobRandomRadiusXHealth,
 						starterMobsArray[i].radiusAdjust,
+                        starterMobsArray[i].FOVRadius,
 						starterMobsArray[i].setMinHealth,
 						starterMobsArray[i].setMaxHealth,
 						starterMobsArray[i].mobName,
@@ -541,7 +543,7 @@
 		function playerCollideWithLoot(mob1, lootsArray) {
 			let result = false;
 			lootsArray.forEach(loot => {
-				let radii = (mob1.radius + 200) + loot.radius; // temporary magnet for loot
+				let radii = (mob1.radius + 200) + loot.radius;
 				let distance = getDistance(mob1, loot);
 				let hasCrashed = distance < radii;
 				if (hasCrashed) {

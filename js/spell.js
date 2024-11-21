@@ -1,11 +1,12 @@
 class Spell {
-	constructor(x, y, radius, name, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
+	constructor(x, y, radius, name, casterName, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 		this.name = name;
+		this.casterName = casterName;
 		this.art = art;
 		this.shape = shape;
 		this.appearance = appearance;
@@ -39,6 +40,9 @@ class Spell {
 		this.height = 50;
 		this.x2 = null;
 		this.y2 = null;
+		this.newTargetX = null;
+		this.newTargetY = null;
+		this.caster = null;
 	}
 
 	setTarget(x, y) {
@@ -301,8 +305,14 @@ class Spell {
 		if (this.ability === "shoot1") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
-				let dx = castMouseX - this.x;
-				let dy = castMouseY - this.y;
+				if (this.casterName == "player1") {
+					this.newTargetX = worldX - biome1.x;
+					this.newTargetY = worldY - biome1.y;
+				} else if (this.casterName == "hostileMob") {
+					console.log("hi");
+				}
+				let dx = this.newTargetX - this.x;
+				let dy = this.newTargetY - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 				this.hasTarget = true;  // Mark that the target has been set
 			}

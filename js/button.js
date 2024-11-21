@@ -27,7 +27,6 @@ class Button {
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
 			this.width = window.innerWidth / 8;
 			this.height = window.innerHeight / 20;
-			console.log(this, this.radii);
 			this.text = "level: " + myGameCharacter.level;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
