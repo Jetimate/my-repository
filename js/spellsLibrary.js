@@ -2,7 +2,7 @@
 const castSpike = {
 	radius: 12,
 	name: "castSpike",
-	art: "projectile",
+	art: "projecting",
 	shape: "circle",
 	appearance: "spike.png",
 	castAmount: 1,

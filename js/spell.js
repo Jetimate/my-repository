@@ -1,5 +1,5 @@
 class Spell {
-	constructor(x, y, radius, name, casterName, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
+	constructor(x, y, radius, name, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -7,6 +7,7 @@ class Spell {
 		this.radius = radius;
 		this.name = name;
 		this.casterName = casterName;
+		this.side = side;
 		this.art = art;
 		this.shape = shape;
 		this.appearance = appearance;
@@ -56,11 +57,13 @@ class Spell {
 			spellsArray.splice(spellIndex, 1);
 		}
 	}
-	handleCollisions() {
+	//learn from your mistakes
+	failedHandleCollisions() {
 		for (let i = 0; i < spellsArray.length; i++) {
 			for (let j = i + 1; j < spellsArray.length; j++) {
 				const spellA = spellsArray[i];
 				const spellB = spellsArray[j];
+				let totalDamageDealt = false;
 
 				// Skip collision handling if either spell has the ability "book"
 				if (spellA.ability === "book" || spellB.ability === "book") {
@@ -74,12 +77,14 @@ class Spell {
 					const distance = Math.sqrt(dx * dx + dy * dy);
 
 					if (distance < spellA.radius + spellB.radius) {
+						simulateCollision();
+						/*
 						// Calculate knockback direction
 						const angle = Math.atan2(dy, dx);
 						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
 
 						// Apply knockback
-						//if (!spellA.ability == "book" && !spellB.ability == "book") {
+						//if (spellA.ability != "book" && spellB.ability != "book") {
 							if (!spellA.ignoreSpellCollision) {
 								spellA.x -= Math.cos(angle) * knockbackDistance;
 								spellA.y -= Math.sin(angle) * knockbackDistance;
@@ -89,6 +94,7 @@ class Spell {
 								spellB.y += Math.sin(angle) * knockbackDistance;
 							}
 						//}
+						*/
 					}
 				}
 				// If one is a circle and the other is a line, handle circle-line collision
@@ -135,6 +141,7 @@ class Spell {
 					const distance = Math.sqrt(dx * dx + dy * dy);
 
 					if (distance < circle.radius) {
+						simulateCollision();
 						// Calculate knockback direction
 						/*
 						const angle = Math.atan2(dy, dx);
@@ -148,9 +155,167 @@ class Spell {
 						*/
 					}
 				}
+				function simulateCollision() {
+					totalDamageDealt = true;
+
+					if (spellA.side != spellB.side) {
+						// calculate damage
+						let calculatedSpellADamage = spellA.damage - spellB.defense;
+						if (calculatedSpellADamage <= 0) {
+							calculatedSpellADamage = 0;
+						}
+						let calculatedSpellBDamage = spellB.damage - spellA.defense;
+						if (calculatedSpellBDamage <= 0) {
+							calculatedSpellBDamage = 0;
+						}
+						// Apply damage
+						spellA.health -= calculatedSpellBDamage;
+						spellB.health -= calculatedSpellADamage;
+					}
+
+					// Apply knockback to both spells
+					const dx = spellB.x - spellA.x;
+					const dy = spellB.y - spellA.y;
+					const angle = Math.atan2(dy, dx);
+					let knockbackDistance = 0;
+					if (spellA.shape === "circle" && spellB.shape === "circle") {
+						const distance = Math.sqrt(dx * dx + dy * dy);
+						knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
+						console.log(knockbackDistance);
+					}
+					if (!spellA.ignoreSpellCollision) {
+						console.log(knockbackDistance);
+						spellA.x -= Math.cos(angle) * knockbackDistance;
+						spellA.y -= Math.sin(angle) * knockbackDistance;
+					}
+					if (!spellB.ignoreSpellCollision) {
+						spellB.x += Math.cos(angle) * knockbackDistance;
+						spellB.y += Math.sin(angle) * knockbackDistance;
+					}
+				}
+				if (totalDamageDealt && spellA.health <= 0) {
+					//temporary solution to bug number 3. make sure to finalize this
+					myGameCharacter.speed = constantPlayerSpeed;
+					spellA.destroy();
+				}
+				if (totalDamageDealt && spellB.health <= 0) {
+					//temporary solution to bug number 3. make sure to finalize this
+					myGameCharacter.speed = constantPlayerSpeed;
+					spellB.destroy();
+				}
 			}
 		}
 	}
+	handleCollisions() {
+	for (let i = 0; i < spellsArray.length; i++) {
+		for (let j = i + 1; j < spellsArray.length; j++) {
+			const spellA = spellsArray[i];
+			const spellB = spellsArray[j];
+			//let totalDamageDealt = false;
+
+			// Skip collision handling if either spell has the ability "book"
+			if (spellA.art === "books" || spellB.art === "books") {
+				continue;
+			}
+
+			// If both are circles, handle circle-circle collision
+			if (spellA.shape === "circle" && spellB.shape === "circle") {
+				const dx = spellB.x - spellA.x;
+				const dy = spellB.y - spellA.y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
+
+				if (distance < spellA.radius + spellB.radius) {
+					simulateCollision(spellA, spellB);
+				}
+			}
+			// If one is a circle and the other is a line, handle circle-line collision
+			else if ((spellA.shape === "circle" && spellB.shape === "line") ||
+				(spellA.shape === "line" && spellB.shape === "circle")) {
+
+				// Ensure spellA is the circle and spellB is the line for simplicity
+				const circle = spellA.shape === "circle" ? spellA : spellB;
+				const line = spellA.shape === "line" ? spellA : spellB;
+
+				// Calculate the closest point on the line segment to the circle center
+				const lineStart = { x: line.x, y: line.y };
+				const lineEnd = { x: line.x2, y: line.y2 };
+				const circleCenter = { x: circle.x, y: circle.y };
+
+				// Vector from line start to circle center
+				const lineToCircle = {
+					x: circleCenter.x - lineStart.x,
+					y: circleCenter.y - lineStart.y
+				};
+
+				// Line segment vector
+				const lineVector = {
+					x: lineEnd.x - lineStart.x,
+					y: lineEnd.y - lineStart.y
+				};
+
+				// Calculate projection of lineToCircle onto lineVector
+				const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
+				let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
+
+				// Clamp t to stay within the segment bounds
+				t = Math.max(0, Math.min(1, t));
+
+				// Find the closest point on the line segment
+				const closestPoint = {
+					x: lineStart.x + t * lineVector.x,
+					y: lineStart.y + t * lineVector.y
+				};
+
+				// Distance from circle center to closest point
+				const dx = closestPoint.x - circleCenter.x;
+				const dy = closestPoint.y - circleCenter.y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
+
+				if (distance < circle.radius) {
+					simulateCollision(circle, line);
+				}
+			}
+		}
+	}
+
+	// Function to handle collision simulation
+	function simulateCollision(spellA, spellB) {
+		//totalDamageDealt = true;
+
+		// Handle spell damage if on opposing sides
+		if (spellA.side !== spellB.side) {
+			let calculatedSpellADamage = Math.max(spellA.damage - spellB.defense, 0);
+			let calculatedSpellBDamage = Math.max(spellB.damage - spellA.defense, 0);
+
+			// Apply cumulative damage
+			spellA.health -= calculatedSpellBDamage;
+			spellB.health -= calculatedSpellADamage;
+		}
+
+		// Apply knockback
+		const dx = spellB.x - spellA.x;
+		const dy = spellB.y - spellA.y;
+		const distance = Math.sqrt(dx * dx + dy * dy);
+		const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
+
+		if (!spellA.ignoreSpellCollision) {
+			spellA.x -= (dx / distance) * knockbackDistance;
+			spellA.y -= (dy / distance) * knockbackDistance;
+		}
+		if (!spellB.ignoreSpellCollision) {
+			spellB.x += (dx / distance) * knockbackDistance;
+			spellB.y += (dy / distance) * knockbackDistance;
+		}
+
+		// Handle destruction
+		if (spellA.health <= 0) {
+			spellA.destroy();
+		}
+		if (spellB.health <= 0) {
+			spellB.destroy();
+		}
+	}
+}
 	draw() {
 		if (this.art === "beams") {
 			var ctx = myGameArea.context;
@@ -234,8 +399,8 @@ class Spell {
 		}
 	}
 	update() {
-		if (this.ability === "book") {
-			let totalSpellBookCountArray = spellsArray.filter(element => element.ability == "book");
+		if (this.art === "books") {
+			let totalSpellBookCountArray = spellsArray.filter(element => element.art == "books");
 			// Check if the index is odd or even
 			totalSpellBookCountArray.forEach((spellBook, index) => {
 				spellBook.orbitRadius = 2 + index;
@@ -419,7 +584,7 @@ class Spell {
 			myGameCharacter.speed = 0.1;
 			// If lifeTimer exceeds maxLife, this entity will be removed
 			if (this.lifeTimer >= 5) {
-				myGameCharacter.speed = 3;
+				myGameCharacter.speed = constantPlayerSpeed;
 				// Call the function to remove this entity from the array
 				this.destroy();
 			}
@@ -431,17 +596,17 @@ class Spell {
 			this.y = spellsArray[beamBookIndex].y;
 			if (isMouseDown && this.width <= 400) {
 				this.width += 20;
-				myGameCharacter.speed = 1.5;
+				myGameCharacter.speed = 1;
 			}
 			
 			if (!isMouseDown && this.width > 10) {
 				this.width -= 40;
-				myGameCharacter.speed = 3;
+				myGameCharacter.speed = constantPlayerSpeed;
 			}
 			// Life timer logic
 			this.lifeTimer++;
 			if (this.lifeTimer >= 300) {
-				myGameCharacter.speed = 3;
+				myGameCharacter.speed = constantPlayerSpeed;
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
@@ -453,12 +618,12 @@ class Spell {
 			this.x2 = castMouseX;
 			this.y2 = castMouseY;
 
-			myGameCharacter.speed = 1.5;
+			myGameCharacter.speed = 1;
 
 			// Life timer logic
 			this.lifeTimer++;
 			if (this.lifeTimer >= 10) {
-				myGameCharacter.speed = 3;
+				myGameCharacter.speed = constantPlayerSpeed;
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}

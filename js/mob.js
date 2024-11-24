@@ -15,10 +15,12 @@
 		FOVRadius,
 		setMinHealth,
 		setMaxHealth,
-		mobName,
+		name,
+		side,
 		maxAmount,
 		type,
 		ability,
+		learnedSpells,
 		intelligence,
 		experienceDrop,
 		lootDrop,
@@ -43,10 +45,11 @@
 		this.health = health;
 		this.defense = defense;
 		this.damage = damage;
-		this.mobName = mobName;
+		this.name = name;
 		this.maxAmount = maxAmount;
 		this.type = type;
 		this.ability = ability;
+		this.learnedSpells = learnedSpells;
 		this.intelligence = intelligence;
 		this.experienceDrop = experienceDrop;
 		this.lootDrop = lootDrop;
@@ -62,6 +65,7 @@
 		this.isDead = false;
 		this.attackTimer = 0;
 		this.secondsTracker = 0;
+		this.side = side;
 	}		
 	update() {
 		if (this.isDead) {
@@ -72,8 +76,8 @@
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
 		ctx.drawImage(this.image, -this.radius - this.radiusAdjust, -this.radius - this.radiusAdjust, (this.radius + this.radiusAdjust) * 2, (this.radius + this.radiusAdjust) * 2);
-	    //draw FOVRadius or radius
-		///*
+		//draw FOVRadius or radius 
+		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI);
 		ctx.strokeStyle = "blue";
@@ -91,13 +95,13 @@
 		ctx.strokeStyle = "red";
 		ctx.stroke();
 		ctx.closePath();
-		//*/
+		*/
 		ctx.restore();
 	}      
 	spawn() {
-		let totalSpecificMobCount = mobsArray.filter(element => element.mobName === this.mobName).length;
+		let totalSpecificMobCount = mobsArray.filter(element => element.name === this.name).length;
 		if ((totalSpecificMobCount - 1) < this.maxAmount) {
-			console.log(totalSpecificMobCount, this.maxAmount, "called");
+			//console.log(totalSpecificMobCount, this.maxAmount, "called");
 
 			// Capture the current context's values
 			let randomX = ((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) + camera.x;
@@ -121,10 +125,12 @@
 				FOVRadius: this.FOVRadius,
 				setMinHealth: this.setMinHealth,
 				setMaxHealth: this.setMaxHealth,
-				mobName: this.mobName,
+				name: this.name,
+				side: this.side,
 				maxAmount: this.maxAmount,
 				type: this.type,
 				ability: this.ability,
+				learnedSpells: this.learnedSpells,
 				intelligence: this.intelligence,
 				experienceDrop: this.experienceDrop,
 				lootDrop: this.lootDrop,
@@ -149,10 +155,12 @@
 					mobConfig.FOVRadius,
 					mobConfig.setMinHealth,
 					mobConfig.setMaxHealth,
-					mobConfig.mobName,
+					mobConfig.name,
+					mobConfig.side,
 					mobConfig.maxAmount,
 					mobConfig.type,
 					mobConfig.ability,
+					mobConfig.learnedSpells,
 					mobConfig.intelligence,
 					mobConfig.experienceDrop,
 					mobConfig.lootDrop, 0, 0,
@@ -160,7 +168,7 @@
 				);
 
 				mobsArray.push(newMob);
-				console.log(totalSpecificMobCount, mobConfig.maxAmount, "update");
+				//console.log(totalSpecificMobCount, mobConfig.maxAmount, "update");
 			}, mobRespawnCooldown);
 		}
 	}
@@ -278,7 +286,7 @@
 					this.angle += Math.max(-turnSpeed, angleDifference);
 				}
 
-				// Log angles for debugging
+				// Log angles for debugging 
 				//console.log("Current Angle:", currentAngle, "Target Angle:", targetAngle, "Angle Difference:", angleDifference);
 				this.attackTimer++
 				if (this.attackTimer >= 60) {
@@ -291,24 +299,25 @@
 							castSpell(new Spell(
 								this.x,
 								this.y,
-								castSpike.radius,
-								castSpike.name,
-								this.mobName,
-								castSpike.art,
-								castSpike.shape,
-								castSpike.appearance,
-								castSpike.castAmount,
-								castSpike.maxAmount,
-								castSpike.ignoreSpellCollision,
-								castSpike.ignoreMobCollision,
-								castSpike.index,
-								castSpike.health,
-								castSpike.defense,
-								castSpike.damage,
-								castSpike.speed,
-								castSpike.ability,
-								castSpike.manaCost,
-								castSpike.respawnTime));
+								this.learnedSpells.radius,
+								this.learnedSpells.name,
+								this.name,
+								this.side,
+								this.learnedSpells.art,
+								this.learnedSpells.shape,
+								this.learnedSpells.appearance,
+								this.learnedSpells.castAmount,
+								this.learnedSpells.maxAmount,
+								this.learnedSpells.ignoreSpellCollision,
+								this.learnedSpells.ignoreMobCollision,
+								this.learnedSpells.index,
+								this.learnedSpells.health,
+								this.learnedSpells.defense,
+								this.learnedSpells.damage,
+								this.learnedSpells.speed,
+								this.learnedSpells.ability,
+								this.learnedSpells.manaCost,
+								this.learnedSpells.respawnTime));
 							spellCount++;
 						} else {
 							// Stop the interval once the desired amount of spells is cast
@@ -318,7 +327,7 @@
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}
-				console.log(this.attackTimer, this.secondsTracker)
+				//console.log(this.attackTimer, this.secondsTracker)
 			}
 		}
 	}

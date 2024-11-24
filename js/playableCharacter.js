@@ -1,6 +1,7 @@
 class PlayableCharacter extends Mob {
-	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, mana, experience, level, healthRegen, manaRegen) {
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, name, mana, experience, level, healthRegen, manaRegen) {
 		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust,);
+		this.name = name;
 		this.mana = mana;
 		this.manaRegen = manaRegen;
 		this.maxMana = 5;
@@ -10,8 +11,9 @@ class PlayableCharacter extends Mob {
 		this.maxHealth = 100;
 		this.movementX = 0;
 		this.movementY = 0;
-		this.speed = 3;	
+		this.speed = constantPlayerSpeed;	
 		this.newSpeed = 0;
+		this.side = "player1";
 	}		
 	playerNewPos() {
 		this.angle += this.moveAngle * Math.PI / 180;
