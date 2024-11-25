@@ -43,7 +43,8 @@ class Button {
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 2;
 			this.width = window.innerWidth / 8;
 			this.height = window.innerHeight / 20;
-			this.text = "health: " + myGameCharacter.health + "/" + myGameCharacter.maxHealth;
+			let roundedHealth = Math.round(myGameCharacter.health);
+			this.text = "health: " + roundedHealth + "/" + myGameCharacter.maxHealth;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "manaBarButton") {
@@ -51,7 +52,8 @@ class Button {
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 3;
 			this.width = window.innerWidth / 8;
 			this.height = window.innerHeight / 20;
-			this.text = "mana: " + myGameCharacter.mana;
+			let roundedMana = Math.round(myGameCharacter.mana);
+			this.text = "mana: " + roundedMana + "/" + myGameCharacter.maxMana;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "inventoryButton") {

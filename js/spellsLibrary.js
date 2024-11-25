@@ -16,6 +16,7 @@ const castSpike = {
 	speed: 10,
 	ability: "shoot1",
 	manaCost: 0.1,
+	summonCost: 0,
 	respawnTime: 500
 };
 const castLuminousEnergy = {
@@ -35,44 +36,47 @@ const castLuminousEnergy = {
 	speed: 15,
 	ability: "shoot2",
 	manaCost: 1.25,
+	summonCost: 0,
 	respawnTime: 1000
 }
 const summonSpirit = {
-	radius: 15,
+	radius: 20,
 	name: "summonSpirit",
 	art: "summoning",
 	shape: "circle",
 	appearance: "luminousSpirit.png",
-	castAmount: 8,
-	maxAmount: 8,
-	ignoreSpellCollision: false,
-	ignoreMobCollision: false,
-	index: 1,
-	health: 10,
-	defense: 0,
-	damage: 3,
-	speed: 5,
-	ability: "summon1",
-	manaCost: 1.75,
-	respawnTime: 1000
-};
-const summonSpecter = {
-	radius: 15,
-	name: "summonSpecter",
-	art: "summoning",
-	shape: "circle",
-	appearance: "specter.png",
 	castAmount: 5,
 	maxAmount: 5,
 	ignoreSpellCollision: false,
 	ignoreMobCollision: false,
 	index: 1,
-	health: 25, 
+	health: 20,
 	defense: 0,
-	damage: 5,
-	speed: 7,
+	damage: 4.5,
+	speed: 5,
 	ability: "summon1",
 	manaCost: 2.5,
+	summonCost: 2,
+	respawnTime: 1000
+};
+const summonSpecter = {
+	radius: 25,
+	name: "summonSpecter",
+	art: "summoning",
+	shape: "circle",
+	appearance: "specter.png",
+	castAmount: 50, //4
+	maxAmount: 4,
+	ignoreSpellCollision: false,
+	ignoreMobCollision: false,
+	index: 1,
+	health: 35, 
+	defense: 0,
+	damage: 7.5,
+	speed: 7,
+	ability: "summon1",
+	manaCost: 5,
+	summonCost: 2.5,
 	respawnTime: 1500
 };
 const teleport = {
@@ -92,6 +96,7 @@ const teleport = {
 	speed: 30,
 	ability: "teleport",
 	manaCost: 2,
+	summonCost: 0,
 	respawnTime: 500
 };
 const smash = {
@@ -111,6 +116,7 @@ const smash = {
 	speed: 0,
 	ability: "AoE1",
 	manaCost: 3,
+	summonCost: 0,
 	respawnTime: 500
 };
 const castBeam = {
@@ -130,6 +136,7 @@ const castBeam = {
 	speed: 10,
 	ability: "beam1",
 	manaCost: 1,
+	summonCost: 0,
 	respawnTime: 500
 };
 const castLightningBolt = {
@@ -149,6 +156,7 @@ const castLightningBolt = {
 	speed: 10,
 	ability: "beam2",
 	manaCost: 2,
+	summonCost: 0,
 	respawnTime: 500
 };
 const castEnergyBall = {
@@ -168,5 +176,26 @@ const castEnergyBall = {
 	speed: 10,
 	ability: "shoot1",
 	manaCost: 1,
+	summonCost: 0,
 	respawnTime: 500
+};
+const summonShield = {
+	radius: 120,
+	name: "summonShield",
+	art: "summoning",
+	shape: "circle",
+	appearance: "luminousRock.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: false,
+	ignoreMobCollision: false,
+	index: 1,
+	health: 240,
+	defense: 2.5,
+	damage: 0.1,
+	speed: 5,
+	ability: "summon1",
+	manaCost: 1,
+	summonCost: 5,
+	respawnTime: 1000
 };

@@ -170,3 +170,22 @@ const energyBallBook = {
 	manaCost: 1,
 	respawnTime: null
 }
+const shieldBook = {
+	radius: 12,
+	name: "shieldBook",
+	art: "books",
+	shape: "circle",
+	appearance: "enchantedBook.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: true,
+	ignoreMobCollision: true,
+	index: 1,
+	health: 100,
+	defense: 100,
+	damage: 0,
+	speed: 12,
+	ability: null,
+	manaCost: 1,
+	respawnTime: null
+}

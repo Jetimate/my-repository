@@ -4,16 +4,19 @@ class PlayableCharacter extends Mob {
 		this.name = name;
 		this.mana = mana;
 		this.manaRegen = manaRegen;
-		this.maxMana = 5;
 		this.experience = experience;
 		this.level = level;
 		this.healthRegen = healthRegen;
 		this.maxHealth = 100;
+		this.maxMana = 5;
 		this.movementX = 0;
 		this.movementY = 0;
 		this.speed = constantPlayerSpeed;	
 		this.newSpeed = 0;
 		this.side = "player1";
+		this.summonSpace = 0;
+		this.summonLimit = 20000;
+		this.pickUpRange = 200;
 	}		
 	playerNewPos() {
 		this.angle += this.moveAngle * Math.PI / 180;
@@ -28,12 +31,12 @@ class PlayableCharacter extends Mob {
 		if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 	}
 	regenerateHealth() {
-		if (this.health < this.maxHealth) {
+		if (this.maxHealth > this.health + this.healthRegen) {
 			this.health += this.healthRegen;
 		}
 	}
 	regenerateMana() {
-		if (this.mana < this.maxMana) {
+		if (this.maxMana > this.mana + this.manaRegen) {
 			this.mana += this.manaRegen;
 		}
 	}

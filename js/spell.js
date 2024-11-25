@@ -1,5 +1,5 @@
 class Spell {
-	constructor(x, y, radius, name, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, respawnTime) {
+	constructor(x, y, radius, name, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -22,6 +22,7 @@ class Spell {
 		this.speed = speed;
 		this.ability = ability;
 		this.manaCost = manaCost;
+		this.summonCost = summonCost;
 		this.respawnTime = respawnTime;
 		this.radian = 0;
 		this.angle = 0;
@@ -51,6 +52,9 @@ class Spell {
 		this.targetY = y;
 	}
 	destroy() {
+		if (this.art == "summoning") {
+			myGameCharacter.summonSpace -= 1 * this.summonCost;
+		}
 		let spellIndex = spellsArray.indexOf(this);
 		if (spellIndex > -1) {
 			//console.log(this);
@@ -211,7 +215,6 @@ class Spell {
 		for (let j = i + 1; j < spellsArray.length; j++) {
 			const spellA = spellsArray[i];
 			const spellB = spellsArray[j];
-			//let totalDamageDealt = false;
 
 			// Skip collision handling if either spell has the ability "book"
 			if (spellA.art === "books" || spellB.art === "books") {
@@ -280,17 +283,6 @@ class Spell {
 
 	// Function to handle collision simulation
 	function simulateCollision(spellA, spellB) {
-		//totalDamageDealt = true;
-
-		// Handle spell damage if on opposing sides
-		if (spellA.side !== spellB.side) {
-			let calculatedSpellADamage = Math.max(spellA.damage - spellB.defense, 0);
-			let calculatedSpellBDamage = Math.max(spellB.damage - spellA.defense, 0);
-
-			// Apply cumulative damage
-			spellA.health -= calculatedSpellBDamage;
-			spellB.health -= calculatedSpellADamage;
-		}
 
 		// Apply knockback
 		const dx = spellB.x - spellA.x;
@@ -307,12 +299,21 @@ class Spell {
 			spellB.y += (dy / distance) * knockbackDistance;
 		}
 
-		// Handle destruction
-		if (spellA.health <= 0) {
-			spellA.destroy();
-		}
-		if (spellB.health <= 0) {
-			spellB.destroy();
+		// Handle spell damage if on opposing sides
+		if (spellA.side !== spellB.side) {
+			let calculatedSpellADamage = Math.max(spellA.damage - spellB.defense, 0);
+			let calculatedSpellBDamage = Math.max(spellB.damage - spellA.defense, 0);
+
+			// Apply cumulative damage
+			spellA.health -= calculatedSpellBDamage;
+			spellB.health -= calculatedSpellADamage;
+			// Handle destruction
+			if (spellA.health <= 0) {
+				spellA.destroy();
+			}
+			if (spellB.health <= 0) {
+				spellB.destroy();
+			}
 		}
 	}
 }
@@ -531,7 +532,7 @@ class Spell {
 					this.damage += this.damageIncrease;
 
 					if (this.radius >= 15) {
-						console.log(this.radius + " " + this.damage);
+						//console.log(this.radius + " " + this.damage);
 						this.radiusIncrease = 0;
 						this.orbitRadiusIncrease = 0;
 						this.damageIncrease = 0;
@@ -627,7 +628,7 @@ class Spell {
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
-		this.handleCollisions();
 		this.draw();
+		this.handleCollisions();
 	}
 }

@@ -2,9 +2,7 @@ class Loot {
 	constructor(x, y, radius, name, spellName, appearance, ignoreCollision, text) {
 		this.image = new Image();
 		this.image.src = appearance;
-		//this.radian = 0;
 		this.angle = 0;
-		//this.moveAngle = 0;
 		this.lifeTimer = 0;
 		this.x = x;
 		this.y = y;

@@ -274,14 +274,16 @@
 		}
 		function spellBooksKeeper() {
 			addSpellBook(new SpellBook(500, 5, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", castEnergyBall, energyBallBook, 15, "castEnergyBall"));
-			addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 15, "castBeam"));
-			addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
-			addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
+			addSpellBook(new SpellBook(605, 5, 2, 100, 100, [5], "black", "beam.webp", "beamBook", castBeam, beamBook, 60, "castBeam"));
+            addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "luminousRock.png", "shieldBook", summonShield, shieldBook, 60, "summonShield"));
+			//addSpellBook(new SpellBook(710, 5, 3, 100, 100, [5], "black", "spike.png", "castSpikeBook", castSpike, spikeBook, 90, "castSpike"));
+			addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 45, "castLightningBolt"));
 		}
 		function spellsKeeper() {
 		}
 
 		function updateGameArea() {
+            console.log(myGameCharacter.summonSpace, myGameCharacter.summonLimit);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
 			const canvasWidth = myGameArea.context.canvas.width;
@@ -312,7 +314,6 @@
 			});
 			lootsArray.forEach(loot => loot.draw());
 			spellsArray.forEach(spell => spell.update());
-			myGameCharacter.playerNewPos();
 			myGameCharacter.update();
 			myGameCharacter.regenerateHealth();
 			myGameCharacter.regenerateMana();
@@ -329,29 +330,16 @@
 				button.draw(ctx);
 			});
 			// player and mob collision
-			if (playerCrashWith(myGameCharacter, mobsArray)) {
-				//	myGameCharacter.playerNewPos();
-			}
+			playerCrashWith(myGameCharacter, mobsArray);
 			// player and loot collision
-			if (playerCollideWithLoot(myGameCharacter, lootsArray)) {
-				//	myGameCharacter.playerNewPos();
-			}
+			playerCollideWithLoot(myGameCharacter, lootsArray);
 			// player and spell collision
-			if (playerCrashWithSpell(myGameCharacter, spellsArray)) {
-				//    myGameCharacter.playerNewPos();
-			}
+			playerCrashWithSpell(myGameCharacter, spellsArray);
 			// mob to mob collision
-			if (crashWith(mobsArray, mobsArray)) {
-				//	myGameCharacter.playerNewPos();
-			}
+			crashWith(mobsArray, mobsArray);
 			// mob and spell collision
-			if (crashWithSpell(spellsArray, mobsArray)) {
-				myGameCharacter.playerNewPos();
-			}
-			//updates when moving
-			else {
-				myGameCharacter.playerNewPos();
-			}
+			crashWithSpell(spellsArray, mobsArray);
+            myGameCharacter.playerNewPos();
 			myGameCharacter.movementX = 0;
 			myGameCharacter.movementY = 0;
 			myGameCharacter.moveAngle = 0;
@@ -414,6 +402,7 @@
 					myGameCharacter.maxHealth += 5;
 					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
+					myGameCharacter.summonLimit += 2.5;
 
 					if (!slot4Active && myGameCharacter.level >= 1) {
 						addSpellBook(new SpellBook(815, 5, 4, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", summonSpirit, luminousSpiritBook, 300, "summonSpirit"));
@@ -424,7 +413,7 @@
 						slot5Active = true;
 					}
 					if (!slot6Active && myGameCharacter.level >= 2) {
-						addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 420, "summonSpecter"));
+						addSpellBook(new SpellBook(1025, 5, 6, 100, 100, [5], "black", "specter.png", "summonSpecterBook", summonSpecter, specterBook, 42, "summonSpecter"));
 						slot6Active = true;
 					}
 					if (!slot7Active && myGameCharacter.level >= 2) {
@@ -477,6 +466,7 @@
 				spell.speed,
 				spell.ability,
 				spell.manaCost,
+                spell.summonCost,
 				spell.respawnTime);
 			spellsArray.push(newSpell);
 		}
@@ -516,294 +506,258 @@
 			}
 		}
 		function crashWith(mob1Array, mob2Array) {
-			let result = false;
 			mob1Array.forEach(mob1 => {
 				mob2Array.forEach(mob2 => {
-					let radii = mob1.radius + mob2.radius;
-					let distance = getDistance(mob1, mob2);
-					let hasCrashed = distance < radii;
-					if (hasCrashed) {
-						result = hasCrashed;
-						const dx = mob2.x - mob1.x;
-						const dy = mob2.y - mob1.y;
-						const distance = Math.sqrt(dx * dx + dy * dy);
-						const minDistance = mob1.radius + mob2.radius;
-						if (distance < minDistance) {
-							// Calculate knockback direction
-							const angle = Math.atan2(dy, dx);
-							const knockbackDistance = 1;
-							// Apply knockback
-							for (let i = 0; i < 5; i++) {
-								if (!mob1.ignoreMobCollision) {
-									mob1.x -= Math.cos(angle) * knockbackDistance;
-									mob1.y -= Math.sin(angle) * knockbackDistance;
-								} if (!mob2.ignoreMobCollision) {
-									mob2.x += Math.cos(angle) * knockbackDistance;
-									mob2.y += Math.sin(angle) * knockbackDistance;
-								}
-							}
-						}
-					}
+                    let dx = mob2.x - mob1.x;
+                    let dy = mob2.y - mob1.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let radii = mob1.radius + mob2.radius;
+
+                    if (distance < radii) {
+
+                        // Apply knockback
+                        const angle = Math.atan2(dy, dx);
+                        const knockbackDistance = (radii - distance) / 2; // Prevent overlap
+                        if (!mob1.ignoreMobCollision) {
+                            mob1.x -= Math.cos(angle) * knockbackDistance;
+                            mob1.y -= Math.sin(angle) * knockbackDistance;
+                        }
+                        if (!mob2.ignoreMobCollision) {
+                            mob2.x += Math.cos(angle) * knockbackDistance;
+                            mob2.y += Math.sin(angle) * knockbackDistance;
+                        }
+                    }
 				});
 			});
-			return result;
 		}
-		function playerCollideWithLoot(mob1, lootsArray) {
-			let result = false;
-			lootsArray.forEach(loot => {
-				let radii = (mob1.radius + 200) + loot.radius;
-				let distance = getDistance(mob1, loot);
-				let hasCrashed = distance < radii;
-				if (hasCrashed) {
-					result = hasCrashed;
-					let lootIndex = lootsArray.indexOf(loot);
-					inventoryArray.push(loot);
-					lootsArray.splice(lootIndex, 1);
-				}
-			});
-			return result;
-		}
-		function playerCrashWith(mob1, mob2Array) {
-			let result = false;
-			mob2Array.forEach(mob2 => {
-				let radii = mob1.radius + mob2.radius;
-				let distance = getDistance(mob1, mob2);
-				let hasCrashed = distance < radii;
-				if (hasCrashed) {
-					result = hasCrashed;
-					const dx = mob2.x - mob1.x;
-					const dy = mob2.y - mob1.y;
-					// Calculate knockback direction
-					const angle = Math.atan2(dy, dx);
-					const knockbackDistance = 1;
-					// Apply knockback
-					for (let i = 0; i < 7; i++) {
-						if (!mob1.ignoreMobCollision) {
-							mob1.x -= Math.cos(angle) * knockbackDistance;
-							mob1.y -= Math.sin(angle) * knockbackDistance;
-						}
-						if (!mob2.ignoreMobCollision) {
-							mob2.x += Math.cos(angle) * knockbackDistance;
-							mob2.y += Math.sin(angle) * knockbackDistance;
-						}
-					}
-					// Calculate mob 2 damage
-					let calculatedMob2Damage = Math.max(0, mob2.damage - mob1.defense);
-					mob1.health = Math.max(0, mob1.health - calculatedMob2Damage);
+		function playerCollideWithLoot(mob, lootsArray) {
+            lootsArray.forEach((loot, index) => {
+                let dx = loot.x - mob.x;
+                let dy = loot.y - mob.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let radii = mob.radius + loot.radius + mob.pickUpRange;
 
-					// Calculate mob 1 damage
-					let calculatedMob1Damage = Math.max(0, mob1.damage - mob2.defense);
-					mob2.health = Math.max(0, mob2.health - calculatedMob1Damage);
-					mob2.radius = mob2.health;
-					myGameCharacter.health = mob1.health;
-					// player to mob collision
-					if (myGameCharacter.health <= 0) {
-						//death
-						playerDeath();
+                if (distance < radii) {
+                    // Collect loot
+                    inventoryArray.push(loot);
+                    lootsArray.splice(index, 1); // Remove loot from the array
+                }
+            });
+		}
+		function playerCrashWith(player, mobArray) {
+			mobArray.forEach(mob => {
+                let dx = mob.x - player.x;
+                let dy = mob.y - player.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let radii = player.radius + mob.radius;
+				if (distance < radii) {
+                    // Apply knockback
+                    const angle = Math.atan2(dy, dx);
+                    const knockbackDistance = (radii - distance) * 4; // Prevent overlap
+                    if (!player.ignoreMobCollision) {
+                        player.x -= Math.cos(angle) * knockbackDistance;
+                        player.y -= Math.sin(angle) * knockbackDistance;
+                    }
+                    if (!mob.ignoreMobCollision) {
+                        mob.x += Math.cos(angle) * knockbackDistance;
+                        mob.y += Math.sin(angle) * knockbackDistance;
+                    }
+
+                    // Apply damage
+                    let mobDamage = Math.max(0, mob.damage - player.defense);
+                    let playerDamage = Math.max(0, player.damage - mob.defense);
+                    player.health = Math.max(0, player.health - mobDamage);
+                    mob.health = Math.max(0, mob.health - playerDamage);
+					mob.radius = mob.health;
+
+                    if (player.health <= 0) {
+                        playerDeath();
 					}
 				}
 			});
-			return result;
 		}
-		function playerCrashWithSpell(mob, spellsArray) {
-			let result = false;
+		function playerCrashWithSpell(player, spellsArray) {
 			spellsArray.forEach(spell => {
-				let totalDamageDealt = false; // Track if the spell has dealt any damage to any mob
-				if (spell.shape == "circle") {
-					let radii = spell.radius + mob.radius;
-					let distance = getDistance(spell, mob);
-					let hasCrashed = distance < radii;
-					if (hasCrashed) {
-						simulateCollision();
-					}
-				}
-				if (spell.shape == "line") {
-					// Calculate the closest point on the line segment to the circle center
-					const lineStart = { x: spell.x, y: spell.y };
-					const lineEnd = { x: spell.x2, y: spell.y2 };
-					const circleCenter = { x: mob.x, y: mob.y };
-
-					// Vector from line start to circle center
-					const lineToCircle = {
-						x: circleCenter.x - lineStart.x,
-						y: circleCenter.y - lineStart.y
-					};
-
-					// Line segment vector
-					const lineVector = {
-						x: lineEnd.x - lineStart.x,
-						y: lineEnd.y - lineStart.y
-					};
-
-					// Calculate projection of lineToCircle onto lineVector
-					const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
-					let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
-
-					// Clamp t to stay within the segment bounds
-					t = Math.max(0, Math.min(1, t));
-
-					// Find the closest point on the line segment
-					const closestPoint = {
-						x: lineStart.x + t * lineVector.x,
-						y: lineStart.y + t * lineVector.y
-					};
-
-					// Distance from circle center to closest point
-					const dx = closestPoint.x - circleCenter.x;
-					const dy = closestPoint.y - circleCenter.y;
-					const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < mob.radius) {
-						simulateCollision();
-					}
-				}
-				function simulateCollision() {
-					result = true;
-					totalDamageDealt = true;
-
-                    if (spell.side != mob.side) {
-						// Apply damage to the mob
-						let calculatedSpellDamage = spell.damage - mob.defense;
-						if (calculatedSpellDamage <= 0) {
-							calculatedSpellDamage = 0;
+				if (spell.art != "books") {
+					if (spell.side != player.side) {
+						if (spell.shape == "circle") {
+							let dx = spell.x - player.x;
+							let dy = spell.y - player.y;
+							let distance = Math.sqrt(dx * dx + dy * dy);
+							let radii = spell.radius + player.radius;
+							if (distance < radii) {
+								simulateCollision();
+							}
 						}
-						mob.health -= calculatedSpellDamage;
+						if (spell.shape == "line") {
+							// Calculate the closest point on the line segment to the circle center
+							const lineStart = { x: spell.x, y: spell.y };
+							const lineEnd = { x: spell.x2, y: spell.y2 };
+							const circleCenter = { x: player.x, y: player.y };
 
-						let calculatedMobDamage = mob.damage - spell.defense;
-						if (calculatedMobDamage <= 0) {
-							calculatedMobDamage = 0;
+							// Vector from line start to circle center
+							const lineToCircle = {
+								x: circleCenter.x - lineStart.x,
+								y: circleCenter.y - lineStart.y
+							};
+
+							// Line segment vector
+							const lineVector = {
+								x: lineEnd.x - lineStart.x,
+								y: lineEnd.y - lineStart.y
+							};
+
+							// Calculate projection of lineToCircle onto lineVector
+							const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
+							let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
+
+							// Clamp t to stay within the segment bounds
+							t = Math.max(0, Math.min(1, t));
+
+							// Find the closest point on the line segment
+							const closestPoint = {
+								x: lineStart.x + t * lineVector.x,
+								y: lineStart.y + t * lineVector.y
+							};
+
+							// Distance from circle center to closest point
+							const dx = closestPoint.x - circleCenter.x;
+							const dy = closestPoint.y - circleCenter.y;
+							const distance = Math.sqrt(dx * dx + dy * dy);
+
+							if (distance < player.radius) {
+								simulateCollision();
+							}
 						}
-						// Apply damage to the spell
-                        if (spell.art !== "books") {
-							spell.health -= calculatedMobDamage;
-						}
+						function simulateCollision() {
 
-						// Check if the mob should die and be removed
-						if (mob.health <= 0) {
-							playerDeath();
-						}
+							let spellDamage = Math.max(0, spell.damage - player.defense);
+							let playerDamage = Math.max(0, player.damage - spell.defense);
+							player.health = Math.max(0, player.health - spellDamage);
+							spell.health = Math.max(0, spell.health - playerDamage);
 
-						// Apply knockback to both spell and mob
-						const dx = mob.x - spell.x;
-						const dy = mob.y - spell.y;
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = 2;
+							// Check if the player should die and be removed
+							if (player.health <= 0) {
+								playerDeath();
+							}
+                            // Remove the spell only if its health is <= 0 after damaging all mobs
+                            if (spell.health <= 0) {
+                                myGameCharacter.speed = constantPlayerSpeed;
+                                spell.destroy();
+                            }
 
-                        if (spell.art !== "books") {
+							// Apply knockback to both spell and player
+							const dx = player.x - spell.x;
+							const dy = player.y - spell.y;
+							const angle = Math.atan2(dy, dx);
+							const knockbackDistance = 2;
+
 							if (!spell.ignoreMobCollision) {
 								spell.x -= Math.cos(angle) * knockbackDistance;
 								spell.y -= Math.sin(angle) * knockbackDistance;
 							}
-							if (!mob.ignoreSpellCollision) {
-								mob.x += Math.cos(angle) * knockbackDistance;
-								mob.y += Math.sin(angle) * knockbackDistance;
+							if (!player.ignoreSpellCollision) {
+								player.x += Math.cos(angle) * knockbackDistance;
+								player.y += Math.sin(angle) * knockbackDistance;
 							}
 						}
 					}
-				}
-
-				// Remove the spell only if its health is <= 0 after damaging all mobs
-				if (totalDamageDealt && spell.health <= 0) {
-					let spellIndex = spellsArray.indexOf(spell);
-					//temporary solution to bug number 3. make sure to finalize this
-					myGameCharacter.speed = constantPlayerSpeed;
-					spellsArray.splice(spellIndex, 1);
 				}
 			});
-			return result;
 		}
 		function crashWithSpell(spellsArray, mobArray) {
-			let result = false;
 			spellsArray.forEach(spell => {
-				let totalDamageDealt = false; // Track if the spell has dealt any damage to any mob
-				for (let mobIndex = 0; mobIndex < mobArray.length; mobIndex++) {
-					let mob = mobArray[mobIndex];
-					if (spell.shape == "circle") {
-						let radii = spell.radius + mob.radius;
-						let distance = getDistance(spell, mob);
-						let hasCrashed = distance < radii;
-						if (hasCrashed) {
-							simulateCollision();
-						}
-					}
-					if (spell.shape == "line") {
-						// Calculate the closest point on the line segment to the circle center
-						const lineStart = { x: spell.x, y: spell.y };
-						const lineEnd = { x: spell.x2, y: spell.y2 };
-						const circleCenter = { x: mob.x, y: mob.y };
-
-						// Vector from line start to circle center
-						const lineToCircle = {
-							x: circleCenter.x - lineStart.x,
-							y: circleCenter.y - lineStart.y
-						};
-
-						// Line segment vector
-						const lineVector = {
-							x: lineEnd.x - lineStart.x,
-							y: lineEnd.y - lineStart.y
-						};
-
-						// Calculate projection of lineToCircle onto lineVector
-						const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
-						let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
-
-						// Clamp t to stay within the segment bounds
-						t = Math.max(0, Math.min(1, t));
-
-						// Find the closest point on the line segment
-						const closestPoint = {
-							x: lineStart.x + t * lineVector.x,
-							y: lineStart.y + t * lineVector.y
-						};
-
-						// Distance from circle center to closest point
-						const dx = closestPoint.x - circleCenter.x;
-						const dy = closestPoint.y - circleCenter.y;
-						const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < mob.radius) {
-							simulateCollision();
-						}
-					}
-					function simulateCollision() {
-						result = true;
-						totalDamageDealt = true;
-
+				if (spell.art != "books") {
+					for (let mobIndex = 0; mobIndex < mobArray.length; mobIndex++) {
+						let mob = mobArray[mobIndex];
 						if (spell.side != mob.side) {
-							// Apply damage to the mob
-							let calculatedSpellDamage = spell.damage - mob.defense;
-							if (calculatedSpellDamage <= 0) {
-								calculatedSpellDamage = 0;
+							if (spell.shape == "circle") {
+								let dx = spell.x - mob.x;
+								let dy = spell.y - mob.y;
+								let distance = Math.sqrt(dx * dx + dy * dy);
+								let radii = spell.radius + mob.radius;
+								if (distance < radii) {
+									simulateCollision();
+								}
 							}
-							mob.health -= calculatedSpellDamage;
-							mob.radius = mob.health;
+							if (spell.shape == "line") {
+								// Calculate the closest point on the line segment to the circle center
+								const lineStart = { x: spell.x, y: spell.y };
+								const lineEnd = { x: spell.x2, y: spell.y2 };
+								const circleCenter = { x: mob.x, y: mob.y };
 
-							let calculatedMobDamage = mob.damage - spell.defense;
-							if (calculatedMobDamage <= 0) {
-								calculatedMobDamage = 0;
+								// Vector from line start to circle center
+								const lineToCircle = {
+									x: circleCenter.x - lineStart.x,
+									y: circleCenter.y - lineStart.y
+								};
+
+								// Line segment vector
+								const lineVector = {
+									x: lineEnd.x - lineStart.x,
+									y: lineEnd.y - lineStart.y
+								};
+
+								// Calculate projection of lineToCircle onto lineVector
+								const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
+								let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
+
+								// Clamp t to stay within the segment bounds
+								t = Math.max(0, Math.min(1, t));
+
+								// Find the closest point on the line segment
+								const closestPoint = {
+									x: lineStart.x + t * lineVector.x,
+									y: lineStart.y + t * lineVector.y
+								};
+
+								// Distance from circle center to closest point
+								const dx = closestPoint.x - circleCenter.x;
+								const dy = closestPoint.y - circleCenter.y;
+								const distance = Math.sqrt(dx * dx + dy * dy);
+
+								if (distance < mob.radius) {
+									simulateCollision();
+								}
 							}
-							// Apply damage to the spell
-                            if (spell.art !== "books") {
+							function simulateCollision() {
+
+								// Apply damage to the mob
+								let calculatedSpellDamage = spell.damage - mob.defense;
+								if (calculatedSpellDamage <= 0) {
+									calculatedSpellDamage = 0;
+								}
+								mob.health -= calculatedSpellDamage;
+								mob.radius = mob.health;
+
+								let calculatedMobDamage = mob.damage - spell.defense;
+								if (calculatedMobDamage <= 0) {
+									calculatedMobDamage = 0;
+								}
+								// Apply damage to the spell
 								spell.health -= calculatedMobDamage;
-							}
 
-							// Check if the mob should die and be removed
-							if (mob.health <= 15) {
-								myGameCharacter.experience += mob.experienceDrop;
-								levelUp();
-								mob.spawn();
-								mob.die();
-								mobArray.splice(mobIndex, 1);
-								mobIndex--; // Adjust index after removal
-							}
-							// Apply knockback to both spell and mob
-							const dx = mob.x - spell.x;
-							const dy = mob.y - spell.y;
-							const angle = Math.atan2(dy, dx);
-							const knockbackDistance = 2;
+								// Check if the mob should die and be removed
+								if (mob.health <= 15) {
+									myGameCharacter.experience += mob.experienceDrop;
+									levelUp();
+									mob.spawn();
+									mob.die();
+									mobArray.splice(mobIndex, 1);
+									mobIndex--; // Adjust index after removal
+								}
+                                // Remove the spell only if its health is <= 0 after damaging all mobs
+                                if (spell.health <= 0) {
+                                    //temporary solution to bug number 3. make sure to finalize this
+                                    myGameCharacter.speed = constantPlayerSpeed;
+                                    spell.destroy();
+                                }
+								// Apply knockback to both spell and mob
+								const dx = mob.x - spell.x;
+								const dy = mob.y - spell.y;
+								const angle = Math.atan2(dy, dx);
+								const knockbackDistance = 2;
 
-                            if (spell.art !== "books") {
 								if (!spell.ignoreMobCollision) {
 									spell.x -= Math.cos(angle) * knockbackDistance;
 									spell.y -= Math.sin(angle) * knockbackDistance;
@@ -816,16 +770,7 @@
 						}
 					}
 				}
-
-				// Remove the spell only if its health is <= 0 after damaging all mobs
-				if (totalDamageDealt && spell.health <= 0) {
-					let spellIndex = spellsArray.indexOf(spell);
-					//temporary solution to bug number 3. make sure to finalize this
-					myGameCharacter.speed = constantPlayerSpeed;
-					spellsArray.splice(spellIndex, 1);
-				}
 			});
-			return result;
 		}
 		function getDistance(circle1, circle2) {
 			let a = circle2.y - circle1.y;
@@ -853,6 +798,7 @@
 		3). on the spell aoe ability, the player speed reverting back to normal value doesn't work when the spell
 		finishes its job because it gets destroyed by a mob before it can even apply the code line.
 		this also applies to the beams, we just didn't notice.
+		4). spell line to circle knockback doesn't work properly
 		*/
 	</script>
 </body>

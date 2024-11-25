@@ -75,6 +75,7 @@ class SpellBook {
 			this.mainSpellBook.speed,
 			this.mainSpellBook.ability,
 			this.mainSpellBook.manaCost,
+			this.mainSpellBook.summonCost,
 			this.mainSpellBook.respawnTime));
 		this.spawned = true;	
 	}
@@ -111,6 +112,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
@@ -150,6 +152,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
@@ -158,9 +161,12 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.spell.ability === "summon1" && myGameCharacter.mana > this.spell.manaCost) {
+		if ((this.spell.art === "summoning") &&
+			(myGameCharacter.mana > this.spell.manaCost) &&
+			(myGameCharacter.summonLimit >= myGameCharacter.summonSpace + this.spell.castAmount * this.spell.summonCost)) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			//let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			let spellBookCastAmount = this.spell.castAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastAmount) {
@@ -169,7 +175,7 @@ class SpellBook {
 					castSpell(new Spell(
 						spellsArray[mainSpellBookIndex].x,
 						spellsArray[mainSpellBookIndex].y,
-						this.spell.radius,
+						this.spell.radius + (this.level - 1),
 						this.spell.name,
 						myGameCharacter.name,
 						myGameCharacter.side,
@@ -181,14 +187,16 @@ class SpellBook {
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
-						this.spell.health,
+						this.spell.health + (this.level - 1),
 						this.spell.defense,
-						this.spell.damage,
-						this.spell.speed,
+						this.spell.damage + (this.level - 1),
+						this.spell.speed + ((this.level - 1) * 0.25),
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
+					myGameCharacter.summonSpace += 1 * this.spell.summonCost;
 				} else {
 					// Stop the interval once the desired amount of spells is cast
 					clearInterval(interval);
@@ -224,6 +232,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
@@ -260,6 +269,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
@@ -296,6 +306,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
@@ -335,6 +346,7 @@ class SpellBook {
 						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
+						this.spell.summonCost,
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
