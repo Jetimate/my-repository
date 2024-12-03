@@ -1,5 +1,5 @@
 class Loot {
-	constructor(x, y, radius, name, spellName, appearance, ignoreCollision, text) {
+	constructor(x, y, radius, name, spellName, appearance, ignoreCollision, amount, stackLimit, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.angle = 0;
@@ -11,7 +11,13 @@ class Loot {
 		this.spellName = spellName;
 		this.appearance = appearance;
 		this.ignoreCollision = ignoreCollision;
+		this.amount = amount;
+		this.stackLimit = stackLimit;
 		this.text = text;
+		this.level = 1;
+		this.held = false;
+		this.codeClass = "loot";
+		this.from = "nowhere";
 	}
 	handleCollisions() {
 		for (let i = 0; i < lootsArray.length; i++) {

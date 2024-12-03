@@ -7,6 +7,7 @@ class Background {
 		this.width = width;
 		this.height = height;
 		this.appearance = appearance;
+		this.codeClass = "background";
 	}		
 	draw(ctx) {
 		ctx.beginPath();

@@ -66,6 +66,7 @@
 		this.attackTimer = 0;
 		this.secondsTracker = 0;
 		this.side = side;
+		this.codeClass = "mob";
 	}		
 	update() {
 		if (this.isDead) {
@@ -183,8 +184,7 @@
 	}
 	die() {
 		// Set the isDead flag to true update
-		dropLoot(new Loot(this.x, this.y, this.lootDrop.radius, this.lootDrop.name, this.lootDrop.spellName, this.lootDrop.appearance, this.lootDrop.ignoreCollision, this.lootDrop.text))
-		// (x, y, radius, name, appearance, ignoreCollision, text)
+		dropLoot(new Loot(this.x, this.y, this.lootDrop.radius, this.lootDrop.name, this.lootDrop.spellName, this.lootDrop.appearance, this.lootDrop.ignoreCollision, this.lootDrop.amount, this.lootDrop.stackLimit, this.lootDrop.text))
 		this.state = 0;
 		this.frames = 0;
 		this.moveAngle = 0;

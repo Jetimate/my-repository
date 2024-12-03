@@ -65,7 +65,7 @@ const summonSpecter = {
 	art: "summoning",
 	shape: "circle",
 	appearance: "specter.png",
-	castAmount: 50, //4
+	castAmount: 4,
 	maxAmount: 4,
 	ignoreSpellCollision: false,
 	ignoreMobCollision: false,

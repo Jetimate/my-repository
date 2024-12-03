@@ -3,6 +3,7 @@ class Camera {
         this.x = 0; // Top-left corner of the camera view
         this.y = 0;
         this.zoom = 0.55; // Default zoom level
+        this.codeClass = "camera";
     }
 
     follow(target, canvasWidth, canvasHeight) {

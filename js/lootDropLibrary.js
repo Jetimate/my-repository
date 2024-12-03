@@ -5,6 +5,8 @@ const spikeLootDrop = {
 	spellName: "castSpike",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "spike"
 };
 const luminousEnergyLootDrop = {
@@ -13,6 +15,8 @@ const luminousEnergyLootDrop = {
 	spellName: "castLuminousEnergy",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "lumenergy"
 };
 const luminousSpiritLootDrop = {
@@ -21,6 +25,8 @@ const luminousSpiritLootDrop = {
 	spellName: "summonSpirit",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "spirit"
 };
 const specterLootDrop = {
@@ -29,6 +35,8 @@ const specterLootDrop = {
 	spellName: "summonSpecter",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "specter"
 };
 const teleportLootDrop = {
@@ -37,6 +45,8 @@ const teleportLootDrop = {
 	spellName: "teleport",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "teleport"
 };
 const smashLootDrop = {
@@ -45,5 +55,7 @@ const smashLootDrop = {
 	spellName: "smash",
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
 	text: "smash"
 };

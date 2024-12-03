@@ -17,6 +17,8 @@ class PlayableCharacter extends Mob {
 		this.summonSpace = 0;
 		this.summonLimit = 20000;
 		this.pickUpRange = 200;
+		this.spellBookSlotsUnlocked = 4;
+		this.codeClass = "playableCharacter";
 	}		
 	playerNewPos() {
 		this.angle += this.moveAngle * Math.PI / 180;

@@ -1,5 +1,5 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, spell, mainSpellBook, cooldown, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, uniqueID, spell, mainSpellBook, cooldown, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -21,36 +21,71 @@ class SpellBook {
 		this.spawned = false;
 		this.spellReady = true;
 		this.spellActive = false;
+		this.onSlot = false;
+		this.amount = 1;
+		this.stackLimit = 1;
+		this.held = false;
+		this.codeClass = "spellBook";
+		this.from = "nowhere";
+		this.uniqueID = uniqueID;
 	}
 
 	draw(ctx) {
-		const slotSize = window.innerWidth / 16;
-		const slotMargin = window.innerHeight / 64;
-		const radiiSize = window.innerHeight / 300;
-		const xDistance = window.innerWidth / 6 + (slotSize * this.index) + (slotMargin * this.index)
+		const xDistance = window.innerWidth / 2 - (((slotSize + slotMargin) * myGameCharacter.spellBookSlotsUnlocked) / 2) + (slotSize + slotMargin) * (this.index - 1);
 		const yDistance = window.innerHeight - slotMargin - slotSize;
+		this.x = xDistance;
+		this.y = yDistance;
 		ctx.beginPath();
+		
+		if (isMouseDown && mouseHeldItem.length <= 1) {
+			let distance = Math.sqrt(mouseX >= this.x && mouseX < slotSize + this.x && mouseY >= this.y && mouseY < slotSize + this.y);
+			if (distance && mouseHeldItem.length < 1) {
+				this.held = true;
+				this.from = "spellBookSlot";
+				mouseHeldItem.push(this);
+
+				let slotIndex = buttonsArray.findIndex(element => element.name === "spellBookSlots" && element.index == this.index);
+				buttonsArray[slotIndex].slotActive = false;
+			}
+			if (this.held) {
+				this.x = mouseX - (slotSize / 2);
+				this.y = mouseY - (slotSize / 2);
+			}
+		} else if (!isMouseDown && this.held && mouseHeldItem.length >= 1) {
+			this.held = false;
+			this.index = null;
+			inventoryArray.push(this);
+			mouseHeldItem.splice(0, mouseHeldItem.length);
+			let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
+			spellBooksArray.splice(spellBookIndex, 1);
+		}
+		
 		ctx.roundRect(
-			xDistance,
-			yDistance,
+			this.x,
+			this.y,
 			slotSize,
 			slotSize,
 			radiiSize);
+
 		ctx.strokeStyle = this.borderColor;
-		ctx.lineWidth = window.innerHeight / 500;
+		ctx.lineWidth = window.innerHeight / 750;
 		ctx.stroke();
+
 		ctx.font = window.innerHeight / 64 + "px ubuntu";
 		ctx.fillStyle = "black";
+
 		ctx.drawImage(
 			this.image,
-			xDistance,
-			yDistance,
+			this.x,
+			this.y,
 			slotSize,
 			slotSize);
+		/*
 		ctx.fillText(
 			this.text + " " + this.level,
-			xDistance,
-			yDistance - slotMargin)
+			this.x,
+			this.y - slotMargin)
+		*/
 		ctx.closePath();
 	}
 	activate() {
@@ -359,9 +394,9 @@ class SpellBook {
 
 	update() {
 		// level up spell Book
-		let totalSpellPageCount = inventoryArray.filter(element => element.spellName == this.spell.name).length;
+		let totalSpellPageCount = inventoryArray.filter(element => element.name == this.spell.name).length;
 		if (totalSpellPageCount >= this.maxPages) {
-			let spellPageIndex = inventoryArray.findIndex(element => element.spellName == this.spell.name);
+			let spellPageIndex = inventoryArray.findIndex(element => element.name == this.spell.name);
 			if (spellPageIndex !== -1) {
 				inventoryArray.splice(spellPageIndex, this.maxPages);
 			}
@@ -477,7 +512,8 @@ class SpellBook {
 			}
 		}
 		this.draw(ctx);
-		if (this.spawned == false) {
+		if (this.spawned == false || this.onSlot == true) {
+			// activate only if the spell is on a slot.
 			this.activate();
 		}
 	}
@@ -502,6 +538,18 @@ class SpellBook {
 			}
 			if (this.index === 5) {
 				keys.Digit5 = true;
+			}
+			if (this.index === 6) {
+				keys.Digit1 = true;
+			}
+			if (this.index === 7) {
+				keys.Digit2 = true;
+			}
+			if (this.index === 8) {
+				keys.Digit3 = true;
+			}
+			if (this.index === 9) {
+				keys.Digit4 = true;
 			}
 			*/
 			//console.log(this.name + " was clicked");

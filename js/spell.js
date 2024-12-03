@@ -45,6 +45,9 @@ class Spell {
 		this.newTargetX = null;
 		this.newTargetY = null;
 		this.caster = null;
+		this.amount = 1;
+		this.stackLimit = 1;
+		this.codeClass = "spell";
 	}
 
 	setTarget(x, y) {
