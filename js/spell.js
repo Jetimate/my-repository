@@ -1,11 +1,12 @@
 class Spell {
-	constructor(x, y, radius, name, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
+	constructor(x, y, radius, name, spellBookID, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 		this.name = name;
+		this.spellBookID = spellBookID;
 		this.casterName = casterName;
 		this.side = side;
 		this.art = art;
@@ -62,155 +63,6 @@ class Spell {
 		if (spellIndex > -1) {
 			//console.log(this);
 			spellsArray.splice(spellIndex, 1);
-		}
-	}
-	//learn from your mistakes
-	failedHandleCollisions() {
-		for (let i = 0; i < spellsArray.length; i++) {
-			for (let j = i + 1; j < spellsArray.length; j++) {
-				const spellA = spellsArray[i];
-				const spellB = spellsArray[j];
-				let totalDamageDealt = false;
-
-				// Skip collision handling if either spell has the ability "book"
-				if (spellA.ability === "book" || spellB.ability === "book") {
-					continue;
-				}
-
-				// If both are circles, handle circle-circle collision
-				if (spellA.shape === "circle" && spellB.shape === "circle") {
-					const dx = spellB.x - spellA.x;
-					const dy = spellB.y - spellA.y;
-					const distance = Math.sqrt(dx * dx + dy * dy);
-
-					if (distance < spellA.radius + spellB.radius) {
-						simulateCollision();
-						/*
-						// Calculate knockback direction
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
-
-						// Apply knockback
-						//if (spellA.ability != "book" && spellB.ability != "book") {
-							if (!spellA.ignoreSpellCollision) {
-								spellA.x -= Math.cos(angle) * knockbackDistance;
-								spellA.y -= Math.sin(angle) * knockbackDistance;
-							}
-							if (!spellB.ignoreSpellCollision) {
-								spellB.x += Math.cos(angle) * knockbackDistance;
-								spellB.y += Math.sin(angle) * knockbackDistance;
-							}
-						//}
-						*/
-					}
-				}
-				// If one is a circle and the other is a line, handle circle-line collision
-				else if ((spellA.shape === "circle" && spellB.shape === "line") ||
-					(spellA.shape === "line" && spellB.shape === "circle")) {
-
-					// Ensure spellA is the circle and spellB is the line for simplicity
-					const circle = spellA.shape === "circle" ? spellA : spellB;
-					const line = spellA.shape === "line" ? spellA : spellB;
-
-					// Calculate the closest point on the line segment to the circle center
-					const lineStart = { x: line.x, y: line.y };
-					const lineEnd = { x: line.x2, y: line.y2 };
-					const circleCenter = { x: circle.x, y: circle.y };
-
-					// Vector from line start to circle center
-					const lineToCircle = {
-						x: circleCenter.x - lineStart.x,
-						y: circleCenter.y - lineStart.y
-					};
-
-					// Line segment vector
-					const lineVector = {
-						x: lineEnd.x - lineStart.x,
-						y: lineEnd.y - lineStart.y
-					};
-
-					// Calculate projection of lineToCircle onto lineVector
-					const lineLengthSquared = lineVector.x * lineVector.x + lineVector.y * lineVector.y;
-					let t = ((lineToCircle.x * lineVector.x) + (lineToCircle.y * lineVector.y)) / lineLengthSquared;
-
-					// Clamp t to stay within the segment bounds
-					t = Math.max(0, Math.min(1, t));
-
-					// Find the closest point on the line segment
-					const closestPoint = {
-						x: lineStart.x + t * lineVector.x,
-						y: lineStart.y + t * lineVector.y
-					};
-
-					// Distance from circle center to closest point
-					const dx = closestPoint.x - circleCenter.x;
-					const dy = closestPoint.y - circleCenter.y;
-					const distance = Math.sqrt(dx * dx + dy * dy);
-
-					if (distance < circle.radius) {
-						simulateCollision();
-						// Calculate knockback direction
-						/*
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = circle.radius - distance;
-
-						// Apply knockback to the circle (ignore line knockback for simplicity)
-						if (!circle.ignoreSpellCollision) {
-							circle.x -= Math.cos(angle) * knockbackDistance;
-							circle.y -= Math.sin(angle) * knockbackDistance;
-						}
-						*/
-					}
-				}
-				function simulateCollision() {
-					totalDamageDealt = true;
-
-					if (spellA.side != spellB.side) {
-						// calculate damage
-						let calculatedSpellADamage = spellA.damage - spellB.defense;
-						if (calculatedSpellADamage <= 0) {
-							calculatedSpellADamage = 0;
-						}
-						let calculatedSpellBDamage = spellB.damage - spellA.defense;
-						if (calculatedSpellBDamage <= 0) {
-							calculatedSpellBDamage = 0;
-						}
-						// Apply damage
-						spellA.health -= calculatedSpellBDamage;
-						spellB.health -= calculatedSpellADamage;
-					}
-
-					// Apply knockback to both spells
-					const dx = spellB.x - spellA.x;
-					const dy = spellB.y - spellA.y;
-					const angle = Math.atan2(dy, dx);
-					let knockbackDistance = 0;
-					if (spellA.shape === "circle" && spellB.shape === "circle") {
-						const distance = Math.sqrt(dx * dx + dy * dy);
-						knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
-						console.log(knockbackDistance);
-					}
-					if (!spellA.ignoreSpellCollision) {
-						console.log(knockbackDistance);
-						spellA.x -= Math.cos(angle) * knockbackDistance;
-						spellA.y -= Math.sin(angle) * knockbackDistance;
-					}
-					if (!spellB.ignoreSpellCollision) {
-						spellB.x += Math.cos(angle) * knockbackDistance;
-						spellB.y += Math.sin(angle) * knockbackDistance;
-					}
-				}
-				if (totalDamageDealt && spellA.health <= 0) {
-					//temporary solution to bug number 3. make sure to finalize this
-					myGameCharacter.speed = constantPlayerSpeed;
-					spellA.destroy();
-				}
-				if (totalDamageDealt && spellB.health <= 0) {
-					//temporary solution to bug number 3. make sure to finalize this
-					myGameCharacter.speed = constantPlayerSpeed;
-					spellB.destroy();
-				}
-			}
 		}
 	}
 	handleCollisions() {

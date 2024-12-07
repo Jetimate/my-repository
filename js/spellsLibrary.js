@@ -1,6 +1,6 @@
 // spells
 const castSpike = {
-	radius: 12,
+	radius: 30, //12
 	name: "castSpike",
 	art: "projecting",
 	shape: "circle",
@@ -12,7 +12,7 @@ const castSpike = {
 	index: 1,
 	health: 5,
 	defense: 0,
-	damage: 3,
+	damage: 30, //3
 	speed: 10,
 	ability: "shoot1",
 	manaCost: 0.1,
@@ -179,9 +179,9 @@ const castEnergyBall = {
 	summonCost: 0,
 	respawnTime: 500
 };
-const summonShield = {
+const summonLuminousShield = {
 	radius: 120,
-	name: "summonShield",
+	name: "summonLuminousShield",
 	art: "summoning",
 	shape: "circle",
 	appearance: "luminousRock.png",

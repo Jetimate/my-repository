@@ -283,18 +283,16 @@
             addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 4));
 		}
 		function spellBooksKeeper() {
-			addSpellBook(new SpellBook(500, 5, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a1", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(500, 5, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a2", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(500, 5, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a3", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(500, 5, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a4", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a1", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a2", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a3", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a4", castEnergyBall, energyBallBook, 15, "Energy Ball"));
 
-
-            addSpellBookToInventory(new SpellBook(500, 5, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a5", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-
-            addSpellBookToInventory(new SpellBook(605, 5, null, 100, 100, [5], "black", "beam.webp", "beamBook", "b1", castBeam, beamBook, 60, "Beam"));
-            addSpellBookToInventory(new SpellBook(710, 5, null, 100, 100, [5], "black", "luminousRock.png", "shieldBook", "c1", summonShield, shieldBook, 60, "Shield"));
-			//addSpellBook(new SpellBook(710, 5, null, 100, 100, [5], "black", "spike.png", "castSpikeBook", "d1", castSpike, spikeBook, 90, "Spike"));
-            addSpellBookToInventory(new SpellBook(1340, 5, null, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", "e1", castLightningBolt, lightningBoltBook, 45, "Lightning"));
+            addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a5", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "beam.webp", "beamBook", "b1", castBeam, beamBook, 60, "Beam"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "shieldBook", "c1", summonLuminousShield, luminousShieldBook, 60, "Shield")); 
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "spike.png", "castSpikeBook", "d1", castSpike, spikeBook, 90, "Spike"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", "e1", castLightningBolt, lightningBoltBook, 45, "Lightning"));
 		}
 		function spellsKeeper() {
 		}
@@ -422,28 +420,28 @@
 					myGameCharacter.summonLimit += 2.5;
 
 					if (!slot4Active && myGameCharacter.level >= 1) {
-                        addSpellBookToInventory(new SpellBook(815, 5, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", "f1", summonSpirit, luminousSpiritBook, 300, "Spirit"));
+                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", "f1", summonSpirit, luminousSpiritBook, 300, "Spirit"));
 						slot4Active = true;
 					}
 					if (!slot5Active && myGameCharacter.level >= 1) {
-                        addSpellBookToInventory(new SpellBook(920, 5, null, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", "g1", castLuminousEnergy, luminousEnergyBook, 45, "Luminergy"));
+                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", "g1", castLuminousEnergy, luminousEnergyBook, 45, "Luminergy"));
 						slot5Active = true;
 					}
 					if (!slot6Active && myGameCharacter.level >= 2) {
-                        addSpellBookToInventory(new SpellBook(1025, 5, null, 100, 100, [5], "black", "specter.png", "summonSpecterBook", "h1", summonSpecter, specterBook, 300, "Specter"));
+                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.png", "summonSpecterBook", "h1", summonSpecter, specterBook, 300, "Specter"));
 						slot6Active = true;
 					}
 					if (!slot7Active && myGameCharacter.level >= 2) {
-                        addSpellBookToInventory(new SpellBook(1130, 5, null, 100, 100, [5], "black", "teleportation.png", "teleportBook", "i1", teleport, teleportBook, 180, "Teleport"));
+                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "teleportation.png", "teleportBook", "i1", teleport, teleportBook, 180, "Teleport"));
 						slot7Active = true;
 					}
 					if (!slot8Active && myGameCharacter.level >= 3) {
-                        addSpellBookToInventory(new SpellBook(1235, 5, null, 100, 100, [5], "black", "smash.png", "smashBook", "j1", smash, smashBook, 15, "Smash"));
+                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "smash.png", "smashBook", "j1", smash, smashBook, 15, "Smash"));
 						slot8Active = true;
 					}
 					//    if (!slot9Active && myGameCharacter.level >= 4) {
 					//        addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
-					//        slot9Active = true;
+					//        slot9Active = true; shield
 					//    }
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
@@ -479,22 +477,19 @@
             let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.text, button.index);
 			buttonsArray.push(newButton);
 		}
-        function addSpellBookToInventory(spellBook) {
-            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.uniqueID, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
-            inventoryArray.push(newSpellBook);
-        }
 		function addSpellBook(spellBook) {
 			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.uniqueID, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
+            let slotIndex = buttonsArray.findIndex(element => element.name === "spellBookSlots" && element.index == newSpellBook.index);
             if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
-				let slotIndex = buttonsArray.findIndex(element => element.name === "spellBookSlots" && element.index == newSpellBook.index);
 				buttonsArray[slotIndex].slotActive = true;
+				newSpellBook.onSlot = true;
 				spellBooksArray.push(newSpellBook);
 			} else {
                 inventoryArray.push(newSpellBook);
 			}
 		}
 		function dropLoot(loot) {
-            let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellName, loot.appearance, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
+            let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.rarity, loot.dropChance, loot.appearance, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
 			lootsArray.push(newLoot);
 		}
 		function castSpell(spell) {
@@ -503,6 +498,7 @@
 				spell.y,
 				spell.radius,
 				spell.name,
+                spell.spellBookID,
 				spell.casterName,
                 spell.side,
 				spell.art,

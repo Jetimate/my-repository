@@ -1,58 +1,99 @@
 // loot drops
-const spikeLootDrop = {
+// folklore essence
+const luminousEssence = {
 	radius: 20,
-	name: "spikeLootDrop",
-	spellName: "castSpike",
+	name: "luminousEssence",
+	rarity: "common",
+	dropChance: 100,
+	appearance: "glowstone.webp",
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "luminousEssence"
+};
+const gloomEssence = {
+	radius: 20,
+	name: "gloomEssence",
+	rarity: "common",
+	dropChance: 100,
+	appearance: "glowstone.webp",
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "gloomEssence"
+};
+// folklore scrolls
+const spikeScroll = {
+	radius: 20,
+	name: "spikeScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "spike"
 };
-const luminousEnergyLootDrop = {
+const luminousEnergyScroll = {
 	radius: 20,
-	name: "luminousEnergyLootDrop",
-	spellName: "castLuminousEnergy",
+	name: "luminousEnergyScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "lumenergy"
 };
-const luminousSpiritLootDrop = {
+const luminousShieldScroll = {
 	radius: 20,
-	name: "luminousSpiritLootDrop",
-	spellName: "summonSpirit",
+	name: "luminousShieldScroll",
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "enchantedBook.png",
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "lumshield"
+};
+const luminousSpiritScroll = {
+	radius: 20,
+	name: "luminousSpiritScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "spirit"
 };
-const specterLootDrop = {
+const specterScroll = {
 	radius: 20,
-	name: "specterLootDrop",
-	spellName: "summonSpecter",
+	name: "specterScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "specter"
 };
-const teleportLootDrop = {
+const teleportScroll = {
 	radius: 20,
-	name: "teleportLootDrop",
-	spellName: "teleport",
+	name: "teleportScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "teleport"
 };
-const smashLootDrop = {
+const smashScroll = {
 	radius: 20,
-	name: "smashLootDrop",
-	spellName: "smash",
+	name: "smashScroll",
+	rarity: "uncommon",
+	dropChance: 25,
 	appearance: "enchantedBook.png",
 	ignoreCollision: false,
 	amount: 1,

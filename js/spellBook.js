@@ -54,8 +54,14 @@ class SpellBook {
 		} else if (!isMouseDown && this.held && mouseHeldItem.length >= 1) {
 			this.held = false;
 			this.index = null;
+			this.onSlot = false;
+			this.spawned = false;
 			inventoryArray.push(this);
 			mouseHeldItem.splice(0, mouseHeldItem.length);
+
+			let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name && element.spellBookID == this.uniqueID);
+			spellsArray.splice(mainSpellBookIndex, 1);
+
 			let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
 			spellBooksArray.splice(spellBookIndex, 1);
 		}
@@ -68,7 +74,7 @@ class SpellBook {
 			radiiSize);
 
 		ctx.strokeStyle = this.borderColor;
-		ctx.lineWidth = window.innerHeight / 750;
+		ctx.lineWidth = window.innerHeight / 100;
 		ctx.stroke();
 
 		ctx.font = window.innerHeight / 64 + "px ubuntu";
@@ -94,6 +100,7 @@ class SpellBook {
 			myGameCharacter.y,
 			this.mainSpellBook.radius,
 			this.mainSpellBook.name,
+			this.uniqueID,
 			myGameCharacter.name,
 			myGameCharacter.side,
 			this.mainSpellBook.art,
@@ -131,6 +138,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -171,6 +179,7 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius,
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -212,6 +221,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius + (this.level - 1),
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -251,6 +261,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -288,6 +299,7 @@ class SpellBook {
 						myGameCharacter.y,
 						this.spell.radius + (spellCount * 15),
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -325,6 +337,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -365,6 +378,7 @@ class SpellBook {
 						spellsArray[mainSpellBookIndex].y,
 						this.spell.radius,
 						this.spell.name,
+						this.uniqueID,
 						myGameCharacter.name,
 						myGameCharacter.side,
 						this.spell.art,
@@ -512,7 +526,7 @@ class SpellBook {
 			}
 		}
 		this.draw(ctx);
-		if (this.spawned == false || this.onSlot == true) {
+		if (this.spawned == false && this.onSlot == true) {
 			// activate only if the spell is on a slot.
 			this.activate();
 		}

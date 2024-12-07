@@ -191,6 +191,7 @@ class Button {
 						spellBooksArray.push(mouseHeldItem[0]);
 						mouseHeldItem[0].held = false;
 						this.slotActive = true;
+						mouseHeldItem[0].onSlot = true;
 
 						let heldItemIndex = inventoryArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						inventoryArray.splice(heldItemIndex, 1);
@@ -201,6 +202,7 @@ class Button {
 						spellBooksArray.push(mouseHeldItem[0]);
 						mouseHeldItem[0].held = false;
 						this.slotActive = true;
+						mouseHeldItem[0].onSlot = true;
 
 						let heldItemIndex = spellBooksArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						spellBooksArray.splice(heldItemIndex, 1);
