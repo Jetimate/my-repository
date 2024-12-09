@@ -1,5 +1,5 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, uniqueID, spell, mainSpellBook, cooldown, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, uniqueID, spell, mainSpell, cooldown, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -12,7 +12,7 @@ class SpellBook {
 		this.appearance = appearance;
 		this.name = name;
 		this.spell = spell;
-		this.mainSpellBook = mainSpellBook;
+		this.mainSpell = mainSpell;
 		this.cooldown = cooldown;
 		this.text = text;
 		this.cooldownTimer = 0;
@@ -27,6 +27,7 @@ class SpellBook {
 		this.held = false;
 		this.codeClass = "spellBook";
 		this.from = "nowhere";
+		this.location = null;
 		this.uniqueID = uniqueID;
 	}
 
@@ -44,7 +45,7 @@ class SpellBook {
 				this.from = "spellBookSlot";
 				mouseHeldItem.push(this);
 
-				let slotIndex = buttonsArray.findIndex(element => element.name === "spellBookSlots" && element.index == this.index);
+				let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == this.index);
 				buttonsArray[slotIndex].slotActive = false;
 			}
 			if (this.held) {
@@ -59,8 +60,8 @@ class SpellBook {
 			inventoryArray.push(this);
 			mouseHeldItem.splice(0, mouseHeldItem.length);
 
-			let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name && element.spellBookID == this.uniqueID);
-			spellsArray.splice(mainSpellBookIndex, 1);
+			let mainSpellIndex = spellsArray.findIndex(element => element.name == this.mainSpell.name && element.spellBookID == this.uniqueID);
+			spellsArray.splice(mainSpellIndex, 1);
 
 			let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
 			spellBooksArray.splice(spellBookIndex, 1);
@@ -98,32 +99,31 @@ class SpellBook {
 		castSpell(new Spell(
 			myGameCharacter.x,
 			myGameCharacter.y,
-			this.mainSpellBook.radius,
-			this.mainSpellBook.name,
+			this.mainSpell.radius,
+			this.mainSpell.name,
 			this.uniqueID,
 			myGameCharacter.name,
 			myGameCharacter.side,
-			this.mainSpellBook.art,
-			this.mainSpellBook.shape,
-			this.mainSpellBook.appearance,
-			this.mainSpellBook.castAmount,
-			this.mainSpellBook.maxAmount,
-			this.mainSpellBook.ignoreSpellCollision,
-			this.mainSpellBook.ignoreMobCollision,
-			this.mainSpellBook.index,
-			this.mainSpellBook.health,
-			this.mainSpellBook.defense,
-			this.mainSpellBook.damage,
-			this.mainSpellBook.speed,
-			this.mainSpellBook.ability,
-			this.mainSpellBook.manaCost,
-			this.mainSpellBook.summonCost,
-			this.mainSpellBook.respawnTime));
+			this.mainSpell.art,
+			this.mainSpell.shape,
+			this.mainSpell.appearance,
+			this.mainSpell.castAmount,
+			this.mainSpell.maxAmount,
+			this.mainSpell.ignoreSpellCollision,
+			this.mainSpell.ignoreMobCollision,
+			this.mainSpell.index,
+			this.mainSpell.health,
+			this.mainSpell.defense,
+			this.mainSpell.damage,
+			this.mainSpell.speed,
+			this.mainSpell.ability,
+			this.mainSpell.manaCost,
+			this.mainSpell.summonCost,
+			this.mainSpell.respawnTime));
 		this.spawned = true;	
 	}
 	interact() {
-		let mainSpellBookIndex = spellsArray.findIndex(element => element.name == this.mainSpellBook.name);
-		//console.log(spellsArray[mainSpellBookIndex].health);
+		let mainSpellIndex = spellsArray.findIndex(element => element.name == this.mainSpell.name);
 
 		if (this.spell.ability === "shoot1" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
@@ -134,8 +134,8 @@ class SpellBook {
 					// Cast a spell
 					
 					castSpell(new Spell(
-						spellsArray[mainSpellBookIndex].x,
-						spellsArray[mainSpellBookIndex].y,
+						spellsArray[mainSpellIndex].x,
+						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.uniqueID,
@@ -217,8 +217,8 @@ class SpellBook {
 					// Cast a spell
 					this.spell.index += 1;
 					castSpell(new Spell(
-						spellsArray[mainSpellBookIndex].x,
-						spellsArray[mainSpellBookIndex].y,
+						spellsArray[mainSpellIndex].x,
+						spellsArray[mainSpellIndex].y,
 						this.spell.radius + (this.level - 1),
 						this.spell.name,
 						this.uniqueID,
@@ -257,8 +257,8 @@ class SpellBook {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
 					castSpell(new Spell(
-						spellsArray[mainSpellBookIndex].x,
-						spellsArray[mainSpellBookIndex].y,
+						spellsArray[mainSpellIndex].x,
+						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.uniqueID,
@@ -333,8 +333,8 @@ class SpellBook {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
 					castSpell(new Spell(
-						spellsArray[mainSpellBookIndex].x,
-						spellsArray[mainSpellBookIndex].y,
+						spellsArray[mainSpellIndex].x,
+						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.uniqueID,
@@ -374,8 +374,8 @@ class SpellBook {
 				if (spellCount < this.spell.castAmount) {
 					// Cast a spell
 					castSpell(new Spell(
-						spellsArray[mainSpellBookIndex].x,
-						spellsArray[mainSpellBookIndex].y,
+						spellsArray[mainSpellIndex].x,
+						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
 						this.spell.name,
 						this.uniqueID,

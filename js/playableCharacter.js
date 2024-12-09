@@ -15,8 +15,8 @@ class PlayableCharacter extends Mob {
 		this.newSpeed = 0;
 		this.side = "player1";
 		this.summonSpace = 0;
-		this.summonLimit = 20000;
-		this.pickUpRange = 200;
+		this.summonLimit = 20; //20
+		this.pickUpRange = 200; //200
 		this.spellBookSlotsUnlocked = 4;
 		this.codeClass = "playableCharacter";
 	}		

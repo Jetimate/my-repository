@@ -20,7 +20,7 @@ const luminousRock = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 10,
-    lootDrop: [luminousEssence, luminousEnergyScroll, luminousShieldScroll],
+    lootDrop: [luminousEssence, luminousEnergyPage, luminousShieldPage],
     intelligence: 0,
     respawnTime: 3000
 };
@@ -45,7 +45,7 @@ const luminousSpirit = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 15,
-    lootDrop: [luminousEssence, luminousSpiritScroll],
+    lootDrop: [luminousEssence, luminousSpiritPage],
     intelligence: 1,
     respawnTime: 4000
 };
@@ -70,7 +70,7 @@ const specter = {
     ability: "chases",
     learnedSpells: null,
     experienceDrop: 20,
-    lootDrop: [gloomEssence, specterScroll],
+    lootDrop: [gloomEssence, specterPage],
     intelligence: 1,
     respawnTime: 8000
 };
@@ -95,7 +95,7 @@ const darkForestTree = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 15,
-    lootDrop: [gloomEssence, spikeScroll],
+    lootDrop: [gloomEssence, spikePage],
     intelligence: 0,
     respawnTime: 8000
 };
@@ -105,7 +105,7 @@ const darkForestTreant = {
     setMinY: 10,
     setMaxY: 1000,
     radiusAdjust: 20,
-    FOVRadius: 540,
+    FOVRadius: 250,
     maxAmount: 5,
     name: "darkForestTreant",
     side: "darkForest",
@@ -120,7 +120,7 @@ const darkForestTreant = {
     ability: "aimedShooting",
     learnedSpells: castSpike,
     experienceDrop: 20,
-    lootDrop: [gloomEssence, spikeScroll],
+    lootDrop: [gloomEssence, spikePage],
     intelligence: 0,
     respawnTime: 8000
 };

@@ -119,6 +119,7 @@
 			<a href="signin.html">sign in</a>
 		</div>
 	</div>
+	<script type="text/javascript" src="js/globalUtilities.js"></script>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playableCharacter.js"></script>
 	<script type="text/javascript" src="js/spellBook.js"></script>
@@ -126,128 +127,16 @@
 	<script type="text/javascript" src="js/button.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
+	<script type="text/javascript" src="js/spellsLibrary.js"></script>
+	<script type="text/javascript" src="js/mainSpellsLibrary.js"></script>
+	<script type="text/javascript" src="js/spellBooksLibrary.js"></script>
 	<script type="text/javascript" src="js/loot.js"></script>
 	<script type="text/javascript" src="js/lootDropLibrary.js"></script>
-	<script type="text/javascript" src="js/spellsLibrary.js"></script>
-	<script type="text/javascript" src="js/spellBooksLibrary.js"></script>
 	<script type="text/javascript" src="js/mobLibrary.js"></script>
 
 	<script>
-		// test
-		const constantPlayerSpeed = 5;
-		const keys = {
-			KeyW: false,
-			KeyA: false,
-			KeyS: false,
-			KeyD: false,
-			ArrowUp: false,
-			ArrowDown: false,
-			ArrowLeft: false,
-			ArrowRight: false,
-			Digit1: false,
-			Digit2: false,
-			Digit3: false,
-			Digit4: false,
-			Digit5: false,
-			Digit6: false,
-			Digit7: false,
-			Digit8: false,
-			Digit9: false,
-			ShiftLeft: false,
-			ShiftRight: false,
-			Space: false,
-			KeyB: false
-		};
-		let isMouseDown = false;
-		let mouseX = 0;
-		let mouseY = 0;
-		let castMouseX = 0;
-		let castMouseY = 0;
-		let mouseClickX = 0;
-		let mouseClickY = 0;
-		let worldX = null;
-		let worldY = null;
-		let slot3Active = false;
-		let slot4Active = false;
-		let slot5Active = false;
-		let slot6Active = false;
-		let slot7Active = false;
-		let slot8Active = false;
-		let slot9Active = false;
-		let mobsArray = [];
-		let lootsArray = [];
-		let inventoryArray = [];
-		let buttonsArray = [];
-		let spellBooksArray = [];
-		let spellsArray = [];
-		let maxExperience = 20;
-		let mouseHeldItem = [];
-        const lootSize = (window.innerWidth + window.innerHeight) / 32;
-        const slotSize = (window.innerWidth + window.innerHeight) / 24;
-        const slotMargin = (window.innerWidth + window.innerHeight) / 128;
-        const radiiSize = (window.innerWidth + window.innerHeight) / 300;
-		const canvas = document.getElementById("mycanvas");
-		const ctx = canvas.getContext("2d");
 		const starterMobsArray = [luminousRock, luminousSpirit, specter, darkForestTree, darkForestTreant];
 
-		var myGameArea = {
-			canvas: document.getElementById("mycanvas"), // splice
-			start: function () {
-				this.context = this.canvas.getContext("2d");
-				this.interval = setInterval(updateGameArea, 16.67);
-			},
-			clear: function () {
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			},
-			stop: function () {
-				clearInterval(this.interval);
-			}
-		}
-		window.addEventListener('click', function (e) {
-			const rect = canvas.getBoundingClientRect();
-			mouseClickX = e.clientX - rect.left;
-			mouseClickY = e.clientY - rect.top;
-			buttonsArray.forEach(button => {
-				button.clickButton(mouseClickX, mouseClickY);
-			});
-			spellBooksArray.forEach(spellBook => {
-				spellBook.clickButton(mouseClickX, mouseClickY);
-			})
-		});
-		window.addEventListener('mousedown', (event) => {
-			//console.log(event);
-			isMouseDown = true;
-			const rect = canvas.getBoundingClientRect();
-			mouseX = event.clientX - rect.left;
-			mouseY = event.clientY - rect.top;
-			biome1.clickImage(biome1);
-		});
-
-		window.addEventListener('mouseup', () => {
-			isMouseDown = false;
-		});
-
-		window.addEventListener('mousemove', (event) => {
-			if (isMouseDown) {
-				const rect = canvas.getBoundingClientRect();
-				mouseX = event.clientX - rect.left;
-				mouseY = event.clientY - rect.top;
-			}
-		});
-		// Key down event listener
-		window.addEventListener('keydown', (event) => {
-			//console.log(event);
-			if (event.code in keys) {
-				keys[event.code] = true;
-			}
-		});
-
-		// Key up event listener
-		window.addEventListener('keyup', (event) => {
-			if (event.code in keys) {
-				keys[event.code] = false;
-			}
-		});
 		function startGame() {
 			castSpellTimeout = [];
 			buttonsArray = [];
@@ -270,35 +159,40 @@
 				mainMenuVariable.remove();
 			}
 		}
+
 		function buttonsKeeper() {
-            addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", "level: " + myGameCharacter.level, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", "experience: " + myGameCharacter.experience, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", "health: " + myGameCharacter.health, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", "mana: " + myGameCharacter.mana, null));
-			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", "inventory", null));
+			addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", null, "bar", "level: " + myGameCharacter.level, null));
+			addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, null));
+			addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, null));
+			addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, null));
+			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", null, "clickable", "inventory", null));
 			// add an automated slot adder with the use of for loops
-			addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 1));
-			addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 2));
-			addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 3));
-            addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 4));
+			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 1));
+			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 2));
+			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
+			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
 		}
 		function spellBooksKeeper() {
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a1", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a2", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a3", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a4", castEnergyBall, energyBallBook, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 90, "Spike"));
+            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			/*
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
 
-            addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", "a5", castEnergyBall, energyBallBook, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "beam.webp", "beamBook", "b1", castBeam, beamBook, 60, "Beam"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "shieldBook", "c1", summonLuminousShield, luminousShieldBook, 60, "Shield")); 
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "spike.png", "castSpikeBook", "d1", castSpike, spikeBook, 90, "Spike"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", "e1", castLightningBolt, lightningBoltBook, 45, "Lightning"));
+			addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "beam.webp", "beamBook", generateID(), castBeam, mainBeam, 60, "Beam"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "shieldBook", generateID(), summonLuminousShield, mainLuminousShield, 60, "Shield"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 90, "Spike"));
+			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", generateID(), castLightningBolt, mainLightningBolt, 45, "Lightning"));
+			*/
 		}
 		function spellsKeeper() {
 		}
 
 		function updateGameArea() {
-            //console.log(isMouseDown);
+			//console.log(isMouseDown);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
 			const canvasWidth = myGameArea.context.canvas.width;
@@ -337,12 +231,12 @@
 			// Reset transformations
 			camera.resetTransform(ctx);
 
-			spellBooksArray.forEach(spellBook => {
-				spellBook.update();
-			});
 			buttonsArray.forEach(button => {
 				button.update();
 				button.draw(ctx);
+			});
+			spellBooksArray.forEach(spellBook => {
+				spellBook.update();
 			});
 			// player and mob collision
 			playerCrashWith(myGameCharacter, mobsArray);
@@ -354,7 +248,7 @@
 			crashWith(mobsArray, mobsArray);
 			// mob and spell collision
 			crashWithSpell(spellsArray, mobsArray);
-            myGameCharacter.playerNewPos();
+			myGameCharacter.playerNewPos();
 			myGameCharacter.movementX = 0;
 			myGameCharacter.movementY = 0;
 			myGameCharacter.moveAngle = 0;
@@ -399,6 +293,7 @@
 			mobsArray = [];
 			lootsArray = [];
 			inventoryArray = [];
+			toBeCraftedArray = [];
 			slot3Active = false;
 			slot4Active = false;
 			slot5Active = false;
@@ -418,78 +313,75 @@
 					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
 					myGameCharacter.summonLimit += 2.5;
-
+					/*
 					if (!slot4Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", "f1", summonSpirit, luminousSpiritBook, 300, "Spirit"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", generateID(), summonSpirit, mainLuminousSpirit, 300, "Spirit"));
 						slot4Active = true;
 					}
 					if (!slot5Active && myGameCharacter.level >= 1) {
-                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", "g1", castLuminousEnergy, luminousEnergyBook, 45, "Luminergy"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", generateID(), castLuminousEnergy, mainLuminousEnergy, 45, "Luminergy"));
 						slot5Active = true;
 					}
 					if (!slot6Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.png", "summonSpecterBook", "h1", summonSpecter, specterBook, 300, "Specter"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.png", "summonSpecterBook", generateID(), summonSpecter, mainSpecter, 300, "Specter"));
 						slot6Active = true;
 					}
 					if (!slot7Active && myGameCharacter.level >= 2) {
-                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "teleportation.png", "teleportBook", "i1", teleport, teleportBook, 180, "Teleport"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "teleportation.png", "teleportBook", generateID(), teleport, mainTeleport, 180, "Teleport"));
 						slot7Active = true;
 					}
 					if (!slot8Active && myGameCharacter.level >= 3) {
-                        addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "smash.png", "smashBook", "j1", smash, smashBook, 15, "Smash"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "smash.png", "smashBook", generateID(), smash, mainSmash, 15, "Smash"));
 						slot8Active = true;
 					}
-					//    if (!slot9Active && myGameCharacter.level >= 4) {
-					//        addSpellBook(new SpellBook(1340, 5, 9, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", castLightningBolt, lightningBoltBook, 15, "castLightningBolt"));
-					//        slot9Active = true; shield
-					//    }
+					*/
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 5));
+						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 5));
 						// add new spellBookSlot
 					}
-                    if (myGameCharacter.spellBookSlotsUnlocked < 6 && myGameCharacter.level >= 15) {
+					if (myGameCharacter.spellBookSlotsUnlocked < 6 && myGameCharacter.level >= 15) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 6));
-                        // add new spellBookSlot
+						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 6));
+						// add new spellBookSlot
 					}
-                    if (myGameCharacter.spellBookSlotsUnlocked < 7 && myGameCharacter.level >= 30) {
+					if (myGameCharacter.spellBookSlotsUnlocked < 7 && myGameCharacter.level >= 30) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 7));
-                        // add new spellBookSlot
+						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 7));
+						// add new spellBookSlot
 					}
-                    if (myGameCharacter.spellBookSlotsUnlocked < 8 && myGameCharacter.level >= 45) {
+					if (myGameCharacter.spellBookSlotsUnlocked < 8 && myGameCharacter.level >= 45) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 8));
-                        // add new spellBookSlot
+						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 8));
+						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(new Button(0, 0, 0, 0, 0, "black", "spellBookSlots", "bug101", 9));
-                        // add new spellBookSlot
-                    }
-                    console.log(myGameCharacter.spellBookSlotsUnlocked);
+						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 9));
+						// add new spellBookSlot
+					}
+					//console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}
 				while (myGameCharacter.experience >= maxExperience);
 			}
 		}
 		function addButton(button) {
-            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.text, button.index);
+			let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.index);
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook) {
-			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.uniqueID, spellBook.spell, spellBook.mainSpellBook, spellBook.cooldown, spellBook.text)
-            let slotIndex = buttonsArray.findIndex(element => element.name === "spellBookSlots" && element.index == newSpellBook.index);
-            if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
+			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.uniqueID, spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text)
+			let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == newSpellBook.index);
+			if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
 				buttonsArray[slotIndex].slotActive = true;
 				newSpellBook.onSlot = true;
 				spellBooksArray.push(newSpellBook);
 			} else {
-                inventoryArray.push(newSpellBook);
+				inventoryArray.push(newSpellBook);
 			}
 		}
 		function dropLoot(loot) {
-            let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.rarity, loot.dropChance, loot.appearance, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
+			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellBookName, loot.rarity, loot.dropChance, loot.appearance, loot.form, loot.type, loot.essenceName, loot.pagesToCraft, loot.essenceToCraft, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
 			lootsArray.push(newLoot);
 		}
 		function castSpell(spell) {
@@ -498,9 +390,9 @@
 				spell.y,
 				spell.radius,
 				spell.name,
-                spell.spellBookID,
+				spell.spellBookID,
 				spell.casterName,
-                spell.side,
+				spell.side,
 				spell.art,
 				spell.shape,
 				spell.appearance,
@@ -515,7 +407,7 @@
 				spell.speed,
 				spell.ability,
 				spell.manaCost,
-                spell.summonCost,
+				spell.summonCost,
 				spell.respawnTime);
 			spellsArray.push(newSpell);
 		}
@@ -541,7 +433,7 @@
 						starterMobsArray[i].setMinHealth,
 						starterMobsArray[i].setMaxHealth,
 						starterMobsArray[i].name,
-                        starterMobsArray[i].side,
+						starterMobsArray[i].side,
 						starterMobsArray[i].maxAmount,
 						starterMobsArray[i].type,
 						starterMobsArray[i].ability,
@@ -557,76 +449,85 @@
 		function crashWith(mob1Array, mob2Array) {
 			mob1Array.forEach(mob1 => {
 				mob2Array.forEach(mob2 => {
-                    let dx = mob2.x - mob1.x;
-                    let dy = mob2.y - mob1.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let radii = mob1.radius + mob2.radius;
+					let dx = mob2.x - mob1.x;
+					let dy = mob2.y - mob1.y;
+					let distance = Math.sqrt(dx * dx + dy * dy);
+					let radii = mob1.radius + mob2.radius;
 
-                    if (distance < radii) {
+					if (distance < radii) {
 
-                        // Apply knockback
-                        const angle = Math.atan2(dy, dx);
-                        const knockbackDistance = (radii - distance) / 2; // Prevent overlap
-                        if (!mob1.ignoreMobCollision) {
-                            mob1.x -= Math.cos(angle) * knockbackDistance;
-                            mob1.y -= Math.sin(angle) * knockbackDistance;
-                        }
-                        if (!mob2.ignoreMobCollision) {
-                            mob2.x += Math.cos(angle) * knockbackDistance;
-                            mob2.y += Math.sin(angle) * knockbackDistance;
-                        }
-                    }
+						// Apply knockback
+						const angle = Math.atan2(dy, dx);
+						const knockbackDistance = (radii - distance) / 2; // Prevent overlap
+						if (!mob1.ignoreMobCollision) {
+							mob1.x -= Math.cos(angle) * knockbackDistance;
+							mob1.y -= Math.sin(angle) * knockbackDistance;
+						}
+						if (!mob2.ignoreMobCollision) {
+							mob2.x += Math.cos(angle) * knockbackDistance;
+							mob2.y += Math.sin(angle) * knockbackDistance;
+						}
+					}
 				});
 			});
 		}
 		function playerCollideWithLoot(mob, lootsArray) {
-            lootsArray.forEach((loot, index) => {
-                let dx = loot.x - mob.x;
-                let dy = loot.y - mob.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let radii = mob.radius + loot.radius + mob.pickUpRange;
+			lootsArray.forEach((loot, index) => {
+				let dx = loot.x - mob.x;
+				let dy = loot.y - mob.y;
+				let distance = Math.sqrt(dx * dx + dy * dy);
+				let radii = mob.radius + loot.radius + mob.pickUpRange;
 
 				if (distance < radii) {
 					// Collect loot
 					// check if the loot should stack
+					/* future project
+					let allStackableLootArray = inventoryArray.filter(element => element.name === loot.name && element.stackLimit > element.amount);
+					console.log(allStackableLootArray);
+					if (allStackableLootArray.length > 1) {
+						for (let i = 0; i < allStackableLootArray.length; i++) {
+							allStackableLootArray[i].amount + allStackableLootArray[i].amount;
+						}
+					}
+					*/
 					let stackableLootIndex = inventoryArray.findIndex(element => element.name === loot.name && element.stackLimit > element.amount);
-                    if (stackableLootIndex !== -1 && inventoryArray[stackableLootIndex].amount + loot.amount <= inventoryArray[stackableLootIndex].stackLimit) {
+					if (stackableLootIndex !== -1 && inventoryArray[stackableLootIndex].amount + loot.amount <= inventoryArray[stackableLootIndex].stackLimit) {
 						inventoryArray[stackableLootIndex].amount += loot.amount;
 					} else {
-                        inventoryArray.push(loot);
+						inventoryArray.push(loot);
 					}
-                    lootsArray.splice(index, 1); // Remove loot from the array
-                }
-            });
+					lootsArray.splice(index, 1); // Remove loot from the array
+				}
+			});
 		}
 		function playerCrashWith(player, mobArray) {
 			mobArray.forEach(mob => {
-                let dx = mob.x - player.x;
-                let dy = mob.y - player.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let radii = player.radius + mob.radius;
+				let dx = mob.x - player.x;
+				let dy = mob.y - player.y;
+				let distance = Math.sqrt(dx * dx + dy * dy);
+				let radii = player.radius + mob.radius;
 				if (distance < radii) {
-                    // Apply knockback
-                    const angle = Math.atan2(dy, dx);
-                    const knockbackDistance = (radii - distance) * 4; // Prevent overlap
-                    if (!player.ignoreMobCollision) {
-                        player.x -= Math.cos(angle) * knockbackDistance;
-                        player.y -= Math.sin(angle) * knockbackDistance;
-                    }
-                    if (!mob.ignoreMobCollision) {
-                        mob.x += Math.cos(angle) * knockbackDistance;
-                        mob.y += Math.sin(angle) * knockbackDistance;
-                    }
+					// Apply knockback
+					const angle = Math.atan2(dy, dx);
+					const knockbackDistance = (radii - distance) * 4; // Prevent overlap
+					if (!player.ignoreMobCollision) {
+						player.x -= Math.cos(angle) * knockbackDistance;
+						player.y -= Math.sin(angle) * knockbackDistance;
+					}
+					if (!mob.ignoreMobCollision) {
+						mob.x += Math.cos(angle) * knockbackDistance;
+						mob.y += Math.sin(angle) * knockbackDistance;
+					}
 
-                    // Apply damage
-                    let mobDamage = Math.max(0, mob.damage - player.defense);
-                    let playerDamage = Math.max(0, player.damage - mob.defense);
-                    player.health = Math.max(0, player.health - mobDamage);
-                    mob.health = Math.max(0, mob.health - playerDamage);
+					// Apply damage
+					let mobDamage = Math.max(0, mob.damage - player.defense);
+					let playerDamage = Math.max(0, player.damage - mob.defense);
+					player.health = Math.max(0, player.health - mobDamage);
+					mob.health = Math.max(0, mob.health - playerDamage);
 					mob.radius = mob.health;
 
-                    if (player.health <= 0) {
-                        playerDeath();
+					if (player.health <= 0) {
+						playerDeath();
 					}
 				}
 			});
@@ -695,11 +596,11 @@
 							if (player.health <= 0) {
 								playerDeath();
 							}
-                            // Remove the spell only if its health is <= 0 after damaging all mobs
-                            if (spell.health <= 0) {
-                                myGameCharacter.speed = constantPlayerSpeed;
-                                spell.destroy();
-                            }
+							// Remove the spell only if its health is <= 0 after damaging all mobs
+							if (spell.health <= 0) {
+								myGameCharacter.speed = constantPlayerSpeed;
+								spell.destroy();
+							}
 
 							// Apply knockback to both spell and player
 							const dx = player.x - spell.x;
@@ -801,12 +702,12 @@
 									mobArray.splice(mobIndex, 1);
 									mobIndex--; // Adjust index after removal
 								}
-                                // Remove the spell only if its health is <= 0 after damaging all mobs
-                                if (spell.health <= 0) {
-                                    //temporary solution to bug number 3. make sure to finalize this
-                                    myGameCharacter.speed = constantPlayerSpeed;
-                                    spell.destroy();
-                                }
+								// Remove the spell only if its health is <= 0 after damaging all mobs
+								if (spell.health <= 0) {
+									//temporary solution to bug number 3. make sure to finalize this
+									myGameCharacter.speed = constantPlayerSpeed;
+									spell.destroy();
+								}
 								// Apply knockback to both spell and mob
 								const dx = mob.x - spell.x;
 								const dy = mob.y - spell.y;

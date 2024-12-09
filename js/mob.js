@@ -188,21 +188,27 @@
 			// generate random number from 1 to 100
 			const roll = Math.floor(Math.random() * 100) + 1;
 			if (roll <= this.lootDrop[i].dropChance) {
-				console.log("wow", "you got:", roll, "for", this.lootDrop[i].name);
+				//console.log("wow", "you got:", roll, "for", this.lootDrop[i].name);
 				dropLoot(new Loot(
 					this.x + i * 20,
 					this.y,
 					this.lootDrop[i].radius,
 					this.lootDrop[i].name,
+					this.lootDrop[i].spellBookName,
 					this.lootDrop[i].rarity,
 					this.lootDrop[i].dropChance,
 					this.lootDrop[i].appearance,
+					this.lootDrop[i].form,
+					this.lootDrop[i].type,
+					this.lootDrop[i].essenceName,
+					this.lootDrop[i].pagesToCraft,
+					this.lootDrop[i].essenceToCraft,
 					this.lootDrop[i].ignoreCollision,
 					this.lootDrop[i].amount,
 					this.lootDrop[i].stackLimit,
 					this.lootDrop[i].text))
 			} else {
-				console.log("better luck next time", "you got:", roll, "for", this.lootDrop[i].name);
+				//console.log("better luck next time", "you got:", roll, "for", this.lootDrop[i].name);
 			}
 		}		
 

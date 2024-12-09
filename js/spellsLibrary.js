@@ -1,6 +1,6 @@
 // spells
 const castSpike = {
-	radius: 30, //12
+	radius: 12,
 	name: "castSpike",
 	art: "projecting",
 	shape: "circle",
@@ -12,7 +12,7 @@ const castSpike = {
 	index: 1,
 	health: 5,
 	defense: 0,
-	damage: 30, //3
+	damage: 3,
 	speed: 10,
 	ability: "shoot1",
 	manaCost: 0.1,
@@ -160,7 +160,7 @@ const castLightningBolt = {
 	respawnTime: 500
 };
 const castEnergyBall = {
-	radius: 450,
+	radius: 50,
 	name: "castEnergyBall",
 	art: "projectile",
 	shape: "circle",

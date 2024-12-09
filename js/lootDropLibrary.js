@@ -3,9 +3,15 @@
 const luminousEssence = {
 	radius: 20,
 	name: "luminousEssence",
+	spellBookName: null,
 	rarity: "common",
 	dropChance: 100,
 	appearance: "glowstone.webp",
+	form: "essence",
+	type: "luminous",
+	essenceName: null,
+	pagesToCraft: null,
+	essenceToCraft: null,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
@@ -14,87 +20,135 @@ const luminousEssence = {
 const gloomEssence = {
 	radius: 20,
 	name: "gloomEssence",
+	spellBookName: null,
 	rarity: "common",
 	dropChance: 100,
 	appearance: "glowstone.webp",
+	form: "essence",
+	type: "gloom",
+	essenceName: null,
+	pagesToCraft: null,
+	essenceToCraft: null,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "gloomEssence"
 };
-// folklore scrolls
-const spikeScroll = {
+// folklore Pages
+const spikePage = {
 	radius: 20,
-	name: "spikeScroll",
+	name: "spikePage",
+	spellBookName: spikeBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "gloom",
+	essenceName: "gloomEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "spike"
 };
-const luminousEnergyScroll = {
+const luminousEnergyPage = {
 	radius: 20,
-	name: "luminousEnergyScroll",
+	name: "luminousEnergyPage",
+	spellBookName: luminousEnergyBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "luminous",
+	essenceName: "luminousEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "lumenergy"
 };
-const luminousShieldScroll = {
+const luminousShieldPage = {
 	radius: 20,
-	name: "luminousShieldScroll",
+	name: "luminousShieldPage",
+	spellBookName: luminousShieldBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "luminous",
+	essenceName: "luminousEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "lumshield"
 };
-const luminousSpiritScroll = {
+const luminousSpiritPage = {
 	radius: 20,
-	name: "luminousSpiritScroll",
+	name: "luminousSpiritPage",
+	spellBookName: luminousSpiritBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "luminous",
+	essenceName: "luminousEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "spirit"
 };
-const specterScroll = {
+const specterPage = {
 	radius: 20,
-	name: "specterScroll",
+	name: "specterPage",
+	spellBookName: specterBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "gloom",
+	essenceName: "gloomEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "specter"
 };
-const teleportScroll = {
+const teleportPage = {
 	radius: 20,
-	name: "teleportScroll",
+	name: "teleportPage",
+	spellBookName: teleportBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "luminous",
+	essenceName: "luminousEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
 	text: "teleport"
 };
-const smashScroll = {
+const smashPage = {
 	radius: 20,
-	name: "smashScroll",
+	name: "smashPage",
+	spellBookName: smashBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "enchantedBook.png",
+	form: "page",
+	type: "fire",
+	essenceName: "fireEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,

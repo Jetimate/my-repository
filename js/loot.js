@@ -1,5 +1,5 @@
 class Loot {
-	constructor(x, y, radius, name, rarity, dropChance, appearance, ignoreCollision, amount, stackLimit, text) {
+	constructor(x, y, radius, name, spellBookName, rarity, dropChance, appearance, form, type, essenceName, pagesToCraft, essenceToCraft, ignoreCollision, amount, stackLimit, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.angle = 0;
@@ -8,9 +8,15 @@ class Loot {
 		this.y = y;
 		this.radius = radius;
 		this.name = name;
+		this.spellBookName = spellBookName;
 		this.rarity = rarity;
 		this.dropChance = dropChance;
 		this.appearance = appearance;
+		this.form = form;
+		this.type = type;
+		this.essenceName = essenceName;
+		this.pagesToCraft = pagesToCraft;
+		this.essenceToCraft = essenceToCraft;
 		this.ignoreCollision = ignoreCollision;
 		this.amount = amount;
 		this.stackLimit = stackLimit;
@@ -19,6 +25,8 @@ class Loot {
 		this.held = false;
 		this.codeClass = "loot";
 		this.from = "nowhere";
+		this.index = null;
+		this.location = null;
 	}
 	handleCollisions() {
 		for (let i = 0; i < lootsArray.length; i++) {
@@ -32,7 +40,7 @@ class Loot {
 
 				if (!this.ignoreCollision) {
 					if (distance < lootA.radius + lootB.radius) {
-						// Calculate knockback direction 
+						// Calculate knockback direction v
 						const angle = Math.atan2(dy, dx);
 						const knockbackDistance = (lootA.radius + lootB.radius - distance) / 2;
 
