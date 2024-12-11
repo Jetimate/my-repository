@@ -33,12 +33,12 @@ class PlayableCharacter extends Mob {
 		if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 	}
 	regenerateHealth() {
-		if (this.maxHealth > this.health + this.healthRegen) {
+		if (this.maxHealth > this.health) {
 			this.health += this.healthRegen;
 		}
 	}
 	regenerateMana() {
-		if (this.maxMana > this.mana + this.manaRegen) {
+		if (this.maxMana > this.mana) {
 			this.mana += this.manaRegen;
 		}
 	}

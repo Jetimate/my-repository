@@ -145,7 +145,6 @@
 			mobsArray = [];
 			lootsArray = [];
 			inventoryArray = [];
-			maxExperience = 20;
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 1500, 1500, "smileyy.webp", false, false, 100, 0.5, 1, 20, 0, "player1", 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
@@ -173,20 +172,11 @@
 			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
 		}
 		function spellBooksKeeper() {
-			addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 90, "Spike"));
-            addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-			/*
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+			addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 30, "Spike"));
+			//addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
+            let spellBook = specterBook;
+            addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text));
 
-			addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "beam.webp", "beamBook", generateID(), castBeam, mainBeam, 60, "Beam"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "shieldBook", generateID(), summonLuminousShield, mainLuminousShield, 60, "Shield"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 90, "Spike"));
-			addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "lightningBolt.png", "lightningBoltBook", generateID(), castLightningBolt, mainLightningBolt, 45, "Lightning"));
-			*/
 		}
 		function spellsKeeper() {
 		}
@@ -307,12 +297,12 @@
 			if (myGameCharacter.experience >= maxExperience) {
 				do {
 					myGameCharacter.experience -= maxExperience;
-					maxExperience += 20;
+					maxExperience += 100;
 					myGameCharacter.level += 1;
 					myGameCharacter.maxHealth += 5;
 					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
-					myGameCharacter.summonLimit += 2.5;
+                    myGameCharacter.summonLimit += 2.5;
 					/*
 					if (!slot4Active && myGameCharacter.level >= 1) {
 						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", generateID(), summonSpirit, mainLuminousSpirit, 300, "Spirit"));
@@ -323,7 +313,7 @@
 						slot5Active = true;
 					}
 					if (!slot6Active && myGameCharacter.level >= 2) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.png", "summonSpecterBook", generateID(), summonSpecter, mainSpecter, 300, "Specter"));
+						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.svg", "summonSpecterBook", generateID(), summonSpecter, mainSpecter, 300, "Specter"));
 						slot6Active = true;
 					}
 					if (!slot7Active && myGameCharacter.level >= 2) {
@@ -486,15 +476,23 @@
 					console.log(allStackableLootArray);
 					if (allStackableLootArray.length > 1) {
 						for (let i = 0; i < allStackableLootArray.length; i++) {
-							allStackableLootArray[i].amount + allStackableLootArray[i].amount;
+							allStackableLootArray[i].amount + allStackableLootArray[i].amount; 
 						}
 					}
 					*/
-					let stackableLootIndex = inventoryArray.findIndex(element => element.name === loot.name && element.stackLimit > element.amount);
-					if (stackableLootIndex !== -1 && inventoryArray[stackableLootIndex].amount + loot.amount <= inventoryArray[stackableLootIndex].stackLimit) {
-						inventoryArray[stackableLootIndex].amount += loot.amount;
-					} else {
-						inventoryArray.push(loot);
+					if (loot.name == "manaPotion") {
+						let potionsMana = 1;
+						if (myGameCharacter.mana + potionsMana <= myGameCharacter.maxMana) {
+							myGameCharacter.mana += potionsMana;
+							console.log("hi");
+						}
+					} else if (loot.form != "potion") {
+						let stackableLootIndex = inventoryArray.findIndex(element => element.name === loot.name && element.stackLimit > element.amount);
+						if (stackableLootIndex !== -1 && inventoryArray[stackableLootIndex].amount + loot.amount <= inventoryArray[stackableLootIndex].stackLimit) {
+							inventoryArray[stackableLootIndex].amount += loot.amount;
+						} else {
+							inventoryArray.push(loot);
+						}
 					}
 					lootsArray.splice(index, 1); // Remove loot from the array
 				}

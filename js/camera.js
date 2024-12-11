@@ -2,7 +2,7 @@ class Camera {
     constructor() {
         this.x = 0; // Top-left corner of the camera view
         this.y = 0;
-        this.zoom = 0.55; // Default zoom level
+        this.zoom = 0.55; // Default zoom level //0.55
         this.codeClass = "camera";
     }
 

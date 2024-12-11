@@ -1,4 +1,22 @@
 // loot drops
+// potions
+const manaPotion = {
+	radius: 20,
+	name: "manaPotion",
+	spellBookName: null,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "manaPotion.png",
+	form: "potion",
+	type: "others",
+	essenceName: null,
+	pagesToCraft: null,
+	essenceToCraft: null,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "spike"
+};
 // folklore essence
 const luminousEssence = {
 	radius: 20,

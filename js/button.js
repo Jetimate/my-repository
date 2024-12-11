@@ -55,7 +55,7 @@ class Button {
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 2;
 			this.width = window.innerWidth / 8;
 			this.height = window.innerHeight / 20;
-			let roundedHealth = Math.ceil(myGameCharacter.health);
+			let roundedHealth = Math.floor(myGameCharacter.health);
 			this.text = "health: " + roundedHealth + "/" + myGameCharacter.maxHealth;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
@@ -64,7 +64,7 @@ class Button {
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 3;
 			this.width = window.innerWidth / 8;
 			this.height = window.innerHeight / 20;
-			let roundedMana = Math.ceil(myGameCharacter.mana);
+			let roundedMana = Math.floor(myGameCharacter.mana);
 			this.text = "mana: " + roundedMana + "/" + myGameCharacter.maxMana;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}

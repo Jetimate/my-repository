@@ -9,7 +9,7 @@ const luminousRock = {
     maxAmount: 15,
     name: "luminousRock",
     side: "darkForest",
-    appearance: "luminousRock.png",
+    appearance: "luminousRock.svg",
     ignoreSpellCollision: true,
     ignoreMobCollision: false,
     setMinHealth: 20,
@@ -20,7 +20,7 @@ const luminousRock = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 10,
-    lootDrop: [luminousEssence, luminousEnergyPage, luminousShieldPage],
+    lootDrop: [luminousEssence, luminousEnergyPage, luminousShieldPage, manaPotion],
     intelligence: 0,
     respawnTime: 3000
 };
@@ -45,7 +45,7 @@ const luminousSpirit = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 15,
-    lootDrop: [luminousEssence, luminousSpiritPage],
+    lootDrop: [luminousEssence, luminousSpiritPage, manaPotion],
     intelligence: 1,
     respawnTime: 4000
 };
@@ -59,7 +59,7 @@ const specter = {
     maxAmount: 5,
     name: "specter",
     side: "darkForest",
-    appearance: "specter.png",
+    appearance: "specter.svg",
     ignoreSpellCollision: false,
     ignoreMobCollision: false,
     setMinHealth: 25,
@@ -70,7 +70,7 @@ const specter = {
     ability: "chases",
     learnedSpells: null,
     experienceDrop: 20,
-    lootDrop: [gloomEssence, specterPage],
+    lootDrop: [gloomEssence, specterPage, manaPotion],
     intelligence: 1,
     respawnTime: 8000
 };
@@ -95,7 +95,7 @@ const darkForestTree = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 15,
-    lootDrop: [gloomEssence, spikePage],
+    lootDrop: [gloomEssence, spikePage, manaPotion],
     intelligence: 0,
     respawnTime: 8000
 };
@@ -120,7 +120,7 @@ const darkForestTreant = {
     ability: "aimedShooting",
     learnedSpells: castSpike,
     experienceDrop: 20,
-    lootDrop: [gloomEssence, spikePage],
+    lootDrop: [gloomEssence, spikePage, manaPotion],
     intelligence: 0,
     respawnTime: 8000
 };
