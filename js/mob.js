@@ -90,7 +90,7 @@
 
 		//ctx.rect(30, 30, 50, 50);
 		//draw FOVRadius or radius 
-		
+		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI); 
 		ctx.strokeStyle = "blue";
@@ -108,7 +108,7 @@
 		ctx.strokeStyle = "red";
 		ctx.stroke();
 		ctx.closePath();
-		
+		*/
 		ctx.restore();
 	}      
 	spawn() {

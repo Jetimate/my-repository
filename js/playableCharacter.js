@@ -19,18 +19,21 @@ class PlayableCharacter extends Mob {
 		this.pickUpRange = 200; //200
 		this.spellBookSlotsUnlocked = 4;
 		this.codeClass = "playableCharacter";
+		this.hasTarget = false;
 	}		
 	playerNewPos() {
-		this.angle += this.moveAngle * Math.PI / 180;
-		this.x += this.newSpeed * Math.sin(this.angle);
-		this.y -= this.newSpeed * Math.cos(this.angle);
-		myGameCharacter.x += myGameCharacter.movementX;
-		myGameCharacter.y += myGameCharacter.movementY;
-		// Ensure the entity stays within the canvas boundaries
-		if (this.x < this.radius) this.x = this.radius;
-		if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-		if (this.y < this.radius) this.y = this.radius;
-		if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+		if (keyMovement) {
+			this.angle += this.moveAngle * Math.PI / 180;
+			this.x += this.newSpeed * Math.sin(this.angle);
+			this.y -= this.newSpeed * Math.cos(this.angle);
+			myGameCharacter.x += myGameCharacter.movementX;
+			myGameCharacter.y += myGameCharacter.movementY;
+			// Ensure the entity stays within the canvas boundaries
+			if (this.x < this.radius) this.x = this.radius;
+			if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+			if (this.y < this.radius) this.y = this.radius;
+			if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+		}
 	}
 	regenerateHealth() {
 		if (this.maxHealth > this.health) {

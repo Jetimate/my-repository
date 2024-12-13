@@ -61,7 +61,7 @@ class Spell {
 		}
 		let spellIndex = spellsArray.indexOf(this);
 		if (spellIndex > -1) {
-			//console.log(this);
+			//console.log(this); isMouseDown
 			spellsArray.splice(spellIndex, 1);
 		}
 	}
@@ -299,7 +299,7 @@ class Spell {
 			}
 		}
 		if (this.ability === "summon1") {
-			if (isMouseDown) {
+			if (leftClick) {
 				let summoningSpells = spellsArray.filter(element => element.ability === "summon1");
 				summoningSpells.forEach(spell => spell.setTarget(worldX - biome1.x, worldY - biome1.y));
 				let dx = (worldX - biome1.x) - this.x;
@@ -307,7 +307,7 @@ class Spell {
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 				this.x += this.speed * Math.sin(this.angle);
 				this.y -= this.speed * Math.cos(this.angle);
-			} else if (!isMouseDown) {
+			} else if (!leftClick) {
 				// Calculate target orbit position
 				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
@@ -391,7 +391,7 @@ class Spell {
 						this.radiusIncrease = 0;
 						this.orbitRadiusIncrease = 0;
 						this.damageIncrease = 0;
-						if (isMouseDown && !this.hasTarget) {
+						if (leftClick && !this.hasTarget) {
 							castMouseX = worldX - biome1.x;
 							castMouseY = worldY - biome1.y;
 							let dx = castMouseX - this.x;
@@ -450,12 +450,12 @@ class Spell {
 			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamBook");
 			this.x = spellsArray[beamBookIndex].x;
 			this.y = spellsArray[beamBookIndex].y;
-			if (isMouseDown && this.width <= 400) {
+			if (leftClick && this.width <= 400) {
 				this.width += 20;
 				myGameCharacter.speed = 1;
 			}
 			
-			if (!isMouseDown && this.width > 10) {
+			if (!leftClick && this.width > 10) {
 				this.width -= 40;
 				myGameCharacter.speed = constantPlayerSpeed;
 			}

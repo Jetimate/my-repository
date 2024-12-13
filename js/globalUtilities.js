@@ -1,4 +1,6 @@
 const constantPlayerSpeed = 5;
+let keyMovement = false;
+let mouseMovement = true;
 const keys = {
 	KeyW: false,
 	KeyA: false,
@@ -24,6 +26,8 @@ const keys = {
 };
 let generatedID = 0;
 let isMouseDown = false;
+let leftClick = false;
+let rightClick = false;
 let mouseX = 0;
 let mouseY = 0;
 let castMouseX = 0;
@@ -32,13 +36,8 @@ let mouseClickX = 0;
 let mouseClickY = 0;
 let worldX = null;
 let worldY = null;
-let slot3Active = false;
-let slot4Active = false;
-let slot5Active = false;
-let slot6Active = false;
-let slot7Active = false;
-let slot8Active = false;
-let slot9Active = false;
+let playerTargetX = null;
+let playerTargetY = null;
 let mobsArray = [];
 let lootsArray = [];
 let inventoryArray = [];
@@ -68,6 +67,9 @@ var myGameArea = {
 		clearInterval(this.interval);
 	}
 }
+window.addEventListener('contextmenu', event => {
+	event.preventDefault();
+});
 window.addEventListener('click', function (e) {
 	const rect = canvas.getBoundingClientRect();
 	mouseClickX = e.clientX - rect.left;
@@ -80,16 +82,36 @@ window.addEventListener('click', function (e) {
 	})
 });
 window.addEventListener('mousedown', (event) => {
-	//console.log(event);
+	console.log(event.button);
 	isMouseDown = true;
 	const rect = canvas.getBoundingClientRect();
 	mouseX = event.clientX - rect.left;
 	mouseY = event.clientY - rect.top;
+	if (event.button == 0) {
+		leftClick = true;
+	}
+	if (event.button == 2) {
+		rightClick = true;
+
+		worldX = (mouseX / camera.zoom) + camera.x;
+		worldY = (mouseY / camera.zoom) + camera.y;
+
+		playerTargetX = worldX - biome1.x;
+		playerTargetY = worldY - biome1.y;
+
+		myGameCharacter.hasTarget = true;
+	}
 	biome1.clickImage(biome1);
 });
 
-window.addEventListener('mouseup', () => {
+window.addEventListener('mouseup', (event) => {
 	isMouseDown = false;
+	if (event.button == 0) {
+		leftClick = false;
+	}
+	if (event.button == 2) {
+		rightClick = false;
+	}
 });
 
 window.addEventListener('mousemove', (event) => {
@@ -114,6 +136,6 @@ window.addEventListener('keyup', (event) => {
 	}
 });
 function generateID() {
-	console.log(generatedID + 1);
+	//console.log(generatedID + 1);
 	return generatedID++;
 }

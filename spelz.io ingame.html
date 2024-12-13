@@ -187,7 +187,7 @@
 		}
 
 		function updateGameArea() {
-			//console.log(isMouseDown);
+            console.log(mouseX, mouseY, playerTargetX, playerTargetY);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
 			const canvasWidth = myGameArea.context.canvas.width;
@@ -250,31 +250,61 @@
 			myGameCharacter.newSpeed = 0;
 
 			function updatePlayerPosition() {
+				if (keyMovement) {
+					if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
+						myGameCharacter.angle = (1.75 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
+						myGameCharacter.angle = (2.25 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
+						myGameCharacter.angle = (1.25 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
+						myGameCharacter.angle = (0.75 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if (keys.KeyW || keys.ArrowUp) { // Up
+						myGameCharacter.angle = (2 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if (keys.KeyS || keys.ArrowDown) { // Down
+						myGameCharacter.angle = (1 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if (keys.KeyA || keys.ArrowLeft) { // Left
+						myGameCharacter.angle = (1.5 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					} else if (keys.KeyD || keys.ArrowRight) { // Right
+						myGameCharacter.angle = (0.5 * Math.PI);
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+					}
+				}
+				if (mouseMovement) {
+                    if (myGameCharacter.hasTarget && playerTargetX != null && playerTargetY != null) {
+                        // Calculate the difference in x and y between the current position and the target
+                        let dx = playerTargetX - myGameCharacter.x;
+                        let dy = playerTargetY - myGameCharacter.y;
+             
+                        // Calculate the distance to the target
+                        let distance = Math.sqrt(dx * dx + dy * dy);
 
-				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
-					myGameCharacter.angle = (1.75 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
-					myGameCharacter.angle = (2.25 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
-					myGameCharacter.angle = (1.25 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
-					myGameCharacter.angle = (0.75 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if (keys.KeyW || keys.ArrowUp) { // Up
-					myGameCharacter.angle = (2 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if (keys.KeyS || keys.ArrowDown) { // Down
-					myGameCharacter.angle = (1 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if (keys.KeyA || keys.ArrowLeft) { // Left
-					myGameCharacter.angle = (1.5 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
-				} else if (keys.KeyD || keys.ArrowRight) { // Right
-					myGameCharacter.angle = (0.5 * Math.PI);
-					myGameCharacter.newSpeed = myGameCharacter.speed;
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+
+                        // Check if the character has reached the target
+                        if (distance <= myGameCharacter.newSpeed) {
+                            // Snap to target and stop moving
+                            myGameCharacter.x = playerTargetX;
+							myGameCharacter.y = playerTargetY;
+							playerTargetX = null;
+							playerTargetY = null;
+                            myGameCharacter.hasTarget = false;
+						} else {
+                            // Calculate the angle to the target
+                            myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+
+                            // Move toward the target
+                            myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
+                            myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
+                        }
+                    }
 				}
 			}
 		}
@@ -289,13 +319,6 @@
 			lootsArray = [];
 			inventoryArray = [];
 			toBeCraftedArray = [];
-			slot3Active = false;
-			slot4Active = false;
-			slot5Active = false;
-			slot6Active = false;
-			slot7Active = false;
-			slot8Active = false;
-			slot9Active = false;
 			startGame();
 		}
 		function levelUp() {
@@ -353,7 +376,7 @@
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
 						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 9));
-						// add new spellBookSlot
+                        // add new spellBookSlot
 					}
 					//console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}

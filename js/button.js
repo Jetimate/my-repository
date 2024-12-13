@@ -97,7 +97,7 @@ class Button {
 				inventoryArray[i].x = xDistance;
 				inventoryArray[i].y = yDistance;
 
-				if (isMouseDown && mouseHeldItem.length <= 1) {
+				if (leftClick && mouseHeldItem.length <= 1) {
 					let distance = Math.sqrt(mouseX >= inventoryArray[i].x && mouseX < lootSize + inventoryArray[i].x && mouseY >= inventoryArray[i].y && mouseY < lootSize + inventoryArray[i].y);
 					if (distance && mouseHeldItem.length < 1) {
 						inventoryArray[i].held = true;
@@ -110,7 +110,7 @@ class Button {
 						inventoryArray[i].x = mouseX - (lootSize / 2);
 						inventoryArray[i].y = mouseY - (lootSize / 2);
 					}
-				} else if (!isMouseDown && inventoryArray[i].held && mouseHeldItem.length >= 1) {
+				} else if (!leftClick && inventoryArray[i].held && mouseHeldItem.length >= 1) {
 					inventoryArray[i].held = false;
 					mouseHeldItem.splice(0, mouseHeldItem.length);
 					//console.log("mousehelditems", mouseHeldItem);

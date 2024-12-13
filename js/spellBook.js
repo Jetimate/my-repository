@@ -38,7 +38,7 @@ class SpellBook {
 		this.y = yDistance;
 		ctx.beginPath();
 		
-		if (isMouseDown && mouseHeldItem.length <= 1) {
+		if (leftClick && mouseHeldItem.length <= 1) {
 			let distance = Math.sqrt(mouseX >= this.x && mouseX < slotSize + this.x && mouseY >= this.y && mouseY < slotSize + this.y);
 			if (distance && mouseHeldItem.length < 1) {
 				this.held = true;
@@ -52,7 +52,7 @@ class SpellBook {
 				this.x = mouseX - (slotSize / 2);
 				this.y = mouseY - (slotSize / 2);
 			}
-		} else if (!isMouseDown && this.held && mouseHeldItem.length >= 1) {
+		} else if (!leftClick && this.held && mouseHeldItem.length >= 1) {
 			this.held = false;
 			this.index = null;
 			this.onSlot = false;
@@ -421,7 +421,7 @@ class SpellBook {
 			if (keys.Digit1 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -432,7 +432,7 @@ class SpellBook {
 			if (keys.Digit2 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -443,7 +443,7 @@ class SpellBook {
 			if (keys.Digit3 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -454,7 +454,7 @@ class SpellBook {
 			if (keys.Digit4 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;				
@@ -465,7 +465,7 @@ class SpellBook {
 			if (keys.Digit5 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -476,7 +476,7 @@ class SpellBook {
 			if (keys.Digit6 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -487,7 +487,7 @@ class SpellBook {
 			if (keys.Digit7 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -498,7 +498,7 @@ class SpellBook {
 			if (keys.Digit8 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -509,7 +509,7 @@ class SpellBook {
 			if (keys.Digit9 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
 				this.spellActive = true;
 				this.borderColor = "green";
-			} else if (isMouseDown && this.spellActive) {
+			} else if (leftClick && this.spellActive) {
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;

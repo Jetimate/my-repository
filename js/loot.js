@@ -40,7 +40,7 @@ class Loot {
 
 				if (!this.ignoreCollision) {
 					if (distance < lootA.radius + lootB.radius) {
-						// Calculate knockback direction v
+						// Calculate knockback direction
 						const angle = Math.atan2(dy, dx);
 						const knockbackDistance = (lootA.radius + lootB.radius - distance) / 2;
 
