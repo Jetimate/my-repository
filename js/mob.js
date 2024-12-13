@@ -73,14 +73,26 @@
 			return;
 		}
 		var ctx = myGameArea.context;
+		ctx.fillStyle = "green";
+		ctx.fillRect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
+		ctx.beginPath();
+		ctx.lineWidth = "1";
+		ctx.strokeStyle = "black";
+		ctx.rect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
+		ctx.stroke();
+
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
 		ctx.drawImage(this.image, -this.radius - this.radiusAdjust, -this.radius - this.radiusAdjust, (this.radius + this.radiusAdjust) * 2, (this.radius + this.radiusAdjust) * 2);
+		// health bar
+		//ctx.rect(0, 0 - (this.radius / 4), this.health, this.radius / 8);
+
+		//ctx.rect(30, 30, 50, 50);
 		//draw FOVRadius or radius 
-		/*
+		
 		ctx.beginPath();
-		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI);
+		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI); 
 		ctx.strokeStyle = "blue";
 		ctx.stroke();
 		ctx.closePath();
@@ -92,11 +104,11 @@
 		ctx.closePath();
 
 		ctx.beginPath();
-		ctx.arc(0, 0, this.radius + this.FOVRadius, 0, 2 * Math.PI);
+		ctx.arc(0, 0, this.radius + this.radiusAdjust, 0, 2 * Math.PI);
 		ctx.strokeStyle = "red";
 		ctx.stroke();
 		ctx.closePath();
-		*/
+		
 		ctx.restore();
 	}      
 	spawn() {
@@ -263,6 +275,9 @@
 		else if (this.intelligence == 2) {
 			//this means that the stage 2 mob attacks
 			console.log("hi, im smart enough?");
+		}
+		if (this.ability == "shrinksOnDamage") {
+			this.radius = this.health + 15;
 		}
 		if (this.ability == "chases") {
 			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;

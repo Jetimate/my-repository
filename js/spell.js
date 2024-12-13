@@ -336,7 +336,7 @@ class Spell {
 				if (this.casterName == "player1") {
 					this.newTargetX = worldX - biome1.x;
 					this.newTargetY = worldY - biome1.y;
-				} else if (this.casterName == "darkForestTreant") {
+				} else if (this.casterName == "gloomForestTreant") {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
 				}

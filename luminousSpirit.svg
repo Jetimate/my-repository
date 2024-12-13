@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="luminousRock.svg"
-   inkscape:export-filename="luminousRock.png"
+   inkscape:export-filename="luminousSpirit.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -58,10 +58,15 @@
        cx="132.29167"
        r="125.67709" />
     <circle
-       style="opacity:1;fill:#8fafef;fill-opacity:1;stroke:none;stroke-width:20;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#8fafef;fill-opacity:1;stroke:#7ba0ea;stroke-width:20;stroke-dasharray:none;stroke-opacity:1"
        id="path10"
        cy="132.29167"
        cx="132.29167"
        r="95.833336" />
+    <path
+       id="path1"
+       style="fill:#262626;stroke:#5282e0;stroke-width:20.0383;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 84.666667,84.666667 H 111.125 Z m 68.791663,0 h 26.45834 z"
+       inkscape:label="eyes" />
   </g>
 </svg>

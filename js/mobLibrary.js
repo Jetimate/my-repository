@@ -17,7 +17,7 @@ const luminousRock = {
     defense: 0,
     damage: 1.5,
     type: "passive",
-    ability: "nothing",
+    ability: "shrinksOnDamage",
     learnedSpells: null,
     experienceDrop: 10,
     lootDrop: [luminousEssence, luminousEnergyPage, luminousShieldPage, manaPotion],
@@ -34,7 +34,7 @@ const luminousSpirit = {
     maxAmount: 15,
     name: "luminousSpirit",
     side: "darkForest",
-    appearance: "luminousSpirit.png",
+    appearance: "luminousSpirit.svg",
     ignoreSpellCollision: false,
     ignoreMobCollision: false,
     setMinHealth: 25,
@@ -74,7 +74,7 @@ const specter = {
     intelligence: 1,
     respawnTime: 8000
 };
-const darkForestTree = {
+const gloomForestTree = {
     setMinX: 10,
     setMaxX: 2000,
     setMinY: 10,
@@ -82,9 +82,9 @@ const darkForestTree = {
     radiusAdjust: 20,
     FOVRadius: 0,
     maxAmount: 20,
-    name: "darkForestTree",
-    side: "darkForest",
-    appearance: "darkForestTree.png",
+    name: "gloomForestTree",
+    side: "gloomForest",
+    appearance: "gloomForestTree.png",
     ignoreSpellCollision: true,
     ignoreMobCollision: false,
     setMinHealth: 20,
@@ -99,7 +99,7 @@ const darkForestTree = {
     intelligence: 0,
     respawnTime: 8000
 };
-const darkForestTreant = {
+const gloomForestTreant = {
     setMinX: 10,
     setMaxX: 2000,
     setMinY: 10,
@@ -107,9 +107,9 @@ const darkForestTreant = {
     radiusAdjust: 20,
     FOVRadius: 250,
     maxAmount: 5,
-    name: "darkForestTreant",
-    side: "darkForest",
-    appearance: "darkForestTreant.png",
+    name: "gloomForestTreant",
+    side: "gloomForest",
+    appearance: "gloomForestTreant.png",
     ignoreSpellCollision: true,
     ignoreMobCollision: false,
     setMinHealth: 20,
