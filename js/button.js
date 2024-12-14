@@ -68,6 +68,100 @@ class Button {
 			this.text = "mana: " + roundedMana + "/" + myGameCharacter.maxMana;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
+		if (this.name == "settingsButton") {
+			this.width = window.innerWidth / 12;
+			this.height = window.innerHeight / 20;
+			this.x = window.innerWidth / 128;
+			this.y = window.innerHeight - this.height - slotMargin;
+			this.text = "settings";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "showSettings") {
+			let settingsButtonIndex = buttonsArray.findIndex(element => element.name === "settingsButton");
+			let totalMovementButtonsArray = buttonsArray.filter(element => element.group == "movementButtons");
+			this.width = window.innerWidth / 6;
+			this.height = (totalMovementButtonsArray.length * (miniButtonSize + buttonMargin)) + buttonMargin;
+			if (buttonsArray[settingsButtonIndex].toggle == false) {
+				if (this.x > -this.width * 1.2) {
+					// Ensure we don't overshoot the target
+					this.x = Math.max(this.x - 5, -this.width * 1.2);
+					console.log(this.x, -this.width * 1.2);
+				}
+			} else {
+				if (this.x < buttonMargin) {
+					// Ensure we don't overshoot the target
+					this.x = Math.min(this.x + 5, buttonMargin);
+					console.log(this.x, buttonMargin);
+				}
+			}	
+			this.y = window.innerHeight - this.height - window.innerHeight / 20 - (slotMargin * 2);
+		}
+		if (this.group == "movementButtons") {
+			let showSettingsIndex = buttonsArray.findIndex(element => element.name == "showSettings");
+			let referenceX = buttonsArray[showSettingsIndex].x;
+			let referenceY = buttonsArray[showSettingsIndex].y;
+
+			const xDistance = referenceX + buttonMargin;
+			const yDistance = referenceY + buttonMargin + ((miniButtonSize + buttonMargin) * this.index);
+			this.x = xDistance;
+			this.y = yDistance;
+			this.width = miniButtonSize;
+			this.height = miniButtonSize;
+
+			if (leftClick) {
+				let distance = Math.sqrt(mouseX >= this.x && mouseX < miniButtonSize + this.x && mouseY >= this.y && mouseY < miniButtonSize + this.y);
+				let totalMovementButtonsArray = buttonsArray.filter(element => element.group == "movementButtons");
+
+				if (distance && this.name == "keyMovementButton" && !this.toggle) {
+
+					// shut off the other buttons
+					totalMovementButtonsArray.forEach(button => {
+						button.toggle = false;
+						button.color = "#bab6bf";
+						mouseMovement = false;
+						followMouseMovement = false;
+					});
+
+					// toggles itself
+					this.toggle = true;
+					this.color = "black";
+					keyMovement = true;
+				}
+
+				if (distance && this.name == "mouseMovementButton" && !this.toggle) {
+
+					totalMovementButtonsArray.forEach(button => {
+						button.toggle = false;
+						button.color = "#bab6bf";
+						keyMovement = false;
+						followMouseMovement = false;
+					});
+					this.toggle = true;
+					this.color = "black";
+					mouseMovement = true;
+				}
+
+				if (distance && this.name == "followMouseMovementButton" && !this.toggle) {
+
+					totalMovementButtonsArray.forEach(button => {
+						button.toggle = false;
+						button.color = "#bab6bf";
+						keyMovement = false;
+						mouseMovement = false;
+					});
+					this.toggle = true;
+					this.color = "black";
+					followMouseMovement = true;
+				}
+			}
+
+			ctx.font = window.innerHeight / 64 + "px ubuntu";
+			ctx.fillStyle = "black";
+			ctx.fillText(
+				this.text,
+				this.x + miniButtonSize + buttonMargin,
+				this.y + miniButtonSize / 2);
+		}
 		if (this.name == "inventoryButton") {
 			this.x = window.innerWidth / 128;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 4;
@@ -160,7 +254,7 @@ class Button {
 		}
 		if (this.name == "showCrafting") {
 			let slotsPerRow = 5;
-			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);;
+			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
 			this.x = (window.innerWidth / 64 + window.innerWidth / 8) + referenceWidth;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
 			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3;
@@ -284,6 +378,11 @@ class Button {
 		const distance = Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
 		if (distance) {
 			//console.log(this.name + " was clicked");
+			if (this.name == "settingsButton" && !this.toggle) {
+				this.toggle = true;
+			} else if (this.name == "settingsButton" && this.toggle) {
+				this.toggle = false;
+			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
 				addButton(new Button(0, 0, 0, 0, 0, "#3477eb", "craftButton", null, "clickable", "bug 101", null));

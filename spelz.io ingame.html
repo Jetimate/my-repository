@@ -165,11 +165,17 @@
 			addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, null));
 			addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, null));
 			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", null, "clickable", "inventory", null));
+            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "settingsButton", null, "clickable", "settings", null));
 			// add an automated slot adder with the use of for loops
 			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 1));
 			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 2));
 			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
 			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
+			// settings buttons
+            addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
+            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
+            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
+            addButton(new Button(0, 0, 0, 0, 0, "black", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
 		}
 		function spellBooksKeeper() {
 			//addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 30, "Spike"));
@@ -187,7 +193,7 @@
 		}
 
 		function updateGameArea() {
-            console.log(mouseX, mouseY, playerTargetX, playerTargetY);
+            //console.log(leftClick, rightClick, mouseX, mouseY, isMouseDown);
 			myGameArea.context.canvas.width = window.innerWidth - 3;
 			myGameArea.context.canvas.height = window.innerHeight - 3;
 			const canvasWidth = myGameArea.context.canvas.width;
@@ -302,10 +308,34 @@
 
                             // Move toward the target
                             myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
-                            myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-                        }
+							myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
+                            if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+                            if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+                            if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+                            if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+						}
                     }
 				}
+                if (followMouseMovement) {
+					let castMouseX = worldX - biome1.x;
+                    let castMouseY = worldY - biome1.y;
+                    let dx = castMouseX - myGameCharacter.x;
+                    let dy = castMouseY - myGameCharacter.y;
+
+					myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+
+					if (rightClick) {
+						myGameCharacter.newSpeed = myGameCharacter.speed;
+
+						myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
+						myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
+                        if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+                        if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+                        if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+                        if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+
+					}
+                }
 			}
 		}
 		function playerDeath() {

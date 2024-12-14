@@ -1,6 +1,7 @@
 const constantPlayerSpeed = 5;
 let keyMovement = false;
-let mouseMovement = true;
+let mouseMovement = false;
+let followMouseMovement = true;
 const keys = {
 	KeyW: false,
 	KeyA: false,
@@ -51,6 +52,8 @@ const lootSize = (window.innerWidth + window.innerHeight) / 32;
 const slotSize = (window.innerWidth + window.innerHeight) / 24;
 const slotMargin = (window.innerWidth + window.innerHeight) / 128;
 const radiiSize = (window.innerWidth + window.innerHeight) / 300;
+const miniButtonSize = (window.innerWidth + window.innerHeight) / 64;
+const buttonMargin = window.innerWidth / 128;
 const canvas = document.getElementById("mycanvas");
 const ctx = canvas.getContext("2d");
 
@@ -82,19 +85,14 @@ window.addEventListener('click', function (e) {
 	})
 });
 window.addEventListener('mousedown', (event) => {
-	console.log(event.button);
+	//console.log("mousedown");
 	isMouseDown = true;
-	const rect = canvas.getBoundingClientRect();
-	mouseX = event.clientX - rect.left;
-	mouseY = event.clientY - rect.top;
 	if (event.button == 0) {
 		leftClick = true;
+
 	}
 	if (event.button == 2) {
 		rightClick = true;
-
-		worldX = (mouseX / camera.zoom) + camera.x;
-		worldY = (mouseY / camera.zoom) + camera.y;
 
 		playerTargetX = worldX - biome1.x;
 		playerTargetY = worldY - biome1.y;
@@ -105,6 +103,7 @@ window.addEventListener('mousedown', (event) => {
 });
 
 window.addEventListener('mouseup', (event) => {
+	//console.log("mouseup");
 	isMouseDown = false;
 	if (event.button == 0) {
 		leftClick = false;
@@ -115,10 +114,13 @@ window.addEventListener('mouseup', (event) => {
 });
 
 window.addEventListener('mousemove', (event) => {
-	if (isMouseDown) {
-		const rect = canvas.getBoundingClientRect();
-		mouseX = event.clientX - rect.left;
-		mouseY = event.clientY - rect.top;
+	//console.log("mousemove");
+	const rect = canvas.getBoundingClientRect();
+	mouseX = event.clientX - rect.left;
+	mouseY = event.clientY - rect.top;
+	if (followMouseMovement) {
+		playerTargetX = worldX - biome1.x;
+		playerTargetY = worldY - biome1.y;
 	}
 });
 // Key down event listener
