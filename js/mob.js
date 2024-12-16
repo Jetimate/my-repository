@@ -342,10 +342,12 @@
 								this.x,
 								this.y,
 								this.learnedSpells.radius,
+								this.learnedSpells.FOVRadius,
 								this.learnedSpells.name,
 								null,
-								this.name,
+								this,
 								this.side,
+								myGameCharacter,
 								this.learnedSpells.art,
 								this.learnedSpells.shape,
 								this.learnedSpells.appearance,
@@ -359,7 +361,7 @@
 								this.learnedSpells.damage,
 								this.learnedSpells.speed,
 								this.learnedSpells.ability,
-								this.learnedSpells.manaCost,
+								0,
 								this.learnedSpells.respawnTime));
 							spellCount++;
 						} else {
@@ -370,7 +372,81 @@
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}
-				//console.log(this.attackTimer, this.secondsTracker)
+			}
+		}
+		if (this.ability == "summoner") {
+			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
+			let distance = getDistance(this, myGameCharacter);
+			let withinRadius = distance < radii;
+			if (withinRadius) {
+				this.setTarget(myGameCharacter.x, myGameCharacter.y);
+
+				// Calculate the target angle
+				let dx = myGameCharacter.x - this.x;
+				let dy = myGameCharacter.y - this.y;
+				let targetAngle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+
+				// Normalize current and target angles to the range -π to π
+				let currentAngle = this.angle % (2 * Math.PI);
+				if (currentAngle > Math.PI) currentAngle -= 2 * Math.PI;
+				if (currentAngle < -Math.PI) currentAngle += 2 * Math.PI;
+
+				let angleDifference = targetAngle - currentAngle;
+
+				// Normalize angleDifference to the range -π to π
+				if (angleDifference > Math.PI) angleDifference -= 2 * Math.PI;
+				if (angleDifference < -Math.PI) angleDifference += 2 * Math.PI;
+
+				// Turn towards the target angle
+				let turnSpeed = 0.01; // Adjust turn speed as needed
+				if (angleDifference > 0) {
+					this.angle += Math.min(turnSpeed, angleDifference);
+				} else if (angleDifference < 0) {
+					this.angle += Math.max(-turnSpeed, angleDifference);
+				}
+
+				this.attackTimer++
+				if (this.attackTimer >= 180) {
+					let spellBookCastAmount = 3;
+					let spellCount = 0; // Keep track of how many spells have been cast
+					const interval = setInterval(() => {
+						if (spellCount < spellBookCastAmount) {
+							// Cast a spell
+
+							castSpell(new Spell(
+								this.x,
+								this.y,
+								this.learnedSpells.radius,
+								this.FOVRadius,
+								this.learnedSpells.name,
+								null,
+								this,
+								this.side,
+								myGameCharacter,
+								this.learnedSpells.art,
+								this.learnedSpells.shape,
+								this.learnedSpells.appearance,
+								this.learnedSpells.castAmount,
+								this.learnedSpells.maxAmount,
+								this.learnedSpells.ignoreSpellCollision,
+								this.learnedSpells.ignoreMobCollision,
+								this.learnedSpells.index,
+								this.learnedSpells.health,
+								this.learnedSpells.defense,
+								this.learnedSpells.damage,
+								this.learnedSpells.speed,
+								this.learnedSpells.ability,
+								0,
+								this.learnedSpells.respawnTime));
+							spellCount++;
+						} else {
+							// Stop the interval once the desired amount of spells is cast
+							clearInterval(interval);
+						}
+					}, 50);
+					this.attackTimer = 0;
+					this.secondsTracker++;
+				}
 			}
 		}
 	}

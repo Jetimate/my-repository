@@ -135,7 +135,14 @@
 	<script type="text/javascript" src="js/mobLibrary.js"></script>
 
 	<script>
-		const starterMobsArray = [luminousRock, luminousSpirit, specter, gloomForestTree, gloomForestTreant];
+		const starterMobsArray = [
+			luminousRock,
+			luminousSpirit,
+			specter,
+			gloomForestTree,
+			gloomForestTreant,
+			gloomForestSpecterTreant,
+			luminousSpiritTreant];
 
 		function startGame() {
 			castSpellTimeout = [];
@@ -184,9 +191,9 @@
 			addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", specterBook.appearance, specterBook.name, generateID(), specterBook.spell, specterBook.mainSpell, specterBook.cooldown, specterBook.text));
             addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", smashBook.appearance, smashBook.name, generateID(), smashBook.spell, smashBook.mainSpell, smashBook.cooldown, smashBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", teleportBook.appearance, teleportBook.name, generateID(), teleportBook.spell, teleportBook.mainSpell, teleportBook.cooldown, teleportBook.text));
-			addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", beamBook.appearance, beamBook.name, generateID(), beamBook.spell, beamBook.mainSpell, beamBook.cooldown, beamBook.text));
-            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", energyBallBook.appearance, energyBallBook.name, generateID(), energyBallBook.spell, energyBallBook.mainSpell, energyBallBook.cooldown, energyBallBook.text));
+			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
+            addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
+            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
 
 		}
 		function spellsKeeper() {
@@ -437,10 +444,12 @@
 				spell.x,
 				spell.y,
 				spell.radius,
+                spell.FOVRadius,
 				spell.name,
 				spell.spellBookID,
-				spell.casterName,
+				spell.caster,
 				spell.side,
+                spell.target,
 				spell.art,
 				spell.shape,
 				spell.appearance,
@@ -510,10 +519,18 @@
 						if (!mob1.ignoreMobCollision) {
 							mob1.x -= Math.cos(angle) * knockbackDistance;
 							mob1.y -= Math.sin(angle) * knockbackDistance;
+                            if (mob1.x < mob1.radius) mob1.x = mob1.radius;
+                            if (mob1.x > biome1.width - mob1.radius) mob1.x = biome1.width - mob1.radius;
+                            if (mob1.y < mob1.radius) mob1.y = mob1.radius;
+                            if (mob1.y > biome1.height - mob1.radius) mob1.y = biome1.height - mob1.radius;
 						}
 						if (!mob2.ignoreMobCollision) {
 							mob2.x += Math.cos(angle) * knockbackDistance;
 							mob2.y += Math.sin(angle) * knockbackDistance;
+                            if (mob2.x < mob2.radius) mob2.x = mob2.radius;
+                            if (mob2.x > biome1.width - mob2.radius) mob2.x = biome1.width - mob2.radius;
+                            if (mob2.y < mob2.radius) mob2.y = mob2.radius;
+                            if (mob2.y > biome1.height - mob2.radius) mob2.y = biome1.height - mob2.radius;
 						}
 					}
 				});
@@ -569,10 +586,18 @@
 					if (!player.ignoreMobCollision) {
 						player.x -= Math.cos(angle) * knockbackDistance;
 						player.y -= Math.sin(angle) * knockbackDistance;
+                        if (player.x < player.radius) player.x = player.radius;
+                        if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
+                        if (player.y < player.radius) player.y = player.radius;
+                        if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 					}
 					if (!mob.ignoreMobCollision) {
 						mob.x += Math.cos(angle) * knockbackDistance;
 						mob.y += Math.sin(angle) * knockbackDistance;
+                        if (mob.x < mob.radius) mob.x = mob.radius;
+                        if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
+                        if (mob.y < mob.radius) mob.y = mob.radius;
+                        if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
 					}
 
 					// Apply damage
@@ -670,6 +695,10 @@
 							if (!player.ignoreSpellCollision) {
 								player.x += Math.cos(angle) * knockbackDistance;
 								player.y += Math.sin(angle) * knockbackDistance;
+                                if (player.x < player.radius) player.x = player.radius;
+                                if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
+                                if (player.y < player.radius) player.y = player.radius;
+                                if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 							}
 						}
 					}
@@ -775,6 +804,10 @@
 								if (!mob.ignoreSpellCollision) {
 									mob.x += Math.cos(angle) * knockbackDistance;
 									mob.y += Math.sin(angle) * knockbackDistance;
+                                    if (mob.x < mob.radius) mob.x = mob.radius;
+                                    if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
+                                    if (mob.y < mob.radius) mob.y = mob.radius;
+                                    if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
 								}
 							}
 						}

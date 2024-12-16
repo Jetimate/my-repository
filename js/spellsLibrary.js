@@ -1,6 +1,7 @@
 // spells
 const castSpike = {
 	radius: 12,
+	FOVRadius: 0,
 	name: "castSpike",
 	art: "projecting",
 	shape: "circle",
@@ -21,6 +22,7 @@ const castSpike = {
 };
 const castLuminousEnergy = {
 	radius: 5,
+	FOVRadius: 0,
 	name: "castLuminousEnergy",
 	art: "projecting",
 	shape: "circle",
@@ -41,6 +43,7 @@ const castLuminousEnergy = {
 }
 const summonSpirit = {
 	radius: 20,
+	FOVRadius: 0,
 	name: "summonSpirit",
 	art: "summoning",
 	shape: "circle",
@@ -52,7 +55,7 @@ const summonSpirit = {
 	index: 1,
 	health: 20,
 	defense: 0,
-	damage: 4.5,
+	damage: 3.5,
 	speed: 5,
 	ability: "summon1",
 	manaCost: 2.5,
@@ -61,6 +64,7 @@ const summonSpirit = {
 };
 const summonSpecter = {
 	radius: 25,
+	FOVRadius: 0,
 	name: "summonSpecter",
 	art: "summoning",
 	shape: "circle",
@@ -72,15 +76,37 @@ const summonSpecter = {
 	index: 1,
 	health: 35, 
 	defense: 0,
-	damage: 7.5,
+	damage: 4.5,
 	speed: 7,
 	ability: "summon1",
 	manaCost: 4,
 	summonCost: 2.5,
 	respawnTime: 1500
 };
+const castSpecterHand = {
+	radius: 5,
+	FOVRadius: 0,
+	name: "castSpecterHand",
+	art: "projecting",
+	shape: "circle",
+	appearance: "specterHand.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: false,
+	ignoreMobCollision: false,
+	index: 1,
+	health: 30,
+	defense: 1.5,
+	damage: 4.5,
+	speed: 7.5,
+	ability: "shoot3",
+	manaCost: 3.5,
+	summonCost: 0,
+	respawnTime: 1500
+};
 const teleport = {
 	radius: 50,
+	FOVRadius: 0,
 	name: "teleport",
 	art: "evading",
 	shape: "circle",
@@ -101,6 +127,7 @@ const teleport = {
 };
 const smash = {
 	radius: 30,
+	FOVRadius: 0,
 	name: "smash",
 	art: "AoE",
 	shape: "circle",
@@ -111,7 +138,7 @@ const smash = {
 	ignoreMobCollision: false,
 	index: 1,
 	health: 1,
-	defense: 0,
+	defense: 100,
 	damage: 2.5,
 	speed: 0,
 	ability: "AoE1",
@@ -121,6 +148,7 @@ const smash = {
 };
 const castBeam = {
 	radius: 0,
+	FOVRadius: 0,
 	name: "castBeam",
 	art: "beams",
 	shape: "line",
@@ -141,6 +169,7 @@ const castBeam = {
 };
 const castLightningBolt = {
 	radius: 0,
+	FOVRadius: 0,
 	name: "castLightningBolt",
 	art: "beams",
 	shape: "line",
@@ -161,6 +190,7 @@ const castLightningBolt = {
 };
 const castEnergyBall = {
 	radius: 50,
+	FOVRadius: 0,
 	name: "castEnergyBall",
 	art: "projectile",
 	shape: "circle",
@@ -181,6 +211,7 @@ const castEnergyBall = {
 };
 const summonLuminousShield = {
 	radius: 120,
+	FOVRadius: 0,
 	name: "summonLuminousShield",
 	art: "summoning",
 	shape: "circle",

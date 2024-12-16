@@ -1,14 +1,16 @@
 class Spell {
-	constructor(x, y, radius, name, spellBookID, casterName, side, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
+	constructor(x, y, radius, FOVRadius, name, spellBookID, caster, side, target, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
+		this.FOVRadius = FOVRadius;
 		this.name = name;
 		this.spellBookID = spellBookID;
-		this.casterName = casterName;
+		this.caster = caster;
 		this.side = side;
+		this.target = target;
 		this.art = art;
 		this.shape = shape;
 		this.appearance = appearance;
@@ -37,6 +39,7 @@ class Spell {
 		this.radiusIncrease = 0;
 		this.orbitRadiusIncrease = 0;
 		this.damageIncrease = 0;
+		this.speedIncrease = 0;
 		this.toggle = false;
 		this.state = 0;
 		this.width = 0;
@@ -45,7 +48,6 @@ class Spell {
 		this.y2 = null;
 		this.newTargetX = null;
 		this.newTargetY = null;
-		this.caster = null;
 		this.amount = 1;
 		this.stackLimit = 1;
 		this.codeClass = "spell";
@@ -209,8 +211,6 @@ class Spell {
 				let length = this.width;
 				this.x2 = this.x + (length * Math.cos(this.angle));
 				this.y2 = this.y + (length * Math.sin(this.angle));
-				//this.x2 = castMouseX;
-				//this.y2 = castMouseY;
 			}
 			if (this.ability === "beam2") {
 				// Calculate the angle from this.x, this.y to this.x2, this.y2
@@ -299,18 +299,31 @@ class Spell {
 			}
 		}
 		if (this.ability === "summon1") {
-			if (leftClick) {
+			if (this.hasTarget) {
 				let summoningSpells = spellsArray.filter(element => element.ability === "summon1");
 				summoningSpells.forEach(spell => spell.setTarget(worldX - biome1.x, worldY - biome1.y));
-				let dx = (worldX - biome1.x) - this.x;
-				let dy = (worldY - biome1.y) - this.y;
-				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
-				this.x += this.speed * Math.sin(this.angle);
-				this.y -= this.speed * Math.cos(this.angle);
-			} else if (!leftClick) {
+
+				if (!leftClick && this.side == myGameCharacter.side) {
+					this.hasTarget = false;
+				} else if (leftClick && this.side == myGameCharacter.side) {
+					let dx = (worldX - biome1.x) - this.x;
+					let dy = (worldY - biome1.y) - this.y;
+					this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+					this.x += this.speed * Math.sin(this.angle);
+					this.y -= this.speed * Math.cos(this.angle);
+				}
+				if (this.side != myGameCharacter.side) {
+					let dx = myGameCharacter.x - this.x;
+					let dy = myGameCharacter.y - this.y;
+					this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+					this.x += this.speed * Math.sin(this.angle);
+					this.y -= this.speed * Math.cos(this.angle);
+				}
+
+			} else if (!this.hasTarget) {
 				// Calculate target orbit position
-				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+				let targetX = this.caster.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
+				let targetY = this.caster.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
 
 				// Calculate distance to target orbit position
 				const dx = targetX - this.x;
@@ -328,15 +341,39 @@ class Spell {
 				this.positionIndex += 0.008;
 				this.x += adjustedSpeed * Math.sin(this.angle);
 				this.y -= adjustedSpeed * Math.cos(this.angle);
+
+				if (this.side == myGameCharacter.side && leftClick) {
+					this.hasTarget = true;
+				}
+
+				// check for potential targets
+				if (this.target != null && this.side != myGameCharacter.side) {
+					let radii = (this.radius + this.FOVRadius) + this.target.radius;
+					let distance = getDistance(this, this.target);
+					let withinRadius = distance < radii;
+					if (withinRadius) {
+						this.hasTarget = true;
+						this.speed = 3;
+						this.setTarget(this.target.x, this.target.y);
+						let dx = this.target.x - this.x;
+						let dy = this.target.y - this.y;
+						this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+						// Ensure the entity stays within the canvas boundaries
+						if (this.x < this.radius) this.x = this.radius;
+						if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+						if (this.y < this.radius) this.y = this.radius;
+						if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+					}
+				}
 			}
 		}
 		if (this.ability === "shoot1") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
-				if (this.casterName == "player1") {
+				if (this.side == myGameCharacter.side) {
 					this.newTargetX = worldX - biome1.x;
 					this.newTargetY = worldY - biome1.y;
-				} else if (this.casterName == "gloomForestTreant") {
+				} else if (this.side != myGameCharacter.side) {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
 				}
@@ -361,10 +398,10 @@ class Spell {
 				case 0:
 					let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 					let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-					if (!this.toggle) {
-						this.radiusIncrease = 0.1;
-						this.orbitRadiusIncrease = 0.01;
-						this.damageIncrease = 0.03;
+					if (!this.toggle) {		
+						this.radiusIncrease = this.radius / 50; //0.1
+						this.orbitRadiusIncrease = this.radius / 500; //0.01
+						this.damageIncrease = this.radius / 15; //0.03
 						this.toggle = true;
 					}
 
@@ -413,6 +450,42 @@ class Spell {
 						this.destroy();
 					}
 					break;
+			}
+		}
+		// inreases size and speed drastically upon attack
+		if (this.ability === "shoot3") {
+			if (!this.toggle) {
+				this.radiusIncrease = this.radius / 1.5;//this.radius / 50; //0.1
+				this.damageIncrease = this.damage / 100;//this.radius / 15; //0.03
+				this.speedIncrease = this.speed / 10;
+				this.toggle = true;
+				console.log(this.radius, this.radiusIncrease, this.damage, this.damageIncrease);
+			}
+			if (!this.hasTarget) {
+				if (this.side == myGameCharacter.side) {
+					this.newTargetX = worldX - biome1.x;
+					this.newTargetY = worldY - biome1.y;
+				} else if (this.side != myGameCharacter.side) {
+					this.newTargetX = myGameCharacter.x;
+					this.newTargetY = myGameCharacter.y;
+				}
+				let dx = this.newTargetX - this.x;
+				let dy = this.newTargetY - this.y;
+				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+				this.hasTarget = true;  // Mark that the target has been set
+			}
+			// Continue moving based on the previously calculated angle
+			this.radius += this.radiusIncrease;
+			this.damage += this.damageIncrease;
+			this.speed += this.speedIncrease;
+			this.x += this.speed * Math.sin(this.angle);
+			this.y -= this.speed * Math.cos(this.angle);
+			this.lifeTimer++;
+
+			// If lifeTimer exceeds maxLife, this entity will be removed
+			if (this.lifeTimer >= 60) {
+				// Call the function to remove this entity from the array
+				this.destroy();
 			}
 		}
 		if (this.ability === "teleport") {

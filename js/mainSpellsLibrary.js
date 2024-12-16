@@ -1,7 +1,7 @@
 // main spells 
 const mainSpike = {
 	radius: 12,
-	name: "spikeBook",
+	name: "mainSpike",
 	art: "books",
 	shape: "circle",
 	appearance: "spike.svg",
@@ -21,7 +21,7 @@ const mainSpike = {
 }
 const mainLuminousEnergy = {
 	radius: 12,
-	name: "luminousEnergyBook",
+	name: "mainLuminousEnergy",
 	art: "books",
 	shape: "circle",
 	appearance: "luminousRock.svg",
@@ -40,7 +40,7 @@ const mainLuminousEnergy = {
 }
 const mainLuminousSpirit = {
 	radius: 12,
-	name: "luminousSpiritBook",
+	name: "mainLuminousSpirit",
 	art: "books",
 	shape: "circle",
 	appearance: "luminousSpirit.svg",
@@ -59,7 +59,7 @@ const mainLuminousSpirit = {
 }
 const mainSpecter = {
 	radius: 12,
-	name: "specterBook",
+	name: "mainSpecter",
 	art: "books",
 	shape: "circle",
 	appearance: "specter.svg",
@@ -76,9 +76,28 @@ const mainSpecter = {
 	manaCost: 1,
 	respawnTime: null
 }
+const mainSpecterHand = {
+	radius: 12,
+	name: "mainSpecterHand",
+	art: "books",
+	shape: "circle",
+	appearance: "specterHand.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: true,
+	ignoreMobCollision: true,
+	index: 1,
+	health: 100,
+	defense: 100,
+	damage: 0,
+	speed: 12,
+	ability: null,
+	manaCost: 1,
+	respawnTime: null
+}
 const mainTeleport = {
 	radius: 12,
-	name: "teleportBook",
+	name: "mainTeleport",
 	art: "books",
 	shape: "circle",
 	appearance: "teleportation.png",
@@ -97,7 +116,7 @@ const mainTeleport = {
 }
 const mainSmash = {
 	radius: 12,
-	name: "smashBook",
+	name: "mainSmash",
 	art: "books",
 	shape: "circle",
 	appearance: "smash.png",
@@ -116,7 +135,7 @@ const mainSmash = {
 }
 const mainBeam = {
 	radius: 12,
-	name: "beamBook",
+	name: "mainBeam",
 	art: "books",
 	shape: "circle",
 	appearance: "beam.png",
@@ -135,7 +154,7 @@ const mainBeam = {
 }
 const mainLightningBolt = {
 	radius: 12,
-	name: "lightningBoltBook",
+	name: "mainLightningBolt",
 	art: "books",
 	shape: "circle",
 	appearance: "lightningBolt.png",
@@ -154,7 +173,7 @@ const mainLightningBolt = {
 }
 const mainEnergyBall = {
 	radius: 12,
-	name: "energyBallBook",
+	name: "mainEnergyBall",
 	art: "books",
 	shape: "circle",
 	appearance: "energyBall.png",
@@ -173,7 +192,7 @@ const mainEnergyBall = {
 }
 const mainLuminousShield = {
 	radius: 12,
-	name: "luminousShieldBook",
+	name: "mainLuminousShield",
 	art: "books",
 	shape: "circle",
 	appearance: "luminousRock.svg",

@@ -100,10 +100,12 @@ class SpellBook {
 			myGameCharacter.x,
 			myGameCharacter.y,
 			this.mainSpell.radius,
+			this.mainSpell.FOVRadius,
 			this.mainSpell.name,
 			this.uniqueID,
-			myGameCharacter.name,
+			myGameCharacter,
 			myGameCharacter.side,
+			null,
 			this.mainSpell.art,
 			this.mainSpell.shape,
 			this.mainSpell.appearance,
@@ -137,10 +139,12 @@ class SpellBook {
 						spellsArray[mainSpellIndex].x,
 						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -166,7 +170,6 @@ class SpellBook {
 		}
 		if (this.spell.ability === "shoot2" && myGameCharacter.mana > this.spell.manaCost) {
 			myGameCharacter.mana -= this.spell.manaCost;
-			console.log(this.spell.maxAmount);
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			this.spell.maxAmount = spellBookCastAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -178,10 +181,54 @@ class SpellBook {
 						myGameCharacter.x,
 						myGameCharacter.y,
 						this.spell.radius,
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
+						this.spell.art,
+						this.spell.shape,
+						this.spell.appearance,
+						this.spell.castAmount,
+						this.spell.maxAmount,
+						this.spell.ignoreSpellCollision,
+						this.spell.ignoreMobCollision,
+						this.spell.index,
+						this.spell.health,
+						this.spell.defense,
+						this.spell.damage,
+						this.spell.speed,
+						this.spell.ability,
+						this.spell.manaCost,
+						this.spell.summonCost,
+						this.spell.respawnTime));
+					spellCount++;
+				} else {
+					// Stop the interval once the desired amount of spells is cast
+					clearInterval(interval);
+				}
+			}, 50);
+		}
+		if (this.spell.ability === "shoot3" && myGameCharacter.mana > this.spell.manaCost) {
+			myGameCharacter.mana -= this.spell.manaCost;
+			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			this.spell.maxAmount = spellBookCastAmount;
+			let spellCount = 0; // Keep track of how many spells have been cast
+			const interval = setInterval(() => {
+				if (spellCount < spellBookCastAmount) {
+					// Cast a spell
+					this.spell.index += 1;
+					castSpell(new Spell(
+						myGameCharacter.x,
+						myGameCharacter.y,
+						this.spell.radius,
+						this.spell.FOVRadius,
+						this.spell.name,
+						this.uniqueID,
+						myGameCharacter,
+						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -220,10 +267,12 @@ class SpellBook {
 						spellsArray[mainSpellIndex].x,
 						spellsArray[mainSpellIndex].y,
 						this.spell.radius + (this.level - 1),
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -260,10 +309,12 @@ class SpellBook {
 						spellsArray[mainSpellIndex].x,
 						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -298,10 +349,12 @@ class SpellBook {
 						myGameCharacter.x,
 						myGameCharacter.y,
 						this.spell.radius + (spellCount * 15),
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -336,10 +389,12 @@ class SpellBook {
 						spellsArray[mainSpellIndex].x,
 						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
@@ -377,10 +432,12 @@ class SpellBook {
 						spellsArray[mainSpellIndex].x,
 						spellsArray[mainSpellIndex].y,
 						this.spell.radius,
+						this.spell.FOVRadius,
 						this.spell.name,
 						this.uniqueID,
-						myGameCharacter.name,
+						myGameCharacter,
 						myGameCharacter.side,
+						null,
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
