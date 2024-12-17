@@ -367,6 +367,13 @@ class Spell {
 				}
 			}
 		}
+		if (this.ability === "summon2") {
+			// Ensure the entity stays within the canvas boundaries
+			if (this.x < this.radius) this.x = this.radius;
+			if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+			if (this.y < this.radius) this.y = this.radius;
+			if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+		}
 		if (this.ability === "shoot1") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
@@ -400,9 +407,10 @@ class Spell {
 					let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 					if (!this.toggle) {		
 						this.radiusIncrease = this.radius / 50; //0.1
-						this.orbitRadiusIncrease = this.radius / 500; //0.01
-						this.damageIncrease = this.radius / 15; //0.03
+						this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
+						this.damageIncrease = this.damage / 30; //0.03
 						this.toggle = true;
+						console.log(this.radiusIncrease, this.orbitRadiusIncrease, this.damageIncrease);
 					}
 
 					const dx = targetX - this.x;

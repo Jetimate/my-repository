@@ -172,3 +172,37 @@ const smashPage = {
 	stackLimit: 64,
 	text: "smash"
 };
+const specterHandPage = {
+	radius: 20,
+	name: "specterHandPage",
+	spellBookName: specterHandBook,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "enchantedBook.png",
+	form: "page",
+	type: "gloom",
+	essenceName: "gloomEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "hand"
+};
+const treePage = {
+	radius: 20,
+	name: "treePage",
+	spellBookName: treeBook,
+	rarity: "rare",
+	dropChance: 10,
+	appearance: "enchantedBook.png",
+	form: "page",
+	type: "gloom",
+	essenceName: "gloomEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "tree"
+};

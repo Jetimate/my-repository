@@ -142,7 +142,8 @@
 			gloomForestTree,
 			gloomForestTreant,
 			gloomForestSpecterTreant,
-			luminousSpiritTreant];
+			luminousSpiritTreant,
+            wanderingFog];
 
 		function startGame() {
 			castSpellTimeout = [];
@@ -153,7 +154,7 @@
 			lootsArray = [];
 			inventoryArray = [];
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-			myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 1500, 1500, "player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 5, 0, 0, 0.01, 1.0005);
+			myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 1500, 1500, "player.svg", false, false, 100, 50.5, 1, 20, 0, "player1", 5, 0, 0, 0.01, 1.0005);
 			camera = new Camera(canvas.width, canvas.height);
 			spawnMobs();
 			myGameArea.start();
@@ -193,7 +194,9 @@
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", teleportBook.appearance, teleportBook.name, generateID(), teleportBook.spell, teleportBook.mainSpell, teleportBook.cooldown, teleportBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
             addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
-            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
+            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
+			
+            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
 
 		}
 		function spellsKeeper() {

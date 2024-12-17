@@ -230,3 +230,24 @@ const summonLuminousShield = {
 	summonCost: 5,
 	respawnTime: 1000
 };
+const summonTree = {
+	radius: 50,
+	FOVRadius: 0,
+	name: "summonTree",
+	art: "summoning",
+	shape: "circle",
+	appearance: "gloomForestTree.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: false,
+	ignoreMobCollision: false,
+	index: 1,
+	health: 50,
+	defense: 3,
+	damage: 0.5,
+	speed: 0,
+	ability: "summon2",
+	manaCost: 3,
+	summonCost: 2,
+	respawnTime: 1500
+};

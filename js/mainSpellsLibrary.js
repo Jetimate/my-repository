@@ -209,3 +209,22 @@ const mainLuminousShield = {
 	manaCost: 1,
 	respawnTime: null
 }
+const mainTree = {
+	radius: 12,
+	name: "mainTree",
+	art: "books",
+	shape: "circle",
+	appearance: "gloomForestTree.png",
+	castAmount: 1,
+	maxAmount: 1,
+	ignoreSpellCollision: true,
+	ignoreMobCollision: true,
+	index: 1,
+	health: 100,
+	defense: 100,
+	damage: 0,
+	speed: 12,
+	ability: null,
+	manaCost: 1,
+	respawnTime: null
+}

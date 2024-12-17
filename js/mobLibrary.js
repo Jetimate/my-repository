@@ -70,7 +70,7 @@ const specter = {
     ability: "chases",
     learnedSpells: null,
     experienceDrop: 20,
-    lootDrop: [gloomEssence, specterPage, manaPotion],
+    lootDrop: [gloomEssence, specterHandPage, manaPotion],
     intelligence: 1,
     respawnTime: 8000
 };
@@ -95,7 +95,7 @@ const gloomForestTree = {
     ability: "nothing",
     learnedSpells: null,
     experienceDrop: 15,
-    lootDrop: [gloomEssence, spikePage, manaPotion],
+    lootDrop: [gloomEssence, treePage, manaPotion],
     intelligence: 0,
     respawnTime: 8000
 };
@@ -148,7 +148,7 @@ const gloomForestSpecterTreant = {
     experienceDrop: 20,
     lootDrop: [gloomEssence, specterPage, manaPotion],
     intelligence: 0,
-    respawnTime: 8000
+    respawnTime: 32000
 };
 const luminousSpiritTreant = {
     setMinX: 10,
@@ -173,5 +173,30 @@ const luminousSpiritTreant = {
     experienceDrop: 20,
     lootDrop: [luminousEssence, luminousSpiritPage, manaPotion],
     intelligence: 0,
+    respawnTime: 32000
+};
+const wanderingFog = {
+    setMinX: 10,
+    setMaxX: 2000,
+    setMinY: 10,
+    setMaxY: 1000,
+    radiusAdjust: 30,
+    FOVRadius: 250,
+    maxAmount: 5,
+    name: "wanderingFog",
+    side: "gloomForest",
+    appearance: "wanderingFog.png",
+    ignoreSpellCollision: true,
+    ignoreMobCollision: true,
+    setMinHealth: 100,
+    setMaxHealth: 150,
+    defense: 7.5,
+    damage: 0,
+    type: "passive",
+    ability: "shrinksOnDamage",
+    learnedSpells: null,
+    experienceDrop: 15,
+    lootDrop: [gloomEssence, manaPotion],
+    intelligence: 1,
     respawnTime: 8000
 };

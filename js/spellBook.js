@@ -263,9 +263,18 @@ class SpellBook {
 				if (spellCount < spellBookCastAmount) {
 					// Cast a spell
 					this.spell.index += 1;
+					let setX = null;
+					let setY = null;
+					if (this.spell.ability != "summon2") {
+						setX = spellsArray[mainSpellIndex].x;
+						setY = spellsArray[mainSpellIndex].y;
+					} else if (this.spell.ability == "summon2") {
+						setX = myGameCharacter.x;
+						setY = myGameCharacter.y;
+					}
 					castSpell(new Spell(
-						spellsArray[mainSpellIndex].x,
-						spellsArray[mainSpellIndex].y,
+						setX,
+						setY,
 						this.spell.radius + (this.level - 1),
 						this.spell.FOVRadius,
 						this.spell.name,
