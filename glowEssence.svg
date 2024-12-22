@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="luminousSpirit.svg"
-   inkscape:export-filename="luminousSpirit.png"
+   inkscape:export-filename="glowEssence.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -57,16 +57,16 @@
        cy="132.29167"
        cx="132.29167"
        r="125.67709" />
+    <path
+       style="fill:#bbcef6;stroke:#7ba0ea;stroke-width:13.22916589;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 13.229166,19.843749 c 0,0 87.015224,-17.8561571 119.062494,-6.614583 32.04727,11.241574 66.14583,72.760412 66.14583,72.760412 0,0 -13.21069,60.710742 0,92.604162 13.21069,31.89342 52.91666,66.14583 52.91666,66.14583 0,0 -87.01522,17.85615 -119.06249,6.61458 -32.04727,-11.24157 -66.145831,-72.76041 -66.145831,-72.76041 0,0 13.210686,-60.71074 0,-92.604162 C 52.935143,54.09616 13.229166,19.843749 13.229166,19.843749 Z"
+       id="path1"
+       sodipodi:nodetypes="czczczczc" />
     <circle
        style="opacity:1;fill:#8fafef;fill-opacity:1;stroke:#7ba0ea;stroke-width:19.84374883;stroke-dasharray:none;stroke-opacity:1"
        id="path10"
        cy="132.29167"
        cx="132.29167"
-       r="95.833336" />
-    <path
-       id="path1"
-       style="fill:#262626;stroke:#5282e0;stroke-width:19.84374883;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       d="M 84.666667,84.666667 H 111.125 Z m 68.791663,0 h 26.45834 z"
-       inkscape:label="eyes" />
+       r="82.682259" />
   </g>
 </svg>

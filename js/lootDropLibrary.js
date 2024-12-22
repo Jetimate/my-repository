@@ -18,22 +18,22 @@ const manaPotion = {
 	text: "spike"
 };
 // folklore essence
-const luminousEssence = {
+const glowEssence = {
 	radius: 20,
-	name: "luminousEssence",
+	name: "glowEssence",
 	spellBookName: null,
 	rarity: "common",
 	dropChance: 100,
-	appearance: "glowstone.webp",
+	appearance: "glowEssence.png",
 	form: "essence",
-	type: "luminous",
+	type: "glow",
 	essenceName: null,
 	pagesToCraft: null,
 	essenceToCraft: null,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
-	text: "luminousEssence"
+	text: "Glow Essence"
 };
 const gloomEssence = {
 	radius: 20,
@@ -41,7 +41,7 @@ const gloomEssence = {
 	spellBookName: null,
 	rarity: "common",
 	dropChance: 100,
-	appearance: "glowstone.webp",
+	appearance: "gloomEssence.png",
 	form: "essence",
 	type: "gloom",
 	essenceName: null,
@@ -50,7 +50,7 @@ const gloomEssence = {
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
-	text: "gloomEssence"
+	text: "Gloom Essence"
 };
 // folklore Pages
 const spikePage = {
@@ -78,8 +78,8 @@ const luminousEnergyPage = {
 	dropChance: 25,
 	appearance: "enchantedBook.png",
 	form: "page",
-	type: "luminous",
-	essenceName: "luminousEssence",
+	type: "glow",
+	essenceName: "glowEssence",
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
@@ -95,8 +95,8 @@ const luminousShieldPage = {
 	dropChance: 25,
 	appearance: "enchantedBook.png",
 	form: "page",
-	type: "luminous",
-	essenceName: "luminousEssence",
+	type: "glow",
+	essenceName: "glowEssence",
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
@@ -112,8 +112,8 @@ const luminousSpiritPage = {
 	dropChance: 25,
 	appearance: "enchantedBook.png",
 	form: "page",
-	type: "luminous",
-	essenceName: "luminousEssence",
+	type: "glow",
+	essenceName: "glowEssence",
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
@@ -146,8 +146,8 @@ const teleportPage = {
 	dropChance: 25,
 	appearance: "enchantedBook.png",
 	form: "page",
-	type: "luminous",
-	essenceName: "luminousEssence",
+	type: "glow",
+	essenceName: "glowEssence",
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,

@@ -12,6 +12,8 @@
 		damage,
 		radius,
 		radiusAdjust,
+		movementSpeed,
+		turnSpeed,
 		FOVRadius,
 		setMinHealth,
 		setMaxHealth,
@@ -21,6 +23,8 @@
 		type,
 		ability,
 		learnedSpells,
+		castAmount,
+		castDelay,
 		intelligence,
 		experienceDrop,
 		lootDrop,
@@ -37,6 +41,8 @@
 		this.y = y;
 		this.radius = radius;
 		this.radiusAdjust = radiusAdjust;
+		this.movementSpeed = movementSpeed;
+		this.turnSpeed = turnSpeed;
 		this.appearance = appearance;  
 		this.ignoreSpellCollision = ignoreSpellCollision;
 		this.ignoreMobCollision = ignoreMobCollision;
@@ -50,6 +56,8 @@
 		this.type = type;
 		this.ability = ability;
 		this.learnedSpells = learnedSpells;
+		this.castAmount = castAmount;
+		this.castDelay = castDelay;
 		this.intelligence = intelligence;
 		this.experienceDrop = experienceDrop;
 		this.lootDrop = lootDrop;
@@ -90,13 +98,14 @@
 
 		//ctx.rect(30, 30, 50, 50);
 		//draw FOVRadius or radius 
+
 		/*
 		ctx.beginPath();
 		ctx.arc(0, 0, this.FOVRadius, 0, 2 * Math.PI); 
 		ctx.strokeStyle = "blue";
 		ctx.stroke();
 		ctx.closePath();
-
+		
 		ctx.beginPath();
 		ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
 		ctx.strokeStyle = "green";
@@ -134,6 +143,8 @@
 				randomRadiusXHealth: randomRadiusXHealth,
 				defense: this.defense,
 				damage: this.damage,
+				movementSpeed: this.movementSpeed,
+				turnSpeed: this.turnSpeed,
 				radiusAdjust: this.radiusAdjust,
 				FOVRadius: this.FOVRadius,
 				setMinHealth: this.setMinHealth,
@@ -144,6 +155,8 @@
 				type: this.type,
 				ability: this.ability,
 				learnedSpells: this.learnedSpells,
+				castAmount: this.castAmount,
+				castDelay: this.castDelay,
 				intelligence: this.intelligence,
 				experienceDrop: this.experienceDrop,
 				lootDrop: this.lootDrop,
@@ -165,6 +178,8 @@
 					mobConfig.damage,
 					mobConfig.randomRadiusXHealth, // because radius = health
 					mobConfig.radiusAdjust,
+					mobConfig.movementSpeed,
+					mobConfig.turnSpeed,
 					mobConfig.FOVRadius,
 					mobConfig.setMinHealth,
 					mobConfig.setMaxHealth,
@@ -174,6 +189,8 @@
 					mobConfig.type,
 					mobConfig.ability,
 					mobConfig.learnedSpells,
+					mobConfig.castAmount,
+					mobConfig.castDelay,
 					mobConfig.intelligence,
 					mobConfig.experienceDrop,
 					mobConfig.lootDrop, 0, 0,
@@ -255,7 +272,7 @@
 
 				case 1:
 					if (this.frames < 120) {
-						this.speed = 2;
+						this.speed = this.movementSpeed;
 						// Ensure the entity stays within the canvas boundaries
 						if (this.x < this.radius) this.x = this.radius;
 						if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
@@ -284,7 +301,7 @@
 			let distance = getDistance(this, myGameCharacter);
 			let withinRadius = distance < radii;
 			if (withinRadius) {
-				this.speed = 3;
+				this.speed = this.movementSpeed;
 				this.setTarget(myGameCharacter.x, myGameCharacter.y);
 				let dx = myGameCharacter.x - this.x;
 				let dy = myGameCharacter.y - this.y;
@@ -296,8 +313,7 @@
 				if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 			}
 		}
-		// aimed shooting part
-		if (this.ability == "aimedShooting") {
+		if (this.ability == "aimedCasting") {
 			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
 			let distance = getDistance(this, myGameCharacter);
 			let withinRadius = distance < radii;
@@ -321,28 +337,33 @@
 				if (angleDifference < -Math.PI) angleDifference += 2 * Math.PI;
 
 				// Turn towards the target angle
-				let turnSpeed = 0.01; // Adjust turn speed as needed
 				if (angleDifference > 0) {
-					this.angle += Math.min(turnSpeed, angleDifference);
+					this.angle += Math.min(this.turnSpeed, angleDifference);
 				} else if (angleDifference < 0) {
-					this.angle += Math.max(-turnSpeed, angleDifference);
+					this.angle += Math.max(-this.turnSpeed, angleDifference);
 				}
 
 				// Log angles for debugging 
 				//console.log("Current Angle:", currentAngle, "Target Angle:", targetAngle, "Angle Difference:", angleDifference);
 				this.attackTimer++
-				if (this.attackTimer >= 60) {
-					let spellBookCastAmount = 1;
+				if (this.attackTimer >= this.castDelay) {
+					let spellBookCastAmount = this.castAmount;
 					let spellCount = 0; // Keep track of how many spells have been cast
 					const interval = setInterval(() => {
 						if (spellCount < spellBookCastAmount) {
 							// Cast a spell
+							let newFOVRadius = null;
+							if (this.type != "summoner") {
+								newFOVRadius = this.learnedSpells.FOVRadius;
+							} else {
+								newFOVRadius = this.FOVRadius;
+							}
 
 							castSpell(new Spell(
 								this.x,
 								this.y,
 								this.learnedSpells.radius,
-								this.learnedSpells.FOVRadius,
+								newFOVRadius,
 								this.learnedSpells.name,
 								null,
 								this,
@@ -368,82 +389,7 @@
 							// Stop the interval once the desired amount of spells is cast
 							clearInterval(interval);
 						}
-					}, 50);
-					this.attackTimer = 0;
-					this.secondsTracker++;
-				}
-			}
-		}
-		if (this.ability == "summoner") {
-			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
-			let distance = getDistance(this, myGameCharacter);
-			let withinRadius = distance < radii;
-			if (withinRadius) {
-				this.setTarget(myGameCharacter.x, myGameCharacter.y);
-
-				// Calculate the target angle
-				let dx = myGameCharacter.x - this.x;
-				let dy = myGameCharacter.y - this.y;
-				let targetAngle = Math.atan2(dy, dx) - (1.5 * Math.PI);
-
-				// Normalize current and target angles to the range -π to π
-				let currentAngle = this.angle % (2 * Math.PI);
-				if (currentAngle > Math.PI) currentAngle -= 2 * Math.PI;
-				if (currentAngle < -Math.PI) currentAngle += 2 * Math.PI;
-
-				let angleDifference = targetAngle - currentAngle;
-
-				// Normalize angleDifference to the range -π to π
-				if (angleDifference > Math.PI) angleDifference -= 2 * Math.PI;
-				if (angleDifference < -Math.PI) angleDifference += 2 * Math.PI;
-
-				// Turn towards the target angle
-				let turnSpeed = 0.01; // Adjust turn speed as needed
-				if (angleDifference > 0) {
-					this.angle += Math.min(turnSpeed, angleDifference);
-				} else if (angleDifference < 0) {
-					this.angle += Math.max(-turnSpeed, angleDifference);
-				}
-
-				this.attackTimer++
-				if (this.attackTimer >= 180) {
-					let spellBookCastAmount = 3;
-					let spellCount = 0; // Keep track of how many spells have been cast
-					const interval = setInterval(() => {
-						if (spellCount < spellBookCastAmount) {
-							// Cast a spell
-
-							castSpell(new Spell(
-								this.x,
-								this.y,
-								this.learnedSpells.radius,
-								this.FOVRadius,
-								this.learnedSpells.name,
-								null,
-								this,
-								this.side,
-								myGameCharacter,
-								this.learnedSpells.art,
-								this.learnedSpells.shape,
-								this.learnedSpells.appearance,
-								this.learnedSpells.castAmount,
-								this.learnedSpells.maxAmount,
-								this.learnedSpells.ignoreSpellCollision,
-								this.learnedSpells.ignoreMobCollision,
-								this.learnedSpells.index,
-								this.learnedSpells.health,
-								this.learnedSpells.defense,
-								this.learnedSpells.damage,
-								this.learnedSpells.speed,
-								this.learnedSpells.ability,
-								0,
-								this.learnedSpells.respawnTime));
-							spellCount++;
-						} else {
-							// Stop the interval once the desired amount of spells is cast
-							clearInterval(interval);
-						}
-					}, 50);
+					}, 75 * this.castAmount);
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}

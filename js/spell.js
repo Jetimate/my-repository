@@ -548,12 +548,20 @@ class Spell {
 			}
 		}
 		if (this.ability === "beam2") {
-			// Calculate the destination based on mouse position
-			let beamBookIndex = spellsArray.findIndex(element => element.name == "lightningBoltBook");
-			this.x = spellsArray[beamBookIndex].x;
-			this.y = spellsArray[beamBookIndex].y;
-			this.x2 = castMouseX;
-			this.y2 = castMouseY;
+			// Calculate the destination based on mouse position		
+			if (this.caster.name == myGameCharacter.name) {
+				let beamBookIndex = spellsArray.findIndex(element => element.name == "lightningBoltBook");
+				this.x = spellsArray[beamBookIndex].x;
+				this.y = spellsArray[beamBookIndex].y;
+				this.x2 = castMouseX;
+				this.y2 = castMouseY;
+			} else {
+				this.x = this.caster.x;
+				this.y = this.caster.y;
+				this.x2 = this.target.x;
+				this.y2 = this.target.y;
+			}
+			
 
 			myGameCharacter.speed = 1;
 
