@@ -528,7 +528,7 @@ class Spell {
 		}
 		if (this.ability === "beam1") {
 			// Calculate the destination based on mouse position
-			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamBook");
+			let beamBookIndex = spellsArray.findIndex(element => element.name == "mainBeam");
 			this.x = spellsArray[beamBookIndex].x;
 			this.y = spellsArray[beamBookIndex].y;
 			if (leftClick && this.width <= 400) {
@@ -550,20 +550,20 @@ class Spell {
 		if (this.ability === "beam2") {
 			// Calculate the destination based on mouse position		
 			if (this.caster.name == myGameCharacter.name) {
-				let beamBookIndex = spellsArray.findIndex(element => element.name == "lightningBoltBook");
+				console.log(spellsArray);
+				let beamBookIndex = spellsArray.findIndex(element => element.name == "mainLightningBolt");
+				console.log(beamBookIndex);
 				this.x = spellsArray[beamBookIndex].x;
 				this.y = spellsArray[beamBookIndex].y;
 				this.x2 = castMouseX;
 				this.y2 = castMouseY;
+				myGameCharacter.speed = 1;
 			} else {
 				this.x = this.caster.x;
 				this.y = this.caster.y;
 				this.x2 = this.target.x;
 				this.y2 = this.target.y;
 			}
-			
-
-			myGameCharacter.speed = 1;
 
 			// Life timer logic
 			this.lifeTimer++;

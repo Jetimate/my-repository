@@ -1,7 +1,7 @@
 const constantPlayerSpeed = 5;
-let keyMovement = false;
+let keyMovement = true;
 let mouseMovement = false;
-let followMouseMovement = true;
+let followMouseMovement = false;
 const keys = {
 	KeyW: false,
 	KeyA: false,

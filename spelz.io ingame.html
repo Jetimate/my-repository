@@ -116,6 +116,7 @@
 			</div>
 		</div>
 		<div class="containerc">
+			<h6>version: 1.0</h6>
 			<a href="signin.html">sign in</a>
 		</div>
 	</div>
@@ -155,7 +156,7 @@
 			lootsArray = [];
 			inventoryArray = [];
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-			myGameCharacter = new PlayableCharacter(900, 900, 900, 900, 1500, 1500, "player.svg", false, false, 100, 50.5, 1, 20, 0, "player1", 5, 0, 0, 0.01, 1.0005);
+            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.005); //mana regen = 0.0005, mana = 5
 			camera = new Camera(canvas.width, canvas.height);
 			spawnMobs();
 			myGameArea.start();
@@ -183,21 +184,22 @@
 			// settings buttons
             addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
-            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
-            addButton(new Button(0, 0, 0, 0, 0, "black", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
+            addButton(new Button(0, 0, 0, 0, 0, "black", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
+            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
 		}
 		function spellBooksKeeper() {
-			//addSpellBook(new SpellBook(0, 0, 1, 100, 100, [5], "black", "spike.png", "castSpikeBook", generateID(), castSpike, mainSpike, 30, "Spike"));
-			//addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "energyBall.png", "energyBallBook", generateID(), castEnergyBall, mainEnergyBall, 15, "Energy Ball"));
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", spikeBook.appearance, spikeBook.name, generateID(), spikeBook.spell, spikeBook.mainSpell, spikeBook.cooldown, spikeBook.text));
-			addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", specterBook.appearance, specterBook.name, generateID(), specterBook.spell, specterBook.mainSpell, specterBook.cooldown, specterBook.text));
+            //below this comment is the primary spell
+            addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", spikeBook.appearance, spikeBook.name, generateID(), spikeBook.spell, spikeBook.mainSpell, spikeBook.cooldown, spikeBook.text));
+            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", energyBallBook.appearance, energyBallBook.name, generateID(), energyBallBook.spell, energyBallBook.mainSpell, energyBallBook.cooldown, energyBallBook.text));
+			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterBook.appearance, specterBook.name, generateID(), specterBook.spell, specterBook.mainSpell, specterBook.cooldown, specterBook.text));
             addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", smashBook.appearance, smashBook.name, generateID(), smashBook.spell, smashBook.mainSpell, smashBook.cooldown, smashBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", teleportBook.appearance, teleportBook.name, generateID(), teleportBook.spell, teleportBook.mainSpell, teleportBook.cooldown, teleportBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
-            addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
-			
-            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
+            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
+            addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
+            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", glowShardBook.appearance, glowShardBook.name, generateID(), glowShardBook.spell, glowShardBook.mainSpell, glowShardBook.cooldown, glowShardBook.text));
+
+            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
 
 		}
 		function spellsKeeper() {
@@ -335,7 +337,7 @@
 
 					myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 
-					if (rightClick) {
+                    if (keys.KeyW || keys.ArrowUp) {
 						myGameCharacter.newSpeed = myGameCharacter.speed;
 
 						myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
@@ -474,7 +476,7 @@
 		}
 		function spawnMobs() {
 			for (let i = 0; i < starterMobsArray.length; i++) {
-				for (let j = 0; j < starterMobsArray[i].maxAmount; j++) {
+				for (let j = 0; j < (starterMobsArray[i].maxAmount) * 3; j++) {
 					let mobRandomX = ((biome1.x - camera.x) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxX - starterMobsArray[i].setMinX + 1)) + starterMobsArray[i].setMinX))) + camera.x;
 					let mobRandomY = ((biome1.y - camera.y) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxY - starterMobsArray[i].setMinY + 1)) + starterMobsArray[i].setMinY))) + camera.y;
 					let mobRandomRadiusXHealth = Math.floor((Math.random() * (starterMobsArray[i].setMaxHealth - starterMobsArray[i].setMinHealth + 1)) + starterMobsArray[i].setMinHealth);
@@ -563,13 +565,13 @@
 						}
 					}
 					*/
-					if (loot.name == "manaPotion") {
-						let potionsMana = 1;
-						if (myGameCharacter.mana + potionsMana <= myGameCharacter.maxMana) {
-							myGameCharacter.mana += potionsMana;
-							console.log("hi");
+					if (loot.name == "manaOrb") {
+						let manaFromOrb = 1;
+                        if (myGameCharacter.mana + manaFromOrb <= myGameCharacter.maxMana) {
+                            myGameCharacter.mana += manaFromOrb;
+							//console.log("hi");
 						}
-					} else if (loot.form != "potion") {
+					} else if (loot.form != "effect") {
 						let stackableLootIndex = inventoryArray.findIndex(element => element.name === loot.name && element.stackLimit > element.amount);
 						if (stackableLootIndex !== -1 && inventoryArray[stackableLootIndex].amount + loot.amount <= inventoryArray[stackableLootIndex].stackLimit) {
 							inventoryArray[stackableLootIndex].amount += loot.amount;

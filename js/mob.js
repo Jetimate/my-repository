@@ -261,7 +261,10 @@
 		if (this.intelligence == 1) {
 			switch (this.state) {
 				case 0:
-					if (this.frames < 120) {
+					if (this.moveAngle == 0) {
+						this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
+					}
+					else if (this.frames < 120) {
 						this.frames++;
 					} else {
 						this.moveAngle = 0;
@@ -282,7 +285,6 @@
 					} else {
 						this.speed = 0;
 						this.frames = 0;
-						this.moveAngle = (Math.random() < 0.5 ? 1 : -1);
 						this.state = 0;
 					}
 					break;
