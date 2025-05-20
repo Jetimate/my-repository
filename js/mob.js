@@ -76,11 +76,10 @@
 		this.side = side;
 		this.codeClass = "mob";
 	}		
-	update() {
+	draw(ctx) {
 		if (this.isDead) {
 			return;
 		}
-		var ctx = myGameArea.context;
 		ctx.fillStyle = "green";
 		ctx.fillRect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
 		ctx.beginPath();

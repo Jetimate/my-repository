@@ -1,5 +1,115 @@
+/*
+const buttonLibrary = {
+	levelBar: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#5fa7e5",
+		name: "levelBarButton",
+		group: null,
+		classification: "bar",
+		text: () => `level: ${myGameCharacter.level}`,
+		index: 0
+	},
+	experienceBar: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#ffd15d",
+		name: "experienceBarButton",
+		group: null,
+		classification: "bar",
+		text: () => `experience: ${myGameCharacter.experience}`,
+		index: 1
+	},
+	healthBar: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#ff5d70",
+		name: "healthBarButton",
+		group: null,
+		classification: "bar",
+		text: () => `health: ${Math.floor(myGameCharacter.health)}/${myGameCharacter.maxHealth}`,
+		index: 2
+	},
+	manaBar: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#dbcff8",
+		name: "manaBarButton",
+		group: null,
+		classification: "bar",
+		text: () => `mana: ${Math.floor(myGameCharacter.mana)}/${myGameCharacter.maxMana}`,
+		index: 3
+	},
+	inventoryButton: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#e3a04d",
+		name: "inventoryButton",
+		group: null,
+		classification: "clickable",
+		text: () => "inventory",
+		index: null
+	},
+	craftButton: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#3477eb",
+		name: "craftButton",
+		group: null,
+		classification: "clickable",
+		text: () => "craft",
+		index: null
+	},
+	settingsButton: {
+		position: (x, y, w, h) => ({
+			x: x,
+			y: y,
+			width: w,
+			height: h
+		}),
+		radii: 0,
+		color: "#bab6bf",
+		name: "settingsButton",
+		group: null,
+		classification: "clickable",
+		text: () => "settings",
+		index: null
+	}
+	
+}
+*/
 class Button {
-    constructor(x, y, width, height, radii, color, name, group, classification, text, index) {
+	constructor(x, y, width, height, radii, color, name, group, classification, text, index) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -18,9 +128,7 @@ class Button {
 
 	draw(ctx) {
 		ctx.beginPath();
-
 		ctx.roundRect(this.x, this.y, this.width, this.height, window.innerHeight / 300);
-		//window.innerWidth / 128
 
 		if (this.classification != "slot") {
 			ctx.fillStyle = this.color;
@@ -28,50 +136,68 @@ class Button {
 		}
 
 		ctx.strokeStyle = "black";
-		ctx.lineWidth = window.innerHeight / 500;
+		ctx.lineWidth = lineThickness;
 		ctx.stroke();
 
-		ctx.font = window.innerHeight / 40 + "px ubuntu";
+		ctx.font = fontSize + "px ubuntu";
 		ctx.fillStyle = "black";
 
 		if (this.name == "levelBarButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
-			this.width = window.innerWidth / 8;
-			this.height = window.innerHeight / 20;
+			this.x = statsBarX;
+			this.y = statsBarY + statsBarHeight * 0;
+			this.width = statsBarWidth;
+			this.height = statsBarHeight;
 			this.text = "level: " + myGameCharacter.level;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "experienceBarButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 1;
-			this.width = window.innerWidth / 8;
-			this.height = window.innerHeight / 20;
+			this.x = statsBarX;
+			this.y = (statsBarY *  2) + statsBarHeight * 1;
+			this.width = statsBarWidth;
+			this.height = statsBarHeight;
 			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "healthBarButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 2;
-			this.width = window.innerWidth / 8;
-			this.height = window.innerHeight / 20;
+			this.x = statsBarX;
+			this.y = (statsBarY * 3) + statsBarHeight * 2;
+			this.width = statsBarWidth;
+			this.height = statsBarHeight;
 			let roundedHealth = Math.floor(myGameCharacter.health);
 			this.text = "health: " + roundedHealth + "/" + myGameCharacter.maxHealth;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "manaBarButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 3;
-			this.width = window.innerWidth / 8;
-			this.height = window.innerHeight / 20;
+			this.x = statsBarX;
+			this.y = (statsBarY * 4) + statsBarHeight * 3;
+			this.width = statsBarWidth;
+			this.height = statsBarHeight;
 			let roundedMana = Math.floor(myGameCharacter.mana);
 			this.text = "mana: " + roundedMana + "/" + myGameCharacter.maxMana;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
+
+		// buttons
+		if (this.name == "inventoryButton") {
+			this.x = statsBarX;
+			this.y = (statsBarY * 5) + statsBarHeight * 4;
+			this.width = statsBarWidth * 0.5;
+			this.height = statsBarHeight;
+			this.text = "inventory";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "craftButton") {
+			this.x = statsBarX;
+			this.y = (statsBarY * 6) + statsBarHeight * 5;
+			this.width = statsBarWidth * 0.5;
+			this.height = statsBarHeight;
+			this.text = "craft";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
 		if (this.name == "settingsButton") {
-			this.width = window.innerWidth / 12;
-			this.height = window.innerHeight / 20;
-			this.x = window.innerWidth / 128;
+			this.width = statsBarWidth * 0.5;
+			this.height = statsBarHeight;
+			this.x = statsBarX;
 			this.y = window.innerHeight - this.height - slotMargin;
 			this.text = "settings";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
@@ -155,21 +281,14 @@ class Button {
 				}
 			}
 
-			ctx.font = window.innerHeight / 64 + "px ubuntu";
+			ctx.font = fontSize + "px ubuntu";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
 				this.x + miniButtonSize + buttonMargin,
 				this.y + miniButtonSize / 2);
 		}
-		if (this.name == "inventoryButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 4;
-			this.width = window.innerWidth / 12;
-			this.height = window.innerHeight / 20;
-			this.text = "inventory";
-			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
-		}
+		
 		if (this.name == "showInventory") {
 			this.x = window.innerWidth / 64 + window.innerWidth / 8;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
@@ -219,9 +338,9 @@ class Button {
 					radiiSize);
 
 				ctx.strokeStyle = inventoryArray[i].borderColor;
-				ctx.lineWidth = window.innerHeight / 500;
+				ctx.lineWidth = lineThickness;
 				ctx.stroke();
-				ctx.font = window.innerHeight / 75 + "px ubuntu";
+				ctx.font = fontSize + "px ubuntu";
 				ctx.fillStyle = "black";
 
 				ctx.drawImage(
@@ -238,19 +357,6 @@ class Button {
 
 				ctx.closePath();
 			}
-		}
-		if (this.name == "craftButton") {
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 5;
-			this.width = window.innerWidth / 12;
-			this.height = window.innerHeight / 20;
-			/*
-			this.x = window.innerWidth / 128;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 4;
-			
-			*/
-			this.text = "craft";
-			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "showCrafting") {
 			let slotsPerRow = 5;
@@ -283,9 +389,9 @@ class Button {
 					radiiSize);
 
 				ctx.strokeStyle = toBeCraftedArray[i].borderColor;
-				ctx.lineWidth = window.innerHeight / 500;
+				ctx.lineWidth = lineThickness;
 				ctx.stroke();
-				ctx.font = window.innerHeight / 75 + "px ubuntu";
+				ctx.font = fontSize + "px ubuntu";
 				ctx.fillStyle = "black";
 
 				ctx.drawImage(
@@ -313,7 +419,6 @@ class Button {
 
 			let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot").length;
 			const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (this.index - 1) - slotMargin;
-//			const xDistance = (referenceX + ((referenceWidth - (slotSize * totalCraftSlotArray)) / 2) + ((slotSize + slotMargin) * (this.index - 1))) - slotMargin;
 			const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
 			this.x = xDistance;
 			this.y = yDistance;
@@ -341,7 +446,7 @@ class Button {
 				}
 			}
 
-			ctx.font = window.innerHeight / 64 + "px ubuntu";
+			ctx.font = fontSize + "px ubuntu";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
@@ -361,7 +466,7 @@ class Button {
 			} else {
 				this.text = "slot " + this.index;
 			}
-			ctx.font = window.innerHeight / 64 + "px ubuntu";
+			ctx.font = fontSize + "px ubuntu";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
@@ -369,9 +474,6 @@ class Button {
 				this.y - (slotMargin / 2));
 		}
         ctx.closePath();
-	}
-	update() {
-
 	}
 	
 	clickButton(xmouse, ymouse) {

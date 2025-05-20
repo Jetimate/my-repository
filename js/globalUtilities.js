@@ -2,6 +2,9 @@ const constantPlayerSpeed = 5;
 let keyMovement = true;
 let mouseMovement = false;
 let followMouseMovement = false;
+let gameplayScreen = false;
+let gameStarted = false;
+let resizePending = false;
 const keys = {
 	KeyW: false,
 	KeyA: false,
@@ -48,32 +51,43 @@ let spellsArray = [];
 let maxExperience = 100;
 let mouseHeldItem = [];
 let toBeCraftedArray = [];
-const lootSize = (window.innerWidth + window.innerHeight) / 32;
-const slotSize = (window.innerWidth + window.innerHeight) / 24;
-const slotMargin = (window.innerWidth + window.innerHeight) / 128;
-const radiiSize = (window.innerWidth + window.innerHeight) / 300;
-const miniButtonSize = (window.innerWidth + window.innerHeight) / 64;
-const buttonMargin = window.innerWidth / 128;
+const lootSize = (screen.width + screen.height) / 32;
+const slotSize = (screen.width + screen.height) / 40;
+const slotMargin = (screen.width + screen.height) / 128;
+const radiiSize = (screen.width + screen.height) / 300;
+const miniButtonSize = (screen.width + screen.height) / 64;
+const buttonMargin = screen.width / 128;
+const lineThickness = (screen.width + screen.height) / 1200;
+const fontSize = (screen.width + screen.height) / 160;
+
+let statsBarX = window.innerWidth * 0.004;
+let statsBarY = window.innerHeight * 0.008;
+let statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
+let statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
+
 const canvas = document.getElementById("mycanvas");
 const ctx = canvas.getContext("2d");
 
-var myGameArea = {
+window.addEventListener('contextmenu', event => {
+	event.preventDefault();
+});
+var myGame = {
 	canvas: document.getElementById("mycanvas"), // splice
 	start: function () {
 		this.context = this.canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 16.67);
+		resizeCanvas(); // Set initial size
+		requestAnimationFrame(updateCanvas);
 	},
 	clear: function () {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	},
-	stop: function () {
-		clearInterval(this.interval);
-	}
 }
-window.addEventListener('contextmenu', event => {
-	event.preventDefault();
+window.addEventListener("resize", () => {
+	resizePending = true;
 });
 window.addEventListener('click', function (e) {
+	gameplayScreen = true;
+
 	const rect = canvas.getBoundingClientRect();
 	mouseClickX = e.clientX - rect.left;
 	mouseClickY = e.clientY - rect.top;

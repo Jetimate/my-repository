@@ -9,117 +9,16 @@
 			height: 100%;
 			margin: 0;
 		}
-
-		button {
-			height: 100px;
-			width: 100px;
-		}
-
-        div {
-            /*border: 1px solid blue;*/
-        }
-
         #mycanvas {
             border: 1px solid #d3d3d3;
             background-color: #f1f1f1;
             position: absolute;
             z-index: -1;
         }
-
-		#mainMenu {
-			border: 1px solid blue;
-			position: absolute;
-			z-index: 1;
-			height: calc(100% - 7px);
-			width: calc(100% - 7px);
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-content: flex-start;
-			padding: 2px;
-		}
-        #inputUserName {
-           width:500px;
-		   height:50px;
-        }
-
-		.spelzio {
-			margin: 0;
-			font-size: 180px;
-		}
-
-		.notstart {
-			width: 100px;
-			height: 70px;
-			margin: 3px;
-		}
-
-		.containera {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-		}
-
-		.item1a {
-			text-align: center;
-			margin: 2px;
-		}
-
-		.item2a {
-			text-align: start;
-			margin: 2px;
-			padding: 0px;
-			font-size: 25px;
-		}
-
-		.containerb {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			flex-grow: 1;
-			margin: 2px;
-		}
-
-		.item1b {
-			margin: 10px;
-			text-align: center;
-			margin: 2px;
-			font-size: 40px;
-		}
-
-		.containerc {
-			text-align: end;
-			margin: 2px;
-			padding: 2px 10px 2px 10px;
-		}
 	</style>
 </head>
 <body>
 	<canvas id="mycanvas"></canvas>
-	<div id="mainMenu">
-		<div class="containera">
-			<div class="item1a">
-				<button class="notstart">settings</button>
-				<button class="notstart">changelog</button>
-			</div>
-			<div class="item2a">
-				<button class="notstart">friends</button><br>
-				<button class="notstart">spelz</button><br>
-				<button class="notstart">monster gallery</button>
-			</div>
-		</div>
-		<div class="containerb">
-			<div class="item1b">
-				<h1 class="spelzio">spelz.io</h1>
-				<input id="inputUserName" type="text" placeholder="Name" />
-				<button id="startGameButton" onclick="startGame()">start game</button>
-			</div>
-		</div>
-		<div class="containerc">
-			<h6>version: 1.0</h6>
-			<a href="signin.html">sign in</a>
-		</div>
-	</div>
 	<script type="text/javascript" src="js/globalUtilities.js"></script>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playableCharacter.js"></script>
@@ -128,14 +27,19 @@
 	<script type="text/javascript" src="js/button.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
-	<script type="text/javascript" src="js/spellsLibrary.js"></script>
-	<script type="text/javascript" src="js/mainSpellsLibrary.js"></script>
-	<script type="text/javascript" src="js/spellBooksLibrary.js"></script>
+	<script type="text/javascript" src="js/libraries/spellsLibrary.js"></script>
+	<script type="text/javascript" src="js/libraries/mainSpellsLibrary.js"></script>
+	<script type="text/javascript" src="js/libraries/spellBooksLibrary.js"></script>
+
+	<script type="text/javascript" src="js/libraries/lootDropLibrary.js"></script>
 	<script type="text/javascript" src="js/loot.js"></script>
-	<script type="text/javascript" src="js/lootDropLibrary.js"></script>
-	<script type="text/javascript" src="js/mobLibrary.js"></script>
+	<script type="text/javascript" src="js/libraries/mobLibrary.js"></script>
 
 	<script>
+		/*
+		reminders when working on this game:
+		1. always commit all and push to github before trying something new
+		*/
 		const starterMobsArray = [
 			luminousRock,
 			luminousSpirit,
@@ -145,7 +49,16 @@
 			gloomForestSpecterTreant,
 			luminousSpiritTreant,
 			wanderingFog,
-            zapper];
+			zapper];
+
+		document.addEventListener("DOMContentLoaded", function () {
+			myGame.start();
+			resizeCanvas();
+		});
+
+		function mainMenu() {
+
+		}
 
 		function startGame() {
 			castSpellTimeout = [];
@@ -156,10 +69,9 @@
 			lootsArray = [];
 			inventoryArray = [];
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.005); //mana regen = 0.0005, mana = 5
+			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.005); //mana regen = 0.0005, mana = 5
 			camera = new Camera(canvas.width, canvas.height);
 			spawnMobs();
-			myGameArea.start();
 			buttonsKeeper();
 			spellBooksKeeper();
 			spellsKeeper();
@@ -170,17 +82,19 @@
 		}
 
 		function buttonsKeeper() {
+			// stats button
 			addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", null, "bar", "level: " + myGameCharacter.level, null));
-			addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, null));
-			addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, null));
-			addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, null));
+            addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, null));
+            addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, null));
+            addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, null));
+			// settings
 			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", null, "clickable", "inventory", null));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "settingsButton", null, "clickable", "settings", null));
 			// add an automated slot adder with the use of for loops
-			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 1));
-			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 2));
-			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
-			addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
+            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 1));
+            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 2));
+            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
+            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
 			// settings buttons
             addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
@@ -188,70 +102,96 @@
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
 		}
 		function spellBooksKeeper() {
-            //below this comment is the primary spell
-            addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", spikeBook.appearance, spikeBook.name, generateID(), spikeBook.spell, spikeBook.mainSpell, spikeBook.cooldown, spikeBook.text));
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", energyBallBook.appearance, energyBallBook.name, generateID(), energyBallBook.spell, energyBallBook.mainSpell, energyBallBook.cooldown, energyBallBook.text));
+			//below this comment is the primary spell
+			addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", spikeBook.appearance, spikeBook.name, generateID(), spikeBook.spell, spikeBook.mainSpell, spikeBook.cooldown, spikeBook.text));
+			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", energyBallBook.appearance, energyBallBook.name, generateID(), energyBallBook.spell, energyBallBook.mainSpell, energyBallBook.cooldown, energyBallBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterBook.appearance, specterBook.name, generateID(), specterBook.spell, specterBook.mainSpell, specterBook.cooldown, specterBook.text));
-            addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", smashBook.appearance, smashBook.name, generateID(), smashBook.spell, smashBook.mainSpell, smashBook.cooldown, smashBook.text));
+			addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", smashBook.appearance, smashBook.name, generateID(), smashBook.spell, smashBook.mainSpell, smashBook.cooldown, smashBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", teleportBook.appearance, teleportBook.name, generateID(), teleportBook.spell, teleportBook.mainSpell, teleportBook.cooldown, teleportBook.text));
 			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
-            addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
-            addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", glowShardBook.appearance, glowShardBook.name, generateID(), glowShardBook.spell, glowShardBook.mainSpell, glowShardBook.cooldown, glowShardBook.text));
+			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
+			addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
+			addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", glowShardBook.appearance, glowShardBook.name, generateID(), glowShardBook.spell, glowShardBook.mainSpell, glowShardBook.cooldown, glowShardBook.text));
 
-            addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
+			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
 
 		}
 		function spellsKeeper() {
 		}
 
-		function updateGameArea() {
-            //console.log(leftClick, rightClick, mouseX, mouseY, isMouseDown);
-			myGameArea.context.canvas.width = window.innerWidth - 3;
-			myGameArea.context.canvas.height = window.innerHeight - 3;
-			const canvasWidth = myGameArea.context.canvas.width;
-			const canvasHeight = myGameArea.context.canvas.height;
+        function updateCanvas() {
+            console.log("frame @", performance.now().toFixed(0));
+            try {
+                if (resizePending) {
+                    resizeCanvas();
+                    resizePending = false;
+                }
 
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (gameplayScreen) {
+                    if (!gameStarted) {
+                        startGame();
+                        gameStarted = true;
+                    }
+                    updateGameplayScreen();
+                }
+
+            } catch (err) {
+                console.error("updateCanvas error:", err);
+            } finally {
+                requestAnimationFrame(updateCanvas);
+            }
+        }
+		function resizeCanvas() {
+			
+            const canvas = myGame.canvas;
+            const newWidth = window.innerWidth - 3;
+            const newHeight = window.innerHeight - 3;
+
+            if (canvas.width !== newWidth || canvas.height !== newHeight) {
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+			}
+
+            statsBarX = window.innerWidth * 0.004;
+            statsBarY = window.innerHeight * 0.008;
+            statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
+            statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
+        }
+
+		function updateGameplayScreen() {
 			// Calculate world coordinates
 			worldX = (mouseX / camera.zoom) + camera.x;
 			worldY = (mouseY / camera.zoom) + camera.y;
 
-			// Clear and resize canvas
-			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-			myGameArea.context.canvas.width = window.innerWidth - 3;
-			myGameArea.context.canvas.height = window.innerHeight - 3;
-
-			ctx.fillStyle = "gray";
-			ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-            // Update camera to follow the player
-			camera.follow(myGameCharacter, canvasWidth, canvasHeight);
-			camera.applyTransform(ctx);
-
-			// Draw game objects
+			// Update camera to follow the player
+			camera.follow(myGameCharacter, myGame.context.canvas.width, myGame.context.canvas.height);
+            camera.applyTransform(ctx);  
+            // Draw game objects
 			biome1.draw(ctx);
 			mobsArray.forEach(mob => {
-				mob.update();
+				mob.draw(ctx);
 				mob.newPos();
 				mob.interact();
 			});
-			lootsArray.forEach(loot => loot.draw());
+			lootsArray.forEach(loot => loot.draw(ctx));
 			spellsArray.forEach(spell => spell.update());
-			myGameCharacter.update();
+			myGameCharacter.draw(ctx);
 			myGameCharacter.regenerateHealth();
 			myGameCharacter.regenerateMana();
 			updatePlayerPosition();
 
-			// Reset transformations
-			camera.resetTransform(ctx);
+            // Reset transformations (important!!!)
+            camera.resetTransform(ctx);
 
 			buttonsArray.forEach(button => {
-				button.update();
-				button.draw(ctx);
+               	button.draw(ctx);
 			});
 			spellBooksArray.forEach(spellBook => {
 				spellBook.update();
 			});
+
 			// player and mob collision
 			playerCrashWith(myGameCharacter, mobsArray);
 			// player and loot collision
@@ -297,63 +237,63 @@
 					}
 				}
 				if (mouseMovement) {
-                    if (myGameCharacter.hasTarget && playerTargetX != null && playerTargetY != null) {
-                        // Calculate the difference in x and y between the current position and the target
-                        let dx = playerTargetX - myGameCharacter.x;
-                        let dy = playerTargetY - myGameCharacter.y;
-             
-                        // Calculate the distance to the target
-                        let distance = Math.sqrt(dx * dx + dy * dy);
+					if (myGameCharacter.hasTarget && playerTargetX != null && playerTargetY != null) {
+						// Calculate the difference in x and y between the current position and the target
+						let dx = playerTargetX - myGameCharacter.x;
+						let dy = playerTargetY - myGameCharacter.y;
+
+						// Calculate the distance to the target
+						let distance = Math.sqrt(dx * dx + dy * dy);
 
 						myGameCharacter.newSpeed = myGameCharacter.speed;
 
-                        // Check if the character has reached the target
-                        if (distance <= myGameCharacter.newSpeed) {
-                            // Snap to target and stop moving
-                            myGameCharacter.x = playerTargetX;
+						// Check if the character has reached the target
+						if (distance <= myGameCharacter.newSpeed) {
+							// Snap to target and stop moving
+							myGameCharacter.x = playerTargetX;
 							myGameCharacter.y = playerTargetY;
 							playerTargetX = null;
 							playerTargetY = null;
-                            myGameCharacter.hasTarget = false;
+							myGameCharacter.hasTarget = false;
 						} else {
-                            // Calculate the angle to the target
-                            myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+							// Calculate the angle to the target
+							myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 
-                            // Move toward the target
-                            myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
+							// Move toward the target
+							myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
 							myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-                            if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-                            if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-                            if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-                            if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+							if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+							if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+							if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+							if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
 						}
-                    }
+					}
 				}
-                if (followMouseMovement) {
+				if (followMouseMovement) {
 					let castMouseX = worldX - biome1.x;
-                    let castMouseY = worldY - biome1.y;
-                    let dx = castMouseX - myGameCharacter.x;
-                    let dy = castMouseY - myGameCharacter.y;
+					let castMouseY = worldY - biome1.y;
+					let dx = castMouseX - myGameCharacter.x;
+					let dy = castMouseY - myGameCharacter.y;
 
 					myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 
-                    if (keys.KeyW || keys.ArrowUp) {
+					if (keys.KeyW || keys.ArrowUp) {
 						myGameCharacter.newSpeed = myGameCharacter.speed;
 
 						myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
 						myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-                        if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-                        if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-                        if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-                        if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+						if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+						if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+						if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+						if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
 
 					}
-                }
+				}
 			}
 		}
 		function playerDeath() {
 			alert("game over");
-			myGameArea.stop();
+			myGame.stop();
 			castSpellTimeout = [];
 			buttonsArray = [];
 			spellBooksArray = [];
@@ -373,7 +313,7 @@
 					myGameCharacter.maxHealth += 5;
 					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
-                    myGameCharacter.summonLimit += 2.5;
+					myGameCharacter.summonLimit += 2.5;
 					/*
 					if (!slot4Active && myGameCharacter.level >= 1) {
 						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", generateID(), summonSpirit, mainLuminousSpirit, 300, "Spirit"));
@@ -419,7 +359,7 @@
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
 						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 9));
-                        // add new spellBookSlot
+						// add new spellBookSlot
 					}
 					//console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}
@@ -427,7 +367,7 @@
 			}
 		}
 		function addButton(button) {
-			let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.index);
+            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.index);
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook) {
@@ -450,12 +390,12 @@
 				spell.x,
 				spell.y,
 				spell.radius,
-                spell.FOVRadius,
+				spell.FOVRadius,
 				spell.name,
 				spell.spellBookID,
 				spell.caster,
 				spell.side,
-                spell.target,
+				spell.target,
 				spell.art,
 				spell.shape,
 				spell.appearance,
@@ -492,8 +432,8 @@
 						starterMobsArray[i].damage,
 						mobRandomRadiusXHealth,
 						starterMobsArray[i].radiusAdjust,
-                        starterMobsArray[i].movementSpeed,
-                        starterMobsArray[i].turnSpeed,
+						starterMobsArray[i].movementSpeed,
+						starterMobsArray[i].turnSpeed,
 						starterMobsArray[i].FOVRadius,
 						starterMobsArray[i].setMinHealth,
 						starterMobsArray[i].setMaxHealth,
@@ -503,8 +443,8 @@
 						starterMobsArray[i].type,
 						starterMobsArray[i].ability,
 						starterMobsArray[i].learnedSpells,
-                        starterMobsArray[i].castAmount,
-                        starterMobsArray[i].castDelay,
+						starterMobsArray[i].castAmount,
+						starterMobsArray[i].castDelay,
 						starterMobsArray[i].intelligence,
 						starterMobsArray[i].experienceDrop,
 						starterMobsArray[i].lootDrop, 0, 0,
@@ -529,18 +469,18 @@
 						if (!mob1.ignoreMobCollision) {
 							mob1.x -= Math.cos(angle) * knockbackDistance;
 							mob1.y -= Math.sin(angle) * knockbackDistance;
-                            if (mob1.x < mob1.radius) mob1.x = mob1.radius;
-                            if (mob1.x > biome1.width - mob1.radius) mob1.x = biome1.width - mob1.radius;
-                            if (mob1.y < mob1.radius) mob1.y = mob1.radius;
-                            if (mob1.y > biome1.height - mob1.radius) mob1.y = biome1.height - mob1.radius;
+							if (mob1.x < mob1.radius) mob1.x = mob1.radius;
+							if (mob1.x > biome1.width - mob1.radius) mob1.x = biome1.width - mob1.radius;
+							if (mob1.y < mob1.radius) mob1.y = mob1.radius;
+							if (mob1.y > biome1.height - mob1.radius) mob1.y = biome1.height - mob1.radius;
 						}
 						if (!mob2.ignoreMobCollision) {
 							mob2.x += Math.cos(angle) * knockbackDistance;
 							mob2.y += Math.sin(angle) * knockbackDistance;
-                            if (mob2.x < mob2.radius) mob2.x = mob2.radius;
-                            if (mob2.x > biome1.width - mob2.radius) mob2.x = biome1.width - mob2.radius;
-                            if (mob2.y < mob2.radius) mob2.y = mob2.radius;
-                            if (mob2.y > biome1.height - mob2.radius) mob2.y = biome1.height - mob2.radius;
+							if (mob2.x < mob2.radius) mob2.x = mob2.radius;
+							if (mob2.x > biome1.width - mob2.radius) mob2.x = biome1.width - mob2.radius;
+							if (mob2.y < mob2.radius) mob2.y = mob2.radius;
+							if (mob2.y > biome1.height - mob2.radius) mob2.y = biome1.height - mob2.radius;
 						}
 					}
 				});
@@ -561,14 +501,14 @@
 					console.log(allStackableLootArray);
 					if (allStackableLootArray.length > 1) {
 						for (let i = 0; i < allStackableLootArray.length; i++) {
-							allStackableLootArray[i].amount + allStackableLootArray[i].amount; 
+							allStackableLootArray[i].amount + allStackableLootArray[i].amount;
 						}
 					}
 					*/
 					if (loot.name == "manaOrb") {
 						let manaFromOrb = 1;
-                        if (myGameCharacter.mana + manaFromOrb <= myGameCharacter.maxMana) {
-                            myGameCharacter.mana += manaFromOrb;
+						if (myGameCharacter.mana + manaFromOrb <= myGameCharacter.maxMana) {
+							myGameCharacter.mana += manaFromOrb;
 							//console.log("hi");
 						}
 					} else if (loot.form != "effect") {
@@ -596,18 +536,18 @@
 					if (!player.ignoreMobCollision) {
 						player.x -= Math.cos(angle) * knockbackDistance;
 						player.y -= Math.sin(angle) * knockbackDistance;
-                        if (player.x < player.radius) player.x = player.radius;
-                        if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
-                        if (player.y < player.radius) player.y = player.radius;
-                        if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
+						if (player.x < player.radius) player.x = player.radius;
+						if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
+						if (player.y < player.radius) player.y = player.radius;
+						if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 					}
 					if (!mob.ignoreMobCollision) {
 						mob.x += Math.cos(angle) * knockbackDistance;
 						mob.y += Math.sin(angle) * knockbackDistance;
-                        if (mob.x < mob.radius) mob.x = mob.radius;
-                        if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
-                        if (mob.y < mob.radius) mob.y = mob.radius;
-                        if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+						if (mob.x < mob.radius) mob.x = mob.radius;
+						if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
+						if (mob.y < mob.radius) mob.y = mob.radius;
+						if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
 					}
 
 					// Apply damage
@@ -705,10 +645,10 @@
 							if (!player.ignoreSpellCollision) {
 								player.x += Math.cos(angle) * knockbackDistance;
 								player.y += Math.sin(angle) * knockbackDistance;
-                                if (player.x < player.radius) player.x = player.radius;
-                                if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
-                                if (player.y < player.radius) player.y = player.radius;
-                                if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
+								if (player.x < player.radius) player.x = player.radius;
+								if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
+								if (player.y < player.radius) player.y = player.radius;
+								if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 							}
 						}
 					}
@@ -814,10 +754,10 @@
 								if (!mob.ignoreSpellCollision) {
 									mob.x += Math.cos(angle) * knockbackDistance;
 									mob.y += Math.sin(angle) * knockbackDistance;
-                                    if (mob.x < mob.radius) mob.x = mob.radius;
-                                    if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
-                                    if (mob.y < mob.radius) mob.y = mob.radius;
-                                    if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+									if (mob.x < mob.radius) mob.x = mob.radius;
+									if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
+									if (mob.y < mob.radius) mob.y = mob.radius;
+									if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
 								}
 							}
 						}

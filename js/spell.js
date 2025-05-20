@@ -174,9 +174,8 @@ class Spell {
 		}
 	}
 }
-	draw() {
+	draw(ctx) {
 		if (this.art === "beams") {
-			var ctx = myGameArea.context;
 			ctx.save();
 			ctx.translate(this.x, this.y);
 
@@ -236,7 +235,6 @@ class Spell {
 			//console.log(this.angle, "moveTo:", this.x, this.y, "lineTo:", this.x2, this.y2); // position
 			ctx.restore();
 		} else {
-			var ctx = myGameArea.context;
 			ctx.save();
 			ctx.translate(this.x, this.y);
 			ctx.rotate(this.angle);
@@ -572,7 +570,7 @@ class Spell {
 				this.destroy(); // Call destroy method after the beam's life ends
 			}
 		}
-		this.draw();
+		this.draw(ctx);
 		this.handleCollisions();
 	}
 }

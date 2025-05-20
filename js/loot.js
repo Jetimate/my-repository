@@ -60,8 +60,7 @@ class Loot {
 			lootsArray.splice(lootIndex, 1);
 		}
 	}
-	draw() {
-		var ctx = myGameArea.context;
+	draw(ctx) {
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);

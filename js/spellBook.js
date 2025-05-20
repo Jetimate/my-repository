@@ -75,10 +75,10 @@ class SpellBook {
 			radiiSize);
 
 		ctx.strokeStyle = this.borderColor;
-		ctx.lineWidth = window.innerHeight / 100;
+		ctx.lineWidth = lineThickness;
 		ctx.stroke();
 
-		ctx.font = window.innerHeight / 64 + "px ubuntu";
+		ctx.font = fontSize + "px ubuntu";
 		ctx.fillStyle = "black";
 
 		ctx.drawImage(
