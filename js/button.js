@@ -142,38 +142,23 @@ class Button {
 		ctx.font = fontSize + "px ubuntu";
 		ctx.fillStyle = "black";
 
-		if (this.name == "levelBarButton") {
+		if (this.classification == "bar") {
 			this.x = statsBarX;
-			this.y = statsBarY + statsBarHeight * 0;
+			this.y = (statsBarY * (this.index + 1)) + statsBarHeight * this.index;
 			this.width = statsBarWidth;
 			this.height = statsBarHeight;
-			this.text = "level: " + myGameCharacter.level;
-			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
-		}
-		if (this.name == "experienceBarButton") {
-			this.x = statsBarX;
-			this.y = (statsBarY *  2) + statsBarHeight * 1;
-			this.width = statsBarWidth;
-			this.height = statsBarHeight;
-			this.text = "experience: " + myGameCharacter.experience + "/" + maxExperience;
-			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
-		}
-		if (this.name == "healthBarButton") {
-			this.x = statsBarX;
-			this.y = (statsBarY * 3) + statsBarHeight * 2;
-			this.width = statsBarWidth;
-			this.height = statsBarHeight;
-			let roundedHealth = Math.floor(myGameCharacter.health);
-			this.text = "health: " + roundedHealth + "/" + myGameCharacter.maxHealth;
-			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
-		}
-		if (this.name == "manaBarButton") {
-			this.x = statsBarX;
-			this.y = (statsBarY * 4) + statsBarHeight * 3;
-			this.width = statsBarWidth;
-			this.height = statsBarHeight;
-			let roundedMana = Math.floor(myGameCharacter.mana);
-			this.text = "mana: " + roundedMana + "/" + myGameCharacter.maxMana;
+			if (this.name == "levelBarButton") {
+				this.text = `level: ${myGameCharacter.level}`;
+			}
+			if (this.name == "experienceBarButton") {
+				this.text = `experience: ${myGameCharacter.experience}/${maxExperience}`;
+			}
+			if (this.name == "healthBarButton") {
+				this.text = `health: ${Math.floor(myGameCharacter.health) }/${myGameCharacter.maxHealth}`;
+			}
+			if (this.name == "manaBarButton") {
+				this.text = `mana: ${Math.floor(myGameCharacter.mana)}/${myGameCharacter.maxMana}`;
+			}
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 
@@ -205,7 +190,7 @@ class Button {
 		if (this.name == "showSettings") {
 			let settingsButtonIndex = buttonsArray.findIndex(element => element.name === "settingsButton");
 			let totalMovementButtonsArray = buttonsArray.filter(element => element.group == "movementButtons");
-			this.width = window.innerWidth / 6;
+			this.width = window.innerWidth / 4;
 			this.height = (totalMovementButtonsArray.length * (miniButtonSize + buttonMargin)) + buttonMargin;
 			if (buttonsArray[settingsButtonIndex].toggle == false) {
 				if (this.x > -this.width * 1.2) {
@@ -479,11 +464,26 @@ class Button {
 	clickButton(xmouse, ymouse) {
 		const distance = Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
 		if (distance) {
-			//console.log(this.name + " was clicked");
+			// TODO: update the delete function to also work with other buttons
+			function deleteButton(...buttonNames) {
+				const buttonsToDelete = new Set(buttonNames);
+				for (let i = buttonsArray.length - 1; i >= 0; i--) {
+					if (buttonsToDelete.has(buttonsArray[i].name)) {
+						buttonsArray.splice(i, 1);
+					}
+				}
+			}
+			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
 			if (this.name == "settingsButton" && !this.toggle) {
 				this.toggle = true;
+				// settings buttons
+				addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
+				addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
+				addButton(new Button(0, 0, 0, 0, 0, "black", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
+				addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
 			} else if (this.name == "settingsButton" && this.toggle) {
 				this.toggle = false;
+				deleteButton("showSettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
@@ -492,14 +492,8 @@ class Button {
 				//console.log(inventoryArray);
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;
-				let showInventoryButtonIndex = buttonsArray.findIndex(element => element.name === "showInventory");
-				if (showInventoryButtonIndex !== -1) {
-					buttonsArray.splice(showInventoryButtonIndex, 1);
-				}
-				let craftButtonIndex = buttonsArray.findIndex(element => element.name === "craftButton");
-				if (craftButtonIndex !== -1) {
-					buttonsArray.splice(craftButtonIndex, 1);
-				}
+				deleteButton("showInventory", "craftButton");
+
 				let showCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "showCrafting");
 				if (showCraftingButtonIndex !== -1) {
 					// removing the page slot properly

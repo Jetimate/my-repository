@@ -82,12 +82,12 @@
 		}
 
 		function buttonsKeeper() {
-			// stats button
-			addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", null, "bar", "level: " + myGameCharacter.level, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, null));
-            addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, null));
-			// settings
+			// stats bar
+			addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", null, "bar", "level: " + myGameCharacter.level, 0));
+            addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, 1));
+            addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, 2));
+            addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, 3));
+			// clickable buttons
 			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", null, "clickable", "inventory", null));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "settingsButton", null, "clickable", "settings", null));
 			// add an automated slot adder with the use of for loops
@@ -96,10 +96,12 @@
             addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
             addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
 			// settings buttons
+			/*
             addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
             addButton(new Button(0, 0, 0, 0, 0, "black", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
             addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
+			*/
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
@@ -120,28 +122,24 @@
 		}
 
         function updateCanvas() {
-            console.log("frame @", performance.now().toFixed(0));
-            try {
-                if (resizePending) {
-                    resizeCanvas();
-                    resizePending = false;
-                }
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                if (gameplayScreen) {
-                    if (!gameStarted) {
-                        startGame();
-                        gameStarted = true;
-                    }
-                    updateGameplayScreen();
-                }
-
-            } catch (err) {
-                console.error("updateCanvas error:", err);
-            } finally {
-                requestAnimationFrame(updateCanvas);
+            if (resizePending) {
+                resizeCanvas();
+                resizePending = false;
             }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "gray";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (gameplayScreen) {
+                if (!gameStarted) {
+                    startGame();
+                    gameStarted = true;
+                }
+                updateGameplayScreen();
+            }
+
+            requestAnimationFrame(updateCanvas);
         }
 		function resizeCanvas() {
 			
@@ -772,10 +770,12 @@
 		}
 		/*
 		tasks:
-		7). add upgrades points. you can earn ugrade points when killing mobs or when leveling up
+		7). add a notification type of feature when a skill is used to show when player has insufficient mana
+		8). add upgrades points. you can earn ugrade points when leveling up
 		12). add a way to access spell books in game
 		13). add a notification type of feature when a skill is used to show when player has insufficient mana
-		15).
+		14). add spells that can be casted multiple times in a row but they rely heavily on mana (they're a different type from spellBooks)
+		15). make the spellBooks run on cooldown instead of mana
 		1000). add a place where npcs will go to when their kingdom is invaded
 		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
 		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
