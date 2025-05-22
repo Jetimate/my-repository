@@ -68,6 +68,10 @@
 			mobsArray = [];
 			lootsArray = [];
 			inventoryArray = [];
+			// ------- for debug, delete later
+            addLootToInventory(spikePage, 64);
+			addLootToInventory(gloomEssence, 64);
+			// -------
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.005); //mana regen = 0.0005, mana = 5
 			camera = new Camera(canvas.width, canvas.height);
@@ -82,41 +86,34 @@
 		}
 
 		function buttonsKeeper() {
-			// stats bar
-			addButton(new Button(0, 0, 0, 0, 0, "#5fa7e5", "levelBarButton", null, "bar", "level: " + myGameCharacter.level, 0));
-            addButton(new Button(0, 0, 0, 0, 0, "#ffd15d", "experienceBarButton", null, "bar", "experience: " + myGameCharacter.experience, 1));
-            addButton(new Button(0, 0, 0, 0, 0, "#ff5d70", "healthBarButton", null, "bar", "health: " + myGameCharacter.health, 2));
-            addButton(new Button(0, 0, 0, 0, 0, "#dbcff8", "manaBarButton", null, "bar", "mana: " + myGameCharacter.mana, 3));
-			// clickable buttons
-			addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "inventoryButton", null, "clickable", "inventory", null));
-            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "settingsButton", null, "clickable", "settings", null));
-			// add an automated slot adder with the use of for loops
-            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 1));
-            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 2));
-            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 3));
-            addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 4));
-			// settings buttons
-			/*
-            addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
-            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
-            addButton(new Button(0, 0, 0, 0, 0, "black", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
-            addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
-			*/
+            // stats bar
+			addButton(buttonLibrary.levelBar, 0);
+			addButton(buttonLibrary.experienceBar, 1);
+			addButton(buttonLibrary.healthBar, 2);
+			addButton(buttonLibrary.manaBar, 3);
+            // clickable buttons
+			addButton(buttonLibrary.inventoryButton, null);
+            addButton(buttonLibrary.settingsButton, null);
+
+            addButton(buttonLibrary.spellBookSlot, 1);
+            addButton(buttonLibrary.spellBookSlot, 2);
+            addButton(buttonLibrary.spellBookSlot, 3);
+            addButton(buttonLibrary.spellBookSlot, 4);
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-			addSpellBook(new SpellBook(0, 0, 1, 0, 0, 0, "black", spikeBook.appearance, spikeBook.name, generateID(), spikeBook.spell, spikeBook.mainSpell, spikeBook.cooldown, spikeBook.text));
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", energyBallBook.appearance, energyBallBook.name, generateID(), energyBallBook.spell, energyBallBook.mainSpell, energyBallBook.cooldown, energyBallBook.text));
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterBook.appearance, specterBook.name, generateID(), specterBook.spell, specterBook.mainSpell, specterBook.cooldown, specterBook.text));
-			addSpellBook(new SpellBook(0, 0, 2, 0, 0, 0, "black", smashBook.appearance, smashBook.name, generateID(), smashBook.spell, smashBook.mainSpell, smashBook.cooldown, smashBook.text));
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", teleportBook.appearance, teleportBook.name, generateID(), teleportBook.spell, teleportBook.mainSpell, teleportBook.cooldown, teleportBook.text));
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", lightningBoltBook.appearance, lightningBoltBook.name, generateID(), lightningBoltBook.spell, lightningBoltBook.mainSpell, lightningBoltBook.cooldown, lightningBoltBook.text));
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", specterHandBook.appearance, specterHandBook.name, generateID(), specterHandBook.spell, specterHandBook.mainSpell, specterHandBook.cooldown, specterHandBook.text));
-			addSpellBook(new SpellBook(0, 0, 3, 0, 0, 0, "black", luminousEnergyBook.appearance, luminousEnergyBook.name, generateID(), luminousEnergyBook.spell, luminousEnergyBook.mainSpell, luminousEnergyBook.cooldown, luminousEnergyBook.text));
-			addSpellBook(new SpellBook(0, 0, 4, 0, 0, 0, "black", glowShardBook.appearance, glowShardBook.name, generateID(), glowShardBook.spell, glowShardBook.mainSpell, glowShardBook.cooldown, glowShardBook.text));
+			
+            addSpellBook(spikeBook, 1);
+            addSpellBook(smashBook, 2);
+            addSpellBook(luminousEnergyBook, 3);
+			addSpellBook(glowShardBook, 4);
 
-			addSpellBook(new SpellBook(0, 0, null, 0, 0, 0, "black", treeBook.appearance, treeBook.name, generateID(), treeBook.spell, treeBook.mainSpell, treeBook.cooldown, treeBook.text));
-
+            addSpellBook(energyBallBook, null);
+            addSpellBook(specterBook, null);
+            addSpellBook(teleportBook, null);
+            addSpellBook(lightningBoltBook, null);
+            addSpellBook(specterHandBook, null);
+            addSpellBook(treeBook, null);
 		}
 		function spellsKeeper() {
 		}
@@ -336,40 +333,52 @@
 					*/
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 5));
+                        addButton(buttonLibrary.spellBookSlot, 5);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 6 && myGameCharacter.level >= 15) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 6));
+                        addButton(buttonLibrary.spellBookSlot, 6);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 7 && myGameCharacter.level >= 30) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 7));
+                        addButton(buttonLibrary.spellBookSlot, 7);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 8 && myGameCharacter.level >= 45) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 8));
+                        addButton(buttonLibrary.spellBookSlot, 8);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-						addButton(new Button(0, 0, 0, 0, 0, "black", null, "spellBookSlot", "slot", "bug101", 9));
+                        addButton(buttonLibrary.spellBookSlot, 9);
 						// add new spellBookSlot
 					}
-					//console.log(myGameCharacter.spellBookSlotsUnlocked);
+                    //console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}
 				while (myGameCharacter.experience >= maxExperience);
 			}
 		}
-		function addButton(button) {
-            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.index);
+        // add loot to inventory for debugging purposes
+        function addLootToInventory(loot, amount) {
+           let newLoot = new Loot(
+              0, 0,
+              loot.radius, loot.name, loot.spellBookName, loot.rarity,
+              loot.dropChance, loot.appearance, loot.form, loot.type,
+              loot.essenceName, loot.pagesToCraft, loot.essenceToCraft,
+              loot.ignoreCollision, amount, loot.stackLimit, loot.text
+           );
+           inventoryArray.push(newLoot);
+        }
+
+		function addButton(button, index) {
+            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, index);
 			buttonsArray.push(newButton);
 		}
-		function addSpellBook(spellBook) {
-			let newSpellBook = new SpellBook(spellBook.x, spellBook.y, spellBook.index, spellBook.width, spellBook.height, spellBook.radii, spellBook.borderColor, spellBook.appearance, spellBook.name, spellBook.uniqueID, spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text)
+		function addSpellBook(spellBook, index) {
+            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, index, spellBook.width, spellBook.height, spellBook.radii, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text)
 			let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == newSpellBook.index);
 			if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
 				buttonsArray[slotIndex].slotActive = true;

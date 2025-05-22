@@ -58,7 +58,7 @@ const spikePage = {
 	name: "spikePage",
 	spellBookName: spikeBook,
 	rarity: "uncommon",
-	dropChance: 25,
+	dropChance: 250,
 	appearance: "lootDrop/spike_page.png",
 	form: "page",
 	type: "gloom",

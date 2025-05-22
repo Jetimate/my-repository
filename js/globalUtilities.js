@@ -1,4 +1,4 @@
-const constantPlayerSpeed = 5;
+const constantPlayerSpeed = 15; //5
 let keyMovement = true;
 let mouseMovement = false;
 let followMouseMovement = false;

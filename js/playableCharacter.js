@@ -37,7 +37,7 @@ class PlayableCharacter extends Mob {
 	}
 	regenerateHealth() {
 		if (this.maxHealth > this.health) {
-			this.health += this.healthRegen;
+			this.health += this.healthRegen + 1; // remove 1 after debug
 		}
 	}
 	regenerateMana() {

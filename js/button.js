@@ -1,113 +1,245 @@
-/*
+
 const buttonLibrary = {
+	// stats bars
 	levelBar: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#5fa7e5",
 		name: "levelBarButton",
 		group: null,
 		classification: "bar",
-		text: () => `level: ${myGameCharacter.level}`,
+		text: "bug 101",
 		index: 0
 	},
 	experienceBar: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#ffd15d",
 		name: "experienceBarButton",
 		group: null,
 		classification: "bar",
-		text: () => `experience: ${myGameCharacter.experience}`,
+		text: "bug 101",
 		index: 1
 	},
 	healthBar: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#ff5d70",
 		name: "healthBarButton",
 		group: null,
 		classification: "bar",
-		text: () => `health: ${Math.floor(myGameCharacter.health)}/${myGameCharacter.maxHealth}`,
+		text: "bug 101",
 		index: 2
 	},
 	manaBar: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#dbcff8",
 		name: "manaBarButton",
 		group: null,
 		classification: "bar",
-		text: () => `mana: ${Math.floor(myGameCharacter.mana)}/${myGameCharacter.maxMana}`,
+		text: "bug 101",
 		index: 3
 	},
+	// clickable buttons
 	inventoryButton: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#e3a04d",
 		name: "inventoryButton",
 		group: null,
 		classification: "clickable",
-		text: () => "inventory",
+		text: "inventory",
 		index: null
 	},
 	craftButton: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#3477eb",
 		name: "craftButton",
 		group: null,
 		classification: "clickable",
-		text: () => "craft",
+		text: "craft",
 		index: null
 	},
 	settingsButton: {
-		position: (x, y, w, h) => ({
-			x: x,
-			y: y,
-			width: w,
-			height: h
-		}),
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
 		radii: 0,
 		color: "#bab6bf",
 		name: "settingsButton",
 		group: null,
 		classification: "clickable",
-		text: () => "settings",
+		text: "settings",
 		index: null
+	},
+	// spell book slot
+	spellBookSlot: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "black",
+		name: null,
+		group: "spellBookSlot",
+		classification: "slot",
+		text: "bug 101",
+		index: null
+	},
+	// show inventory
+	showInventory: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#e3a04d",
+		name: "showInventory",
+		group: null,
+		classification: "stable",
+		text: "bug 101",
+		index: null
+	},
+	// crafting buttons
+	showCrafting: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#3477eb",
+		name: "showCrafting",
+		group: null,
+		classification: "stable",
+		text: "bug 101",
+		index: null
+	},
+	pageSlot: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "black",
+		name: "pageSlot",
+		group: "craftSlot",
+		classification: "slot",
+		text: "insert 5 pages",
+		index: 1
+	},
+	essenceSlot: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "black",
+		name: "essenceSlot",
+		group: "craftSlot",
+		classification: "slot",
+		text: "insert 15 essence",
+		index: 2
+	},
+	activateCraft: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "gray",
+		name: "activateCraft",
+		group: "craftSlot",
+		classification: "clickable",
+		text: "craft",
+		index: 3
+	},
+	craftedItemSlot: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "black",
+		name: "craftedItemSlot",
+		group: "craftSlot",
+		classification: "slot",
+		text: "crafted item:",
+		index: 4
+	},
+	showSettings: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#bab6bf",
+		name: "showSettings",
+		group: null,
+		classification: "stable",
+		text: "bug 101",
+		index: null
+	},
+	keyMovementButton: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "black",
+		name: "keyMovementButton",
+		group: "movementButtons",
+		classification: "clickable",
+		text: "keyMovement",
+		index: 0
+	},
+	mouseMovementButton: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#bab6bf",
+		name: "mouseMovementButton",
+		group: "movementButtons",
+		classification: "clickable",
+		text: "mouseMovement",
+		index: 1
+	},
+	followMouseMovementButton: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#bab6bf",
+		name: "followMouseMovementButton",
+		group: "movementButtons",
+		classification: "clickable",
+		text: "followMouseMovement",
+		index: 2
 	}
-	
 }
-*/
 class Button {
 	constructor(x, y, width, height, radii, color, name, group, classification, text, index) {
         this.x = x;
@@ -462,8 +594,10 @@ class Button {
 	}
 	
 	clickButton(xmouse, ymouse) {
-		const distance = Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
-		if (distance) {
+		if (
+			xmouse >= this.x && xmouse < this.width + this.x &&
+			ymouse >= this.y && ymouse < this.height + this.y
+		)  {
 			// TODO: update the delete function to also work with other buttons
 			function deleteButton(...buttonNames) {
 				const buttonsToDelete = new Set(buttonNames);
@@ -473,22 +607,25 @@ class Button {
 					}
 				}
 			}
+			function deleteLoot() {
+
+			}
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
 			if (this.name == "settingsButton" && !this.toggle) {
 				this.toggle = true;
 				// settings buttons
-				addButton(new Button((-window.innerWidth / 6) * 1.2, 0, 0, 0, 0, "#bab6bf", "showSettings", null, "stable", "bug 101", null));
-				addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "keyMovementButton", "movementButtons", "clickable", "keyMovement", 0));
-				addButton(new Button(0, 0, 0, 0, 0, "black", "mouseMovementButton", "movementButtons", "clickable", "mouseMovement", 1));
-				addButton(new Button(0, 0, 0, 0, 0, "#bab6bf", "followMouseMovementButton", "movementButtons", "clickable", "followMouseMovement", 2));
+				addButton(buttonLibrary.showSettings, null);
+				addButton(buttonLibrary.keyMovementButton, 0);
+				addButton(buttonLibrary.mouseMovementButton, 1);
+				addButton(buttonLibrary.followMouseMovementButton, 2);
 			} else if (this.name == "settingsButton" && this.toggle) {
 				this.toggle = false;
 				deleteButton("showSettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
-				addButton(new Button(0, 0, 0, 0, 0, "#3477eb", "craftButton", null, "clickable", "bug 101", null));
-				addButton(new Button(0, 0, 0, 0, 0, "#e3a04d", "showInventory", null, "stable", "bug 101", null));
+				addButton(buttonLibrary.craftButton, null);
+				addButton(buttonLibrary.showInventory, null);
 				//console.log(inventoryArray);
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;
@@ -544,12 +681,12 @@ class Button {
 			}
 			if (this.name == "craftButton" && !this.toggle) {
 				this.toggle = true;
-				addButton(new Button(0, 0, 0, 0, 0, "#3477eb", "showCrafting", null, "stable", "bug 101", null));
+				addButton(buttonLibrary.showCrafting, null);
 
-				addButton(new Button(0, 0, 0, 0, 0, "black", "pageSlot", "craftSlot", "slot", "insert 5 pages", 1));
-				addButton(new Button(0, 0, 0, 0, 0, "black", "essenceSlot", "craftSlot", "slot", "insert 15 essence", 2));
-				addButton(new Button(0, 0, 0, 0, 0, "gray", "activateCraft", "craftSlot", "clickable", "craft", 3));
-				addButton(new Button(0, 0, 0, 0, 0, "black", "craftedItemSlot", "craftSlot", "slot", "crafted item:", 4));
+				addButton(buttonLibrary.pageSlot, 1);
+				addButton(buttonLibrary.essenceSlot, 2);
+				addButton(buttonLibrary.activateCraft, 3);
+				addButton(buttonLibrary.craftedItemSlot, 4);
 
 				let arrayTransfer = [];
 				let showInventoryButtonIndex = buttonsArray.findIndex(element => element.name === "showInventory");
