@@ -359,7 +359,7 @@
 							} else {
 								newFOVRadius = this.FOVRadius;
 							}
-
+							console.log(this, this.learnedSpells);
 							castSpell(new Spell(
 								this.x,
 								this.y,

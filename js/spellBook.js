@@ -49,9 +49,11 @@ class SpellBook {
 				buttonsArray[slotIndex].slotActive = false;
 			}
 			if (this.held) {
+				// centers the spell book into the cursor
 				this.x = mouseX - (slotSize / 2);
 				this.y = mouseY - (slotSize / 2);
 			}
+			// if not held
 		} else if (!leftClick && this.held && mouseHeldItem.length >= 1) {
 			this.held = false;
 			this.index = null;

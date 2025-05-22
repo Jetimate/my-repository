@@ -165,7 +165,7 @@ const gloomForestTreant = {
     damage: 3,
     type: "hostile",
     ability: "aimedCasting",
-    learnedSpells: castSpike,
+    learnedSpells: spikeBook.spell,
     castAmount: 1,
     castDelay: 60,
     experienceDrop: 20,

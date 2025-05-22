@@ -599,11 +599,11 @@ class Button {
 			ymouse >= this.y && ymouse < this.height + this.y
 		)  {
 			// TODO: update the delete function to also work with other buttons
-			function deleteButton(...buttonNames) {
+			function deleteElement(elementArray,...buttonNames) {
 				const buttonsToDelete = new Set(buttonNames);
-				for (let i = buttonsArray.length - 1; i >= 0; i--) {
-					if (buttonsToDelete.has(buttonsArray[i].name)) {
-						buttonsArray.splice(i, 1);
+				for (let i = elementArray.length - 1; i >= 0; i--) {
+					if (buttonsToDelete.has(elementArray[i].name)) {
+						elementArray.splice(i, 1);
 					}
 				}
 			}
@@ -620,7 +620,7 @@ class Button {
 				addButton(buttonLibrary.followMouseMovementButton, 2);
 			} else if (this.name == "settingsButton" && this.toggle) {
 				this.toggle = false;
-				deleteButton("showSettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
+				deleteElement(buttonsArray, "showSettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
@@ -629,7 +629,7 @@ class Button {
 				//console.log(inventoryArray);
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;
-				deleteButton("showInventory", "craftButton");
+				deleteElement(buttonsArray, "showInventory", "craftButton");
 
 				let showCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "showCrafting");
 				if (showCraftingButtonIndex !== -1) {
