@@ -30,6 +30,7 @@ const keys = {
 };
 let generatedID = 0;
 let isMouseDown = false;
+let mouseClicked = false;
 let leftClick = false;
 let rightClick = false;
 let mouseX = 0;
@@ -38,6 +39,8 @@ let castMouseX = 0;
 let castMouseY = 0;
 let mouseClickX = 0;
 let mouseClickY = 0;
+let mouseReleaseX = 0;
+let mouseReleaseY = 0;
 let worldX = null;
 let worldY = null;
 let playerTargetX = null;
@@ -85,18 +88,14 @@ var myGame = {
 window.addEventListener("resize", () => {
 	resizePending = true;
 });
-window.addEventListener('click', function (e) {
+window.addEventListener('click', function (event) {
 	gameplayScreen = true;
-
+	mouseClicked = false;
+	
 	const rect = canvas.getBoundingClientRect();
-	mouseClickX = e.clientX - rect.left;
-	mouseClickY = e.clientY - rect.top;
-	buttonsArray.forEach(button => {
-		button.clickButton(mouseClickX, mouseClickY);
-	});
-	spellBooksArray.forEach(spellBook => {
-		spellBook.clickButton(mouseClickX, mouseClickY);
-	})
+	mouseReleaseX = event.clientX - rect.left;
+	mouseReleaseY = event.clientY - rect.top;
+	//console.log("mouseRelease", mouseReleaseX, mouseReleaseY);
 });
 window.addEventListener('mousedown', (event) => {
 	//console.log("mousedown");
@@ -113,7 +112,17 @@ window.addEventListener('mousedown', (event) => {
 
 		myGameCharacter.hasTarget = true;
 	}
+	const rect = canvas.getBoundingClientRect();
+	mouseClickX = event.clientX - rect.left;
+	mouseClickY = event.clientY - rect.top;
+	buttonsArray.forEach(button => {
+		button.clickButton();
+	});
+	spellBooksArray.forEach(spellBook => {
+		spellBook.clickButton();
+	})
 	biome1.clickImage(biome1);
+	//console.log("mouseClicked", mouseClickX, mouseClickY);
 });
 
 window.addEventListener('mouseup', (event) => {
@@ -125,6 +134,10 @@ window.addEventListener('mouseup', (event) => {
 	if (event.button == 2) {
 		rightClick = false;
 	}
+	// TODO: make it so that only spellSlots are called instead of the entire buttons existance
+	buttonsArray.forEach(button => {
+		button.clickButton();
+	});
 });
 
 window.addEventListener('mousemove', (event) => {

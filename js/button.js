@@ -428,7 +428,10 @@ class Button {
 				inventoryArray[i].y = yDistance;
 
 				if (leftClick && mouseHeldItem.length <= 1) {
-					let distance = Math.sqrt(mouseX >= inventoryArray[i].x && mouseX < lootSize + inventoryArray[i].x && mouseY >= inventoryArray[i].y && mouseY < lootSize + inventoryArray[i].y);
+					let distance = mouseClickX >= inventoryArray[i].x &&
+						mouseClickX < lootSize + inventoryArray[i].x &&
+						mouseClickY >= inventoryArray[i].y &&
+						mouseClickY < lootSize + inventoryArray[i].y;
 					if (distance && mouseHeldItem.length < 1) {
 						inventoryArray[i].held = true;
 						inventoryArray[i].from = "inventory";
@@ -593,12 +596,16 @@ class Button {
         ctx.closePath();
 	}
 	
-	clickButton(xmouse, ymouse) {
-		if (
-			xmouse >= this.x && xmouse < this.width + this.x &&
-			ymouse >= this.y && ymouse < this.height + this.y
-		)  {
-			// TODO: update the delete function to also work with other buttons
+	clickButton() {
+		//console.log("i work");
+		if (leftClick &&
+			mouseClickX >= this.x &&
+			mouseClickX <= this.x + this.width &&
+			mouseClickY >= this.y &&
+			mouseClickY <= this.y + this.height
+		) {
+			//console.log("buttonCheck", mouseClickX, mouseClickY);
+			//TODO: update the delete function to also work with other buttons
 			function deleteElement(elementArray,...buttonNames) {
 				const buttonsToDelete = new Set(buttonNames);
 				for (let i = elementArray.length - 1; i >= 0; i--) {
@@ -746,7 +753,15 @@ class Button {
 					}
 				}
 			}
-
+			
+		}
+		if (!leftClick &&
+			mouseX >= this.x &&
+			mouseX <= this.x + this.width &&
+			mouseY >= this.y &&
+			mouseY <= this.y + this.height
+		) {
+			console.log("yippie");
 			if (this.group == "spellBookSlot") {
 				if (mouseHeldItem.length > 0 && mouseHeldItem[0].codeClass == "spellBook" && !this.slotActive) {
 					if (mouseHeldItem[0].from == "inventory") {

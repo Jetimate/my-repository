@@ -37,14 +37,16 @@ class SpellBook {
 		this.x = xDistance;
 		this.y = yDistance;
 		ctx.beginPath();
-		
+
 		if (leftClick && mouseHeldItem.length <= 1) {
-			let distance = Math.sqrt(mouseX >= this.x && mouseX < slotSize + this.x && mouseY >= this.y && mouseY < slotSize + this.y);
+			console.log(this.from);
+			let distance = mouseClickX >= this.x &&
+				mouseClickX < slotSize + this.x &&
+				mouseClickY >= this.y &&
+				mouseClickY < slotSize + this.y
 			if (distance && mouseHeldItem.length < 1) {
 				this.held = true;
-				this.from = "spellBookSlot";
 				mouseHeldItem.push(this);
-
 				let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == this.index);
 				buttonsArray[slotIndex].slotActive = false;
 			}
@@ -68,7 +70,6 @@ class SpellBook {
 			let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
 			spellBooksArray.splice(spellBookIndex, 1);
 		}
-		
 		ctx.roundRect(
 			this.x,
 			this.y,
@@ -600,11 +601,8 @@ class SpellBook {
 		}
 	}
 
-	clickButton(xmouse, ymouse) {
-		//console.log("window x: " + xmouse + " window y: " + ymouse);
-		const distance =
-			Math.sqrt(xmouse >= this.x && xmouse < this.width + this.x && ymouse >= this.y && ymouse < this.height + this.y);
-		if (distance) {
+	clickButton() {
+		console.log(leftClick, mouseHeldItem.length);
 			/*
 			if (this.index === 1) {
 				keys.Digit1 = true;
@@ -635,6 +633,5 @@ class SpellBook {
 			}
 			*/
 			//console.log(this.name + " was clicked");
-		}
 	}
 }
