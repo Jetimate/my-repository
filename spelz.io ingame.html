@@ -27,8 +27,6 @@
 	<script type="text/javascript" src="js/button.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
-	<script type="text/javascript" src="js/libraries/spellsLibrary.js"></script>
-	<script type="text/javascript" src="js/libraries/mainSpellsLibrary.js"></script>
 	<script type="text/javascript" src="js/libraries/spellBooksLibrary.js"></script>
 
 	<script type="text/javascript" src="js/libraries/lootDropLibrary.js"></script>
@@ -378,7 +376,7 @@
 			buttonsArray.push(newButton);
 		}
 		function addSpellBook(spellBook, index) {
-            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, index, spellBook.width, spellBook.height, spellBook.radii, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text)
+            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, index, spellBook.width, spellBook.height, spellBook.radii, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text)
 			let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == newSpellBook.index);
 			if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
 				buttonsArray[slotIndex].slotActive = true;

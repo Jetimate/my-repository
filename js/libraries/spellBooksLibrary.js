@@ -25,10 +25,10 @@ const spikeBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainSpike = {
+	spellCore: spikeCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainSpike",
+		name: "spikeCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/spike_spellBook.png",
@@ -73,10 +73,10 @@ const luminousEnergyBook = {
 		summonCost: 0,
 		respawnTime: 1000
 	},
-	mainSpell: mainLuminousEnergy = {
+	spellCore: luminousEnergyCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainLuminousEnergy",
+		name: "luminousEnergyCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/luminousEnergy_spellBook.png",
@@ -121,10 +121,10 @@ const glowShardBook = {
 		summonCost: 0,
 		respawnTime: 1000
 	},
-	mainSpell: mainGlowShard = {
+	spellCore: glowShardCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainGlowShard",
+		name: "glowShardCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/glowShard_spellBook.png",
@@ -169,10 +169,10 @@ const luminousSpiritBook = {
 		summonCost: 2,
 		respawnTime: 1000
 	},
-	mainSpell: mainLuminousSpirit = {
+	spellCore: luminousSpiritCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainLuminousSpirit",
+		name: "luminousSpiritCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/luminousSpirit_spellBook.png",
@@ -217,10 +217,10 @@ const specterBook = {
 		summonCost: 2.5,
 		respawnTime: 1500
 	},
-	mainSpell: mainSpecter = {
+	spellCore: specterCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainSpecter",
+		name: "specterCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/specter_spellBook.png",
@@ -265,10 +265,10 @@ const specterHandBook = {
 		summonCost: 0,
 		respawnTime: 1500
 	},
-	mainSpell: mainSpecterHand = {
+	spellCore: specterHandCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainSpecterHand",
+		name: "specterHandCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/specterHand_spellBook.png",
@@ -313,10 +313,10 @@ const teleportBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainTeleport = {
+	spellCore: teleportCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainTeleport",
+		name: "teleportCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/teleportation_spellBook.png",
@@ -361,10 +361,10 @@ const smashBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainSmash = {
+	spellCore: smashCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainSmash",
+		name: "smashCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/smash_spellBook.png",
@@ -409,10 +409,10 @@ const beamBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainBeam = {
+	spellCore: beamCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainBeam",
+		name: "beamCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/beam_spellBook.png",
@@ -457,10 +457,10 @@ const lightningBoltBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainLightningBolt = {
+	spellCore: lightningBoltCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainLightningBolt",
+		name: "lightningBoltCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/lightningBolt_spellBook.png",
@@ -505,10 +505,10 @@ const energyBallBook = {
 		summonCost: 0,
 		respawnTime: 500
 	},
-	mainSpell: mainEnergyBall = {
+	spellCore: energyBallCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainEnergyBall",
+		name: "energyBallCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/energyBall_spellBook.png",
@@ -553,10 +553,10 @@ const luminousShieldBook = {
 		summonCost: 5,
 		respawnTime: 1000
 	},
-	mainSpell: mainLuminousShield = {
+	spellCore: luminousShieldCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainLuminousShield",
+		name: "luminousShieldCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/luminousShield_spellBook.png",
@@ -601,10 +601,10 @@ const treeBook = {
 		summonCost: 2,
 		respawnTime: 1500
 	},
-	mainSpell: mainTree = {
+	spellCore: treeCore = {
 		radius: 12,
 		FOVRadius: 0,
-		name: "mainTree",
+		name: "treeCore",
 		art: "books",
 		shape: "circle",
 		appearance: "spellBook/summonTree_spellBook.png",
