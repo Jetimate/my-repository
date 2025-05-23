@@ -372,6 +372,7 @@ class Spell {
 			if (this.y < this.radius) this.y = this.radius;
 			if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 		}
+		// basic shooting
 		if (this.ability === "shoot1") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
@@ -398,6 +399,7 @@ class Spell {
 				this.destroy();
 			}
 		}
+		// orbits the petal and takes time before you're able to aim the shot
 		if (this.ability === "shoot2") {
 			switch (this.state) {
 				case 0:

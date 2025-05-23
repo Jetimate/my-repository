@@ -29,10 +29,12 @@ const keys = {
 	KeyB: false
 };
 let generatedID = 0;
+
 let isMouseDown = false;
 let mouseClicked = false;
 let leftClick = false;
 let rightClick = false;
+
 let mouseX = 0;
 let mouseY = 0;
 let castMouseX = 0;
@@ -45,15 +47,19 @@ let worldX = null;
 let worldY = null;
 let playerTargetX = null;
 let playerTargetY = null;
+
 let mobsArray = [];
 let lootsArray = [];
 let inventoryArray = [];
 let buttonsArray = [];
 let spellBooksArray = [];
 let spellsArray = [];
-let maxExperience = 100;
 let mouseHeldItem = [];
 let toBeCraftedArray = [];
+
+let maxExperience = 100;
+let manaBuildUp = 0;
+
 const lootSize = (screen.width + screen.height) / 32;
 const slotSize = (screen.width + screen.height) / 40;
 const slotMargin = (screen.width + screen.height) / 128;

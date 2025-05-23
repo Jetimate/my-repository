@@ -132,8 +132,7 @@ class SpellBook {
 	interact() {
 		let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name);
 
-		if (this.spell.ability === "shoot1" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
+		if (this.spell.ability === "shoot1") {
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
@@ -173,8 +172,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.spell.ability === "shoot2" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
+		if (this.spell.ability === "shoot2") {
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			this.spell.maxAmount = spellBookCastAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -215,8 +213,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.spell.ability === "shoot3" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
+		if (this.spell.ability === "shoot3") {
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			this.spell.maxAmount = spellBookCastAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -258,9 +255,7 @@ class SpellBook {
 			}, 50);
 		}
 		if ((this.spell.art === "summoning") &&
-			(myGameCharacter.mana > this.spell.manaCost) &&
 			(myGameCharacter.summonLimit >= myGameCharacter.summonSpace + this.spell.castAmount * this.spell.summonCost)) {
-			myGameCharacter.mana -= this.spell.manaCost;
 			//let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
 			let spellBookCastAmount = this.spell.castAmount;
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -311,8 +306,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.spell.ability === "teleport" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
+		if (this.spell.ability === "teleport") {
 			//castMouseX = worldX - biome1.x;
 			//castMouseY = worldY - biome1.y;
 			let spellCount = 0; // Keep track of how many spells have been cast
@@ -352,9 +346,7 @@ class SpellBook {
 				}
 			}, 50);
 		}
-		if (this.spell.ability === "AoE1" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
-
+		if (this.spell.ability === "AoE1") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
@@ -392,9 +384,7 @@ class SpellBook {
 				}
 			}, 15);
 		}
-		if (this.spell.ability === "beam1" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
-
+		if (this.spell.ability === "beam1") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
@@ -432,9 +422,7 @@ class SpellBook {
 				}
 			}, 15);
 		}
-		if (this.spell.ability === "beam2" && myGameCharacter.mana > this.spell.manaCost) {
-			myGameCharacter.mana -= this.spell.manaCost;
-
+		if (this.spell.ability === "beam2") {
 			castMouseX = worldX - biome1.x;
 			castMouseY = worldY - biome1.y;
 
@@ -489,10 +477,16 @@ class SpellBook {
 			this.level++;
 		}
 		if (this.index === 1) {
-			if (keys.Digit1 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit1 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -500,10 +494,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 2) {
-			if (keys.Digit2 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit2 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -511,10 +511,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 3) {
-			if (keys.Digit3 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit3 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -522,10 +528,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 4) {
-			if (keys.Digit4 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit4 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;				
@@ -533,10 +545,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 5) {
-			if (keys.Digit5 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit5 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -544,10 +562,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 6) {
-			if (keys.Digit6 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit6 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -555,10 +579,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 7) {
-			if (keys.Digit7 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit7 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -566,10 +596,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 8) {
-			if (keys.Digit8 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit8 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
@@ -577,10 +613,16 @@ class SpellBook {
 			}
 		}
 		if (this.index === 9) {
-			if (keys.Digit9 && this.spellReady && myGameCharacter.mana > this.spell.manaCost) {
+			if (keys.Digit9 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
+				if (!this.spellActive) {
+					manaBuildUp += this.spell.manaCost
+				}
 				this.spellActive = true;
 				this.borderColor = "green";
 			} else if (leftClick && this.spellActive) {
+				manaBuildUp -= this.spell.manaCost
+				myGameCharacter.mana -= this.spell.manaCost;
+
 				this.borderColor = "black";
 				this.interact();
 				this.spellActive = false;
