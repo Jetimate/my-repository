@@ -761,7 +761,6 @@ class Button {
 			mouseY >= this.y &&
 			mouseY <= this.y + this.height
 		) {
-			console.log("yippie");
 			if (this.group == "spellBookSlot") {
 				if (mouseHeldItem.length > 0 && mouseHeldItem[0].codeClass == "spellBook" && !this.slotActive) {
 					if (mouseHeldItem[0].from == "inventory") {
@@ -846,7 +845,7 @@ class Button {
 
 						let craftedItemSlotIndex = buttonsArray.findIndex(element => element.name == "craftedItemSlot");
 
-						// check if there's an item at the craftedItemSlot
+						// checks if there's an item at the craftedItemSlot
 						if (buttonsArray[craftedItemSlotIndex].slotActive) {
 							let spellBookIndex = toBeCraftedArray.findIndex(element => element.codeClass == "spellBook");
 
@@ -858,15 +857,14 @@ class Button {
 
 							buttonsArray[craftedItemSlotIndex].slotActive = false;
 						}
-
+						// crafts a spell book
 						let spellBook = toBeCraftedArray[pageIndex].spellBookName;
-						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.mainSpell, spellBook.cooldown, spellBook.text);
+						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text);
 
+						// places the spell book inside the crafted item slot 
 						craftedSpellBook.index = buttonsArray[craftedItemSlotIndex].index;
 						craftedSpellBook.location = buttonsArray[craftedItemSlotIndex].name;
-
 						toBeCraftedArray.push(craftedSpellBook);
-
 						buttonsArray[craftedItemSlotIndex].slotActive = true;
 
 						if (toBeCraftedArray[pageIndex].amount == 0) {

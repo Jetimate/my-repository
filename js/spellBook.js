@@ -39,7 +39,6 @@ class SpellBook {
 		ctx.beginPath();
 
 		if (leftClick && mouseHeldItem.length <= 1) {
-			console.log(this.from);
 			let distance = mouseClickX >= this.x &&
 				mouseClickX < slotSize + this.x &&
 				mouseClickY >= this.y &&
@@ -51,7 +50,9 @@ class SpellBook {
 				buttonsArray[slotIndex].slotActive = false;
 			}
 			if (this.held) {
+				console.log(this.from);
 				// centers the spell book into the cursor
+				this.from = "spellBookSlot";
 				this.x = mouseX - (slotSize / 2);
 				this.y = mouseY - (slotSize / 2);
 			}
@@ -63,6 +64,7 @@ class SpellBook {
 			this.spawned = false;
 			inventoryArray.push(this);
 			mouseHeldItem.splice(0, mouseHeldItem.length);
+			console.log("i was called");
 
 			let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name && element.spellBookID == this.uniqueID);
 			spellsArray.splice(spellCoreIndex, 1);
@@ -602,7 +604,6 @@ class SpellBook {
 	}
 
 	clickButton() {
-		console.log(leftClick, mouseHeldItem.length);
 			/*
 			if (this.index === 1) {
 				keys.Digit1 = true;
