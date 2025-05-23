@@ -146,6 +146,14 @@
                 canvas.width = newWidth;
                 canvas.height = newHeight;
 			}
+            lootSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.025;
+			slotSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.03;
+            slotMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
+            radiiSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.002;
+            miniButtonSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.015;
+            buttonMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
+            lineThickness = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.0008;
+			fontSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.00575;
 
             statsBarX = window.innerWidth * 0.004;
             statsBarY = window.innerHeight * 0.008;
@@ -561,7 +569,13 @@
 					let playerDamage = Math.max(0, player.damage - mob.defense);
 					player.health = Math.max(0, player.health - mobDamage);
 					mob.health = Math.max(0, mob.health - playerDamage);
-
+                    // Check if the mob should die and be removed
+                    if (mob.health <= 0) {
+                        player.experience += mob.experienceDrop;
+                        levelUp();
+                        mob.spawn();
+						mob.die();
+                    }
 					if (player.health <= 0) {
 						playerDeath();
 					}
@@ -634,7 +648,7 @@
 							}
 							// Remove the spell only if its health is <= 0 after damaging all mobs
 							if (spell.health <= 0) {
-								myGameCharacter.speed = constantPlayerSpeed;
+                                player.speed = constantPlayerSpeed;
 								spell.destroy();
 							}
 
@@ -734,7 +748,7 @@
 
 								// Check if the mob should die and be removed
 								if (mob.health <= 0) {
-									myGameCharacter.experience += mob.experienceDrop;
+                                    myGameCharacter.experience += mob.experienceDrop;
 									levelUp();
 									mob.spawn();
 									mob.die();
@@ -744,7 +758,7 @@
 								// Remove the spell only if its health is <= 0 after damaging all mobs
 								if (spell.health <= 0) {
 									//temporary solution to bug number 3. make sure to finalize this
-									myGameCharacter.speed = constantPlayerSpeed;
+                                    myGameCharacter.speed = constantPlayerSpeed;
 									spell.destroy();
 								}
 								// Apply knockback to both spell and mob

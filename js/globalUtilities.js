@@ -60,14 +60,14 @@ let toBeCraftedArray = [];
 let maxExperience = 100;
 let manaBuildUp = 0;
 
-const lootSize = (screen.width + screen.height) / 32;
-const slotSize = (screen.width + screen.height) / 40;
-const slotMargin = (screen.width + screen.height) / 128;
-const radiiSize = (screen.width + screen.height) / 300;
-const miniButtonSize = (screen.width + screen.height) / 64;
-const buttonMargin = screen.width / 128;
-const lineThickness = (screen.width + screen.height) / 1200;
-const fontSize = (screen.width + screen.height) / 160;
+let lootSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.025;
+let slotSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.03;
+let slotMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
+let radiiSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.002;
+let miniButtonSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.015;
+let buttonMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
+let lineThickness = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.0008;
+let fontSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.00575;
 
 let statsBarX = window.innerWidth * 0.004;
 let statsBarY = window.innerHeight * 0.008;

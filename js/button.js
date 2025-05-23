@@ -271,7 +271,7 @@ class Button {
 		ctx.lineWidth = lineThickness;
 		ctx.stroke();
 
-		ctx.font = fontSize + "px ubuntu";
+		ctx.font = fontSize + "px 'Trebuchet MS'";
 		ctx.fillStyle = "black";
 
 		if (this.classification == "bar") {
@@ -398,7 +398,7 @@ class Button {
 				}
 			}
 
-			ctx.font = fontSize + "px ubuntu";
+			ctx.font = fontSize + "px 'Trebuchet MS'";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
@@ -412,8 +412,8 @@ class Button {
 			let row = 0;
 			let column = 0;
 			let slotsPerRow = 5;
-			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3;
-			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
+			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
+			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
 
 			for (let i = 0; i < inventoryArray.length; i++) {
 
@@ -460,7 +460,7 @@ class Button {
 				ctx.strokeStyle = inventoryArray[i].borderColor;
 				ctx.lineWidth = lineThickness;
 				ctx.stroke();
-				ctx.font = fontSize + "px ubuntu";
+				ctx.font = (fontSize * 0.8) + "px 'Trebuchet MS'";
 				ctx.fillStyle = "black";
 
 				ctx.drawImage(
@@ -511,7 +511,7 @@ class Button {
 				ctx.strokeStyle = toBeCraftedArray[i].borderColor;
 				ctx.lineWidth = lineThickness;
 				ctx.stroke();
-				ctx.font = fontSize + "px ubuntu";
+				ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
 				ctx.fillStyle = "black";
 
 				ctx.drawImage(
@@ -566,7 +566,7 @@ class Button {
 				}
 			}
 
-			ctx.font = fontSize + "px ubuntu";
+			ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
@@ -586,7 +586,7 @@ class Button {
 			} else {
 				this.text = "slot " + this.index;
 			}
-			ctx.font = fontSize + "px ubuntu";
+			ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
 			ctx.fillStyle = "black";
 			ctx.fillText(
 				this.text,
