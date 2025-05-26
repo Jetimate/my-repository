@@ -410,7 +410,7 @@ class Spell {
 						this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
 						this.damageIncrease = this.damage / 30; //0.03
 						this.toggle = true;
-						console.log(this.radiusIncrease, this.orbitRadiusIncrease, this.damageIncrease);
+						//console.log(this.radiusIncrease, this.orbitRadiusIncrease, this.damageIncrease);
 					}
 
 					const dx = targetX - this.x;

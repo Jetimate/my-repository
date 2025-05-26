@@ -256,6 +256,14 @@ class Button {
 		this.toggle = false;
 		this.codeClass = "button";
 		this.slotActive = false;
+		this.isShaking = false;
+		this.shakeStartTime = null;
+		this.shakeDuration = 0;
+		this.shakeIntensity = 0;
+		this.shakeReason = "";
+		this.originalX = this.x;
+		this.originalY = this.y;
+		this.originalColor = this.color;
     }
 
 	draw(ctx) {
@@ -328,13 +336,13 @@ class Button {
 				if (this.x > -this.width * 1.2) {
 					// Ensure we don't overshoot the target
 					this.x = Math.max(this.x - 5, -this.width * 1.2);
-					console.log(this.x, -this.width * 1.2);
+					//console.log(this.x, -this.width * 1.2);
 				}
 			} else {
 				if (this.x < buttonMargin) {
 					// Ensure we don't overshoot the target
 					this.x = Math.min(this.x + 5, buttonMargin);
-					console.log(this.x, buttonMargin);
+					//console.log(this.x, buttonMargin);
 				}
 			}	
 			this.y = window.innerHeight - this.height - window.innerHeight / 20 - (slotMargin * 2);
@@ -890,6 +898,36 @@ class Button {
 					toBeCraftedArray.splice(spellBookIndex, 1);
 				}
 			}
+		}
+	}
+	// method called inside spellBook.js whenever there is sufficient mana
+	startShaking(reason, duration, intensity) {
+		this.isShaking = true;
+		this.shakeStartTime = performance.now();
+		this.shakeDuration = duration;
+		this.shakeIntensity = intensity;
+		this.shakeReason = reason;
+		this.originalX = this.x;
+		this.originalY = this.y;
+		console.log(`${this.name} is shaking due to ${reason}`);
+		if (reason == "insufficientMana") {
+			this.color = "red";
+			this.originalColor = buttonLibrary.manaBar.color;
+		}
+	}
+
+	updateShake(currentTime) {	
+		const elapsed = currentTime - this.shakeStartTime;
+		if (elapsed < this.shakeDuration) {
+			console.log(buttonLibrary.manaBar.color);
+			this.x = this.originalX + (Math.random() - 0.5) * this.shakeIntensity;
+			this.y = this.originalY + (Math.random() - 0.5) * this.shakeIntensity;
+		} else {
+			this.x = this.originalX;
+			this.y = this.originalY;
+			this.color = this.originalColor;
+			this.isShaking = false;
+			this.shakeStartTime = null;
 		}
 	}
 }

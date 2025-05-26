@@ -36,7 +36,15 @@
 	<script>
 		/*
 		reminders when working on this game:
-		1. always commit all and push to github before trying something new
+		1. always commit all and push to github before coding something new or big.
+		2. when adding new code that is referenced or initialized on a different file,
+		   comment it out so that future debugging will be easier to execute.
+
+
+		other possibly useless reminder:
+		1. performace.now() can reach billions of numbers. 
+		   if this increases too much, it can cause lag to the game.
+		   add a way to reset it overtime.
 		*/
 		const starterMobsArray = [
 			luminousRock,
@@ -116,7 +124,9 @@
 		function spellsKeeper() {
 		}
 
-        function updateCanvas() {
+		function updateCanvas(time) {
+			gameTime = time;
+
             if (resizePending) {
                 resizeCanvas();
                 resizePending = false;
@@ -162,7 +172,7 @@
         }
 
 		function updateGameplayScreen() {
-			console.log(manaBuildUp, myGameCharacter.mana);
+			//console.log(gameTime, performance.now());
 			// Calculate world coordinates
 			worldX = (mouseX / camera.zoom) + camera.x;
 			worldY = (mouseY / camera.zoom) + camera.y;
@@ -188,6 +198,9 @@
             camera.resetTransform(ctx);
 
 			buttonsArray.forEach(button => {
+                if (button.isShaking) {
+                    button.updateShake(performance.now());
+                }
 				button.draw(ctx);
 			});
 			spellBooksArray.forEach(spellBook => {

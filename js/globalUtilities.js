@@ -28,10 +28,19 @@ const keys = {
 	Space: false,
 	KeyB: false
 };
+
+// Track if the key has already fired a "pressed once" event
+const keyPressedOnce = {};
+
+// Initialize keyPressedOnce for all keys in keys
+for (const key in keys) {
+	keyPressedOnce[key] = false;
+}
+
 let generatedID = 0;
+let gameTime = 0;
 
 let isMouseDown = false;
-let mouseClicked = false;
 let leftClick = false;
 let rightClick = false;
 
@@ -96,7 +105,6 @@ window.addEventListener("resize", () => {
 });
 window.addEventListener('click', function (event) {
 	gameplayScreen = true;
-	mouseClicked = false;
 	
 	const rect = canvas.getBoundingClientRect();
 	mouseReleaseX = event.clientX - rect.left;
@@ -128,7 +136,6 @@ window.addEventListener('mousedown', (event) => {
 		spellBook.clickButton();
 	})
 	biome1.clickImage(biome1);
-	//console.log("mouseClicked", mouseClickX, mouseClickY);
 });
 
 window.addEventListener('mouseup', (event) => {
@@ -158,6 +165,13 @@ window.addEventListener('mousemove', (event) => {
 });
 // Key down event listener
 window.addEventListener('keydown', (event) => {
+	if (keys.hasOwnProperty(event.code)) {
+		if (!keys[event.code]) {
+			// Key was not previously pressed, so register a "pressed once"
+			keyPressedOnce[event.code] = true;
+		}
+		keys[event.code] = true; // mark key as pressed
+	}
 	//console.log(event);
 	if (event.code in keys) {
 		keys[event.code] = true;
@@ -166,6 +180,10 @@ window.addEventListener('keydown', (event) => {
 
 // Key up event listener
 window.addEventListener('keyup', (event) => {
+	if (keys.hasOwnProperty(event.code)) {
+		keys[event.code] = false;          // mark key as released
+		keyPressedOnce[event.code] = false; // reset pressed once flag on release
+	}
 	if (event.code in keys) {
 		keys[event.code] = false;
 	}

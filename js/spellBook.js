@@ -476,159 +476,42 @@ class SpellBook {
 			this.maxPages += 3;
 			this.level++;
 		}
-		if (this.index === 1) {
-			if (keys.Digit1 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
+		// Handle spell input (1–9)
+		const digitKey = `Digit${this.index}`;
+		const keyPressed = keys[digitKey];
 
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
+		 if (
+			this.index >= 1 && this.index <= 9 &&
+			this.spellReady &&
+			 keyPressed &&
+			 keyPressedOnce[digitKey] &&
+			myGameCharacter.mana - manaBuildUp >= this.spell.manaCost
+		 ) {
+			keyPressedOnce[digitKey] = false;
+			if (!this.spellActive) {
+				manaBuildUp += this.spell.manaCost;
 			}
+			this.spellActive = true;
+			this.borderColor = "green";
+		} else if (leftClick && this.spellActive) {
+			manaBuildUp -= this.spell.manaCost;
+			myGameCharacter.mana -= this.spell.manaCost;
+			this.borderColor = "black";
+			this.interact();
+			this.spellActive = false;
+			this.spellReady = false;
+		} else if (
+			this.index >= 1 && this.index <= 9 &&
+			this.spellReady &&
+			keyPressed &&
+			keyPressedOnce[digitKey] &&
+			!(myGameCharacter.mana - manaBuildUp >= this.spell.manaCost)) {
+
+			keyPressedOnce[digitKey] = false;
+			let manaBarIndex = buttonsArray.findIndex(button => button.name == "manaBarButton");
+			 buttonsArray[manaBarIndex].startShaking("insufficientMana", 300, 5);
 		}
-		if (this.index === 2) {
-			if (keys.Digit2 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
 
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 3) {
-			if (keys.Digit3 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 4) {
-			if (keys.Digit4 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;				
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 5) {
-			if (keys.Digit5 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 6) {
-			if (keys.Digit6 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 7) {
-			if (keys.Digit7 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 8) {
-			if (keys.Digit8 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		}
-		if (this.index === 9) {
-			if (keys.Digit9 && this.spellReady && myGameCharacter.mana > this.spell.manaCost + manaBuildUp) {
-				if (!this.spellActive) {
-					manaBuildUp += this.spell.manaCost
-				}
-				this.spellActive = true;
-				this.borderColor = "green";
-			} else if (leftClick && this.spellActive) {
-				manaBuildUp -= this.spell.manaCost
-				myGameCharacter.mana -= this.spell.manaCost;
-
-				this.borderColor = "black";
-				this.interact();
-				this.spellActive = false;
-				this.spellReady = false;
-			}
-		} 
 		if (!this.spellReady) {
 			this.cooldownTimer++;
 			this.borderColor = "red";
@@ -643,6 +526,10 @@ class SpellBook {
 			// activate only if the spell is on a slot.
 			this.activate();
 		}
+
+		else {
+		}
+
 	}
 
 	clickButton() {
