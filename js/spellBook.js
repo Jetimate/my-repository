@@ -130,7 +130,8 @@ class SpellBook {
 		this.spawned = true;	
 	}
 	interact() {
-		let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name);
+		// locates the index of the spells' core
+		let spellCoreIndex = spellsArray.findIndex(element => element.spellBookID == this.uniqueID);
 
 		if (this.spell.ability === "shoot1") {
 			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
@@ -307,8 +308,6 @@ class SpellBook {
 			}, 50);
 		}
 		if (this.spell.ability === "teleport") {
-			//castMouseX = worldX - biome1.x;
-			//castMouseY = worldY - biome1.y;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
@@ -423,8 +422,8 @@ class SpellBook {
 			}, 15);
 		}
 		if (this.spell.ability === "beam2") {
-			castMouseX = worldX - biome1.x;
-			castMouseY = worldY - biome1.y;
+			castMouseX = mouseWorldX - biome1.x;
+			castMouseY = mouseWorldY - biome1.y;
 
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
@@ -480,13 +479,12 @@ class SpellBook {
 		const digitKey = `Digit${this.index}`;
 		const keyPressed = keys[digitKey];
 
-		 if (
-			this.index >= 1 && this.index <= 9 &&
+		if (this.index >= 1 && this.index <= 9 &&
 			this.spellReady &&
-			 keyPressed &&
-			 keyPressedOnce[digitKey] &&
+			keyPressed &&
+			keyPressedOnce[digitKey] &&
 			myGameCharacter.mana - manaBuildUp >= this.spell.manaCost
-		 ) {
+		) {
 			keyPressedOnce[digitKey] = false;
 			if (!this.spellActive) {
 				manaBuildUp += this.spell.manaCost;
@@ -500,8 +498,7 @@ class SpellBook {
 			this.interact();
 			this.spellActive = false;
 			this.spellReady = false;
-		} else if (
-			this.index >= 1 && this.index <= 9 &&
+		} else if (this.index >= 1 && this.index <= 9 &&
 			this.spellReady &&
 			keyPressed &&
 			keyPressedOnce[digitKey] &&
@@ -510,6 +507,7 @@ class SpellBook {
 			keyPressedOnce[digitKey] = false;
 			let manaBarIndex = buttonsArray.findIndex(button => button.name == "manaBarButton");
 			 buttonsArray[manaBarIndex].startShaking("insufficientMana", 300, 5);
+			 shakeScreen();
 		}
 
 		if (!this.spellReady) {

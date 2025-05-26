@@ -78,9 +78,15 @@
             addLootToInventory(spikePage, 64);
 			addLootToInventory(gloomEssence, 64);
 			// -------
+
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.005); //mana regen = 0.0005, mana = 5
+			//original stats
+//			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.0005); //mana regen = 0.0005
+			// test stats
+			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 20, 0, 0, 0.01, 0.005); //mana regen = 0.0005
 			camera = new Camera(canvas.width, canvas.height);
+			shake = new ScreenShake();
+
 			spawnMobs();
 			buttonsKeeper();
 			spellBooksKeeper();
@@ -108,11 +114,17 @@
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-			
+			/*
             addSpellBook(spikeBook, 1);
             addSpellBook(smashBook, 2);
             addSpellBook(luminousEnergyBook, 3);
 			addSpellBook(glowShardBook, 4);
+			*/
+
+			addSpellBook(lightningBoltBook, 1);
+			addSpellBook(lightningBoltBook, 2);
+            addSpellBook(lightningBoltBook, 3);
+            addSpellBook(lightningBoltBook, 4);
 
             addSpellBook(energyBallBook, null);
             addSpellBook(specterBook, null);
@@ -174,11 +186,15 @@
 		function updateGameplayScreen() {
 			//console.log(gameTime, performance.now());
 			// Calculate world coordinates
-			worldX = (mouseX / camera.zoom) + camera.x;
-			worldY = (mouseY / camera.zoom) + camera.y;
+			mouseWorldX = (mouseX / camera.zoom) + camera.x;
+            mouseWorldY = (mouseY / camera.zoom) + camera.y;
 
 			// Update camera to follow the player
 			camera.follow(myGameCharacter, myGame.context.canvas.width, myGame.context.canvas.height);
+
+            ctx.save();           // Save context state
+            shake.apply(ctx);     // Apply screen shake
+
             camera.applyTransform(ctx);  
             // Draw game objects
 			biome1.draw(ctx);
@@ -195,7 +211,10 @@
 			updatePlayerPosition();
 
             // Reset transformations (important!!!)
-            camera.resetTransform(ctx);
+			camera.resetTransform(ctx);
+
+            shake.reset(ctx);     // Reset any screen shake transforms
+            ctx.restore();        // Restore context state
 
 			buttonsArray.forEach(button => {
                 if (button.isShaking) {
@@ -285,8 +304,8 @@
 					}
 				}
 				if (followMouseMovement) {
-					let castMouseX = worldX - biome1.x;
-					let castMouseY = worldY - biome1.y;
+                    let castMouseX = mouseWorldX - biome1.x;
+                    let castMouseY = mouseWorldY - biome1.y;
 					let dx = castMouseX - myGameCharacter.x;
 					let dy = castMouseY - myGameCharacter.y;
 
@@ -305,6 +324,39 @@
 					}
 				}
 			}
+		}
+		function shakeScreen(magnitude, duration) {
+            shake.start(magnitude, duration);
+		}
+        function evaluatePlayerDamage(player, entity) {
+			//TODO: rearrange the lines of code
+            // Apply damage
+            let entityDamage = Math.max(0, entity.damage - player.defense);
+            let playerDamage = Math.max(0, player.damage - entity.defense);
+
+			// checks if damage is from a mob
+            if (entity.codeClass == "mob" && entity.health <= 0) {
+                player.experience += entity.experienceDrop;
+                levelUp();
+                entity.spawn();
+                entity.die();
+			}
+			// checks if damage is from a spell
+            if (entity.codeClass == "spell" && entity.health <= 0) {
+                player.speed = constantPlayerSpeed;
+                entity.destroy();
+            }
+
+			// checks if opponent damage is equal to 5% of player health
+            if (entityDamage >= player.health * 0.05) {
+				console.log("ha");
+				shake.start(5, 200);
+			}
+            entity.health = Math.max(0, entity.health - playerDamage);
+            player.health = Math.max(0, player.health - entityDamage);
+            if (player.health <= 0) {
+                playerDeath();
+            }
 		}
 		function playerDeath() {
 			alert("game over");
@@ -576,22 +628,7 @@
 						if (mob.y < mob.radius) mob.y = mob.radius;
 						if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
 					}
-
-					// Apply damage
-					let mobDamage = Math.max(0, mob.damage - player.defense);
-					let playerDamage = Math.max(0, player.damage - mob.defense);
-					player.health = Math.max(0, player.health - mobDamage);
-					mob.health = Math.max(0, mob.health - playerDamage);
-                    // Check if the mob should die and be removed
-                    if (mob.health <= 0) {
-                        player.experience += mob.experienceDrop;
-                        levelUp();
-                        mob.spawn();
-						mob.die();
-                    }
-					if (player.health <= 0) {
-						playerDeath();
-					}
+					evaluatePlayerDamage(player, mob);
 				}
 			});
 		}
@@ -649,21 +686,7 @@
 							}
 						}
 						function simulateCollision() {
-
-							let spellDamage = Math.max(0, spell.damage - player.defense);
-							let playerDamage = Math.max(0, player.damage - spell.defense);
-							player.health = Math.max(0, player.health - spellDamage);
-							spell.health = Math.max(0, spell.health - playerDamage);
-
-							// Check if the player should die and be removed
-							if (player.health <= 0) {
-								playerDeath();
-							}
-							// Remove the spell only if its health is <= 0 after damaging all mobs
-							if (spell.health <= 0) {
-                                player.speed = constantPlayerSpeed;
-								spell.destroy();
-							}
+                            evaluatePlayerDamage(player, spell);
 
 							// Apply knockback to both spell and player
 							const dx = player.x - spell.x;
@@ -671,6 +694,7 @@
 							const angle = Math.atan2(dy, dx);
 							const knockbackDistance = 2;
 
+							/*
 							if (!spell.ignoreMobCollision) {
 								spell.x -= Math.cos(angle) * knockbackDistance;
 								spell.y -= Math.sin(angle) * knockbackDistance;
@@ -683,6 +707,7 @@
 								if (player.y < player.radius) player.y = player.radius;
 								if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 							}
+							*/
 						}
 					}
 				}
@@ -765,8 +790,6 @@
 									levelUp();
 									mob.spawn();
 									mob.die();
-									mobArray.splice(mobIndex, 1);
-									mobIndex--; // Adjust index after removal
 								}
 								// Remove the spell only if its health is <= 0 after damaging all mobs
 								if (spell.health <= 0) {

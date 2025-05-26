@@ -82,7 +82,7 @@ const zapper = {
     castAmount: 3,
     castDelay: 120,
     experienceDrop: 15,
-    lootDrop: [glowEssence, manaOrb],
+    lootDrop: [glowEssence, lightningBoltPage, manaOrb],
     intelligence: 1,
     respawnTime: 4000
 };

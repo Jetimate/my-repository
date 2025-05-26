@@ -909,7 +909,6 @@ class Button {
 		this.shakeReason = reason;
 		this.originalX = this.x;
 		this.originalY = this.y;
-		console.log(`${this.name} is shaking due to ${reason}`);
 		if (reason == "insufficientMana") {
 			this.color = "red";
 			this.originalColor = buttonLibrary.manaBar.color;
@@ -919,7 +918,6 @@ class Button {
 	updateShake(currentTime) {	
 		const elapsed = currentTime - this.shakeStartTime;
 		if (elapsed < this.shakeDuration) {
-			console.log(buttonLibrary.manaBar.color);
 			this.x = this.originalX + (Math.random() - 0.5) * this.shakeIntensity;
 			this.y = this.originalY + (Math.random() - 0.5) * this.shakeIntensity;
 		} else {

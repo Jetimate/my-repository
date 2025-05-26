@@ -1,4 +1,4 @@
-const constantPlayerSpeed = 15; //5
+const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;
 let mouseMovement = false;
 let followMouseMovement = false;
@@ -44,16 +44,20 @@ let isMouseDown = false;
 let leftClick = false;
 let rightClick = false;
 
-let mouseX = 0;
-let mouseY = 0;
-let castMouseX = 0;
-let castMouseY = 0;
-let mouseClickX = 0;
-let mouseClickY = 0;
-let mouseReleaseX = 0;
-let mouseReleaseY = 0;
-let worldX = null;
-let worldY = null;
+let mouseX = null;
+let mouseY = null;
+let mouseDownMoveX = null;
+let mouseDownMoveY = null;
+let castMouseX = null;
+let castMouseY = null;
+let mouseClickX = null;
+let mouseClickY = null;
+let worldMouseClickX = null;
+let worldMouseClickY = null;
+let mouseReleaseX = null;
+let mouseReleaseY = null;
+let mouseWorldX = null;
+let mouseWorldY = null;
 let playerTargetX = null;
 let playerTargetY = null;
 
@@ -121,14 +125,18 @@ window.addEventListener('mousedown', (event) => {
 	if (event.button == 2) {
 		rightClick = true;
 
-		playerTargetX = worldX - biome1.x;
-		playerTargetY = worldY - biome1.y;
+		playerTargetX = mouseWorldX - biome1.x;
+		playerTargetY = mouseWorldY - biome1.y;
 
 		myGameCharacter.hasTarget = true;
 	}
 	const rect = canvas.getBoundingClientRect();
 	mouseClickX = event.clientX - rect.left;
 	mouseClickY = event.clientY - rect.top;
+
+	worldMouseClickX = ((mouseClickX / camera.zoom) + camera.x) - biome1.x;
+	worldMouseClickY = ((mouseClickY / camera.zoom) + camera.y) - biome1.y;
+
 	buttonsArray.forEach(button => {
 		button.clickButton();
 	});
@@ -158,9 +166,14 @@ window.addEventListener('mousemove', (event) => {
 	const rect = canvas.getBoundingClientRect();
 	mouseX = event.clientX - rect.left;
 	mouseY = event.clientY - rect.top;
+
+	if (isMouseDown) {
+		mouseDownMoveX = event.clientX - rect.left;
+		mouseDownMoveY = event.clientY - rect.top;
+	}
 	if (followMouseMovement) {
-		playerTargetX = worldX - biome1.x;
-		playerTargetY = worldY - biome1.y;
+		playerTargetX = mouseWorldX - biome1.x;
+		playerTargetY = mouseWorldY - biome1.y;
 	}
 });
 // Key down event listener

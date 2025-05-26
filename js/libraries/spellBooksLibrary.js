@@ -143,6 +143,54 @@ const glowShardBook = {
 		respawnTime: null
 	}
 }
+const luminousShieldBook = {
+	appearance: "spellBook/luminousShield_spellBook.png",
+	name: "luminousShieldBook",
+	cooldown: 90,
+	text: "shield",
+	spell: summonLuminousShield = {
+		radius: 120,
+		FOVRadius: 0,
+		name: "summonLuminousShield",
+		art: "summoning",
+		shape: "circle",
+		appearance: "mob/luminousRock.svg",
+		castAmount: 1,
+		maxAmount: 1,
+		ignoreSpellCollision: false,
+		ignoreMobCollision: false,
+		index: 1,
+		health: 240,
+		defense: 2.5,
+		damage: 0.1,
+		speed: 5,
+		ability: "summon1",
+		manaCost: 1,
+		summonCost: 5,
+		respawnTime: 1000
+	},
+	spellCore: luminousShieldCore = {
+		radius: 12,
+		FOVRadius: 0,
+		name: "luminousShieldCore",
+		art: "books",
+		shape: "circle",
+		appearance: "spellBook/luminousShield_spellBook.png",
+		castAmount: 1,
+		maxAmount: 1,
+		ignoreSpellCollision: true,
+		ignoreMobCollision: true,
+		index: 1,
+		health: 100,
+		defense: 100,
+		damage: 0,
+		speed: 12,
+		ability: null,
+		manaCost: 1,
+		summonCost: 0,
+		respawnTime: null
+	}
+}
 const luminousSpiritBook = {
 	appearance: "spellBook/luminousSpirit_spellBook.png",
 	name: "luminousSpiritBook",
@@ -448,9 +496,9 @@ const lightningBoltBook = {
 		ignoreSpellCollision: true,
 		ignoreMobCollision: true,
 		index: 1,
-		health: 100,
+		health: 1,
 		defense: 0,
-		damage: 3,
+		damage: 10,
 		speed: 10,
 		ability: "beam2",
 		manaCost: 2,
@@ -526,54 +574,6 @@ const energyBallBook = {
 		summonCost: 0,
 		respawnTime: null
 	},
-}
-const luminousShieldBook = {
-	appearance: "spellBook/luminousShield_spellBook.png",
-	name: "luminousShieldBook",
-	cooldown: 90,
-	text: "shield",
-	spell: summonLuminousShield = {
-		radius: 120,
-		FOVRadius: 0,
-		name: "summonLuminousShield",
-		art: "summoning",
-		shape: "circle",
-		appearance: "mob/luminousRock.svg",
-		castAmount: 1,
-		maxAmount: 1,
-		ignoreSpellCollision: false,
-		ignoreMobCollision: false,
-		index: 1,
-		health: 240,
-		defense: 2.5,
-		damage: 0.1,
-		speed: 5,
-		ability: "summon1",
-		manaCost: 1,
-		summonCost: 5,
-		respawnTime: 1000
-	},
-	spellCore: luminousShieldCore = {
-		radius: 12,
-		FOVRadius: 0,
-		name: "luminousShieldCore",
-		art: "books",
-		shape: "circle",
-		appearance: "spellBook/luminousShield_spellBook.png",
-		castAmount: 1,
-		maxAmount: 1,
-		ignoreSpellCollision: true,
-		ignoreMobCollision: true,
-		index: 1,
-		health: 100,
-		defense: 100,
-		damage: 0,
-		speed: 12,
-		ability: null,
-		manaCost: 1,
-		summonCost: 0,
-		respawnTime: null
-	}
 }
 const treeBook = {
 	appearance: "spellBook/summonTree_spellBook.png",

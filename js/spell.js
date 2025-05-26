@@ -40,7 +40,7 @@ class Spell {
 		this.orbitRadiusIncrease = 0;
 		this.damageIncrease = 0;
 		this.speedIncrease = 0;
-		this.toggle = false;
+		this.isCasted = false;
 		this.state = 0;
 		this.width = 0;
 		this.height = 50;
@@ -180,8 +180,8 @@ class Spell {
 			ctx.translate(this.x, this.y);
 
 			// Calculate the difference and angle
-			let dx = (worldX - biome1.x) - myGameCharacter.x;
-			let dy = (worldY - biome1.y) - myGameCharacter.y;
+			let dx = (mouseWorldX - biome1.x) - myGameCharacter.x;
+			let dy = (mouseWorldY - biome1.y) - myGameCharacter.y;
 			this.angle = Math.atan2(dy, dx);
 
 			// Rotate the context to face the target angle
@@ -299,13 +299,13 @@ class Spell {
 		if (this.ability === "summon1") {
 			if (this.hasTarget) {
 				let summoningSpells = spellsArray.filter(element => element.ability === "summon1");
-				summoningSpells.forEach(spell => spell.setTarget(worldX - biome1.x, worldY - biome1.y));
+				summoningSpells.forEach(spell => spell.setTarget(mouseWorldX - biome1.x, mouseWorldY - biome1.y));
 
 				if (!leftClick && this.side == myGameCharacter.side) {
 					this.hasTarget = false;
 				} else if (leftClick && this.side == myGameCharacter.side) {
-					let dx = (worldX - biome1.x) - this.x;
-					let dy = (worldY - biome1.y) - this.y;
+					let dx = (mouseWorldX - biome1.x) - this.x;
+					let dy = (mouseWorldY - biome1.y) - this.y;
 					this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 					this.x += this.speed * Math.sin(this.angle);
 					this.y -= this.speed * Math.cos(this.angle);
@@ -377,8 +377,8 @@ class Spell {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
 				if (this.side == myGameCharacter.side) {
-					this.newTargetX = worldX - biome1.x;
-					this.newTargetY = worldY - biome1.y;
+					this.newTargetX = mouseWorldX - biome1.x;
+					this.newTargetY = mouseWorldY - biome1.y;
 				} else if (this.side != myGameCharacter.side) {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
@@ -405,12 +405,12 @@ class Spell {
 				case 0:
 					let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
 					let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-					if (!this.toggle) {		
+					
+					if (!this.isCasted) {		
 						this.radiusIncrease = this.radius / 50; //0.1
 						this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
 						this.damageIncrease = this.damage / 30; //0.03
-						this.toggle = true;
-						//console.log(this.radiusIncrease, this.orbitRadiusIncrease, this.damageIncrease);
+						this.isCasted = true;
 					}
 
 					const dx = targetX - this.x;
@@ -426,7 +426,7 @@ class Spell {
 					this.positionIndex += 0.008;
 					this.x += adjustedSpeed * Math.sin(this.angle);
 					this.y -= adjustedSpeed * Math.cos(this.angle);
-					//console.log(this.radius + " " + radiusIncrease);
+					
 					this.radius += this.radiusIncrease;
 					this.orbitRadius += this.orbitRadiusIncrease;
 					this.damage += this.damageIncrease;
@@ -437,8 +437,8 @@ class Spell {
 						this.orbitRadiusIncrease = 0;
 						this.damageIncrease = 0;
 						if (leftClick && !this.hasTarget) {
-							castMouseX = worldX - biome1.x;
-							castMouseY = worldY - biome1.y;
+							castMouseX = mouseWorldX - biome1.x;
+							castMouseY = mouseWorldY - biome1.y;
 							let dx = castMouseX - this.x;
 							let dy = castMouseY - this.y;
 							this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
@@ -462,17 +462,16 @@ class Spell {
 		}
 		// inreases size and speed drastically upon attack
 		if (this.ability === "shoot3") {
-			if (!this.toggle) {
+			if (!this.isCasted) {
 				this.radiusIncrease = this.radius / 1.5;//this.radius / 50; //0.1
 				this.damageIncrease = this.damage / 100;//this.radius / 15; //0.03
 				this.speedIncrease = this.speed / 10;
-				this.toggle = true;
-				console.log(this.radius, this.radiusIncrease, this.damage, this.damageIncrease);
+				this.isCasted = true;
 			}
 			if (!this.hasTarget) {
 				if (this.side == myGameCharacter.side) {
-					this.newTargetX = worldX - biome1.x;
-					this.newTargetY = worldY - biome1.y;
+					this.newTargetX = mouseWorldX - biome1.x;
+					this.newTargetY = mouseWorldY - biome1.y;
 				} else if (this.side != myGameCharacter.side) {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
@@ -499,8 +498,8 @@ class Spell {
 		if (this.ability === "teleport") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
-				castMouseX = worldX - biome1.x;
-				castMouseY = worldY - biome1.y;
+				castMouseX = mouseWorldX - biome1.x;
+				castMouseY = mouseWorldY - biome1.y;
 				let dx = castMouseX - this.x;
 				let dy = castMouseY - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
@@ -528,7 +527,7 @@ class Spell {
 		}
 		if (this.ability === "beam1") {
 			// Calculate the destination based on mouse position
-			let beamBookIndex = spellsArray.findIndex(element => element.name == "mainBeam");
+			let beamBookIndex = spellsArray.findIndex(element => element.name == "beamCore");
 			this.x = spellsArray[beamBookIndex].x;
 			this.y = spellsArray[beamBookIndex].y;
 			if (leftClick && this.width <= 400) {
@@ -550,15 +549,20 @@ class Spell {
 		if (this.ability === "beam2") {
 			// Calculate the destination based on mouse position		
 			if (this.caster.name == myGameCharacter.name) {
-				console.log(spellsArray);
-				let beamBookIndex = spellsArray.findIndex(element => element.name == "mainLightningBolt");
-				console.log(beamBookIndex);
-				this.x = spellsArray[beamBookIndex].x;
-				this.y = spellsArray[beamBookIndex].y;
-				this.x2 = castMouseX;
-				this.y2 = castMouseY;
+				//console.log(spellsArray);
+				let beamBookIndex = spellBooksArray.findIndex(element => element.uniqueID == this.spellBookID);
+				let beamBookCoreIndex = spellsArray.findIndex(element => element.spellBookID == spellBooksArray[beamBookIndex].uniqueID);
+				//console.log(beamBookIndex);
+				this.x = spellsArray[beamBookCoreIndex].x;
+				this.y = spellsArray[beamBookCoreIndex].y;
+				if (!this.isCasted) {
+					this.x2 = isMouseDown ? mouseWorldX : worldMouseClickX;
+					this.y2 = isMouseDown ? mouseWorldY : worldMouseClickY;
+					this.isCasted = true;
+				} 
 				myGameCharacter.speed = 1;
 			} else {
+				// this condition is for the mobs that can cast this spell
 				this.x = this.caster.x;
 				this.y = this.caster.y;
 				this.x2 = this.target.x;

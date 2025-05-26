@@ -245,6 +245,11 @@
 		this.moveAngle = 0;
 		this.speed = 0;
 		this.isDead = true;
+
+		const index = mobsArray.indexOf(this);
+		if (index !== -1) {
+			mobsArray.splice(index, 1);
+		}
 	}
 	interact() {
 		if (this.isDead) {
@@ -295,7 +300,7 @@
 			console.log("hi, im smart enough?");
 		}
 		if (this.ability == "shrinksOnDamage") {
-			this.radius = this.health + 15;
+			//this.radius = this.health + 15;
 		}
 		if (this.ability == "chases") {
 			let radii = (this.radius + this.FOVRadius) + myGameCharacter.radius;
@@ -344,8 +349,6 @@
 					this.angle += Math.max(-this.turnSpeed, angleDifference);
 				}
 
-				// Log angles for debugging 
-				//console.log("Current Angle:", currentAngle, "Target Angle:", targetAngle, "Angle Difference:", angleDifference);
 				this.attackTimer++
 				if (this.attackTimer >= this.castDelay) {
 					let spellBookCastAmount = this.castAmount;
@@ -359,7 +362,6 @@
 							} else {
 								newFOVRadius = this.FOVRadius;
 							}
-							console.log(this, this.learnedSpells);
 							castSpell(new Spell(
 								this.x,
 								this.y,

@@ -87,6 +87,23 @@ const luminousEnergyPage = {
 	stackLimit: 64,
 	text: "lumenergy"
 };
+const glowShardPage = {
+	radius: 20,
+	name: "glowShardPage",
+	spellBookName: glowShardBook,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "lootDrop/glowShard_page.png",
+	form: "page",
+	type: "glow",
+	essenceName: "glowEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "glow shard"
+};
 const luminousShieldPage = {
 	radius: 20,
 	name: "luminousShieldPage",
@@ -138,6 +155,23 @@ const specterPage = {
 	stackLimit: 64,
 	text: "specter"
 };
+const specterHandPage = {
+	radius: 20,
+	name: "specterHandPage",
+	spellBookName: specterHandBook,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "lootDrop/specterHand_page.png",
+	form: "page",
+	type: "gloom",
+	essenceName: "gloomEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "hand"
+};
 const teleportPage = {
 	radius: 20,
 	name: "teleportPage",
@@ -172,22 +206,56 @@ const smashPage = {
 	stackLimit: 64,
 	text: "smash"
 };
-const specterHandPage = {
+const beamPage = {
 	radius: 20,
-	name: "specterHandPage",
-	spellBookName: specterHandBook,
+	name: "beamPage",
+	spellBookName: beamBook,
 	rarity: "uncommon",
 	dropChance: 25,
-	appearance: "lootDrop/specterHand_page.png",
+	appearance: "lootDrop/beam_page.png",
 	form: "page",
-	type: "gloom",
-	essenceName: "gloomEssence",
+	type: "glow",
+	essenceName: "glowEssence",
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
 	amount: 1,
 	stackLimit: 64,
-	text: "hand"
+	text: "beam"
+};
+const lightningBoltPage = {
+	radius: 20,
+	name: "lightningBoltPage",
+	spellBookName: lightningBoltBook,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "lootDrop/lightningBolt_page.png",
+	form: "page",
+	type: "glow",
+	essenceName: "glowEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "lightning"
+};
+const energyBallPage = {
+	radius: 20,
+	name: "energyBallPage",
+	spellBookName: energyBallBook,
+	rarity: "uncommon",
+	dropChance: 25,
+	appearance: "lootDrop/energyBall_page.png",
+	form: "page",
+	type: "glow",
+	essenceName: "glowEssence",
+	pagesToCraft: 5,
+	essenceToCraft: 15,
+	ignoreCollision: false,
+	amount: 1,
+	stackLimit: 64,
+	text: "energy ball"
 };
 const treePage = {
 	radius: 20,
