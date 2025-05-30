@@ -493,7 +493,10 @@ class Button {
 			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3; 
 			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
 
-			for (let i = 0; i < toBeCraftedArray.length; i++) {
+			const craftedItems = Array.from(toBeCraftedMap.values());
+
+			for (let i = 0; i < craftedItems.length; i++) {
+				let item = craftedItems[i];
 
 				let displayCraftingIndex = buttonsArray.findIndex(element => element.name == "displayCrafting");
 				let referenceX = buttonsArray[displayCraftingIndex].x;
@@ -502,36 +505,37 @@ class Button {
 				let referenceHeight = buttonsArray[displayCraftingIndex].height;
 
 				let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot").length;
-				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (toBeCraftedArray[i].index - 1) - slotMargin;
+				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (item.index - 1) - slotMargin;
 				const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
-				toBeCraftedArray[i].x = xDistance;
-				toBeCraftedArray[i].y = yDistance;
+
+				item.x = xDistance;
+				item.y = yDistance;
 
 				ctx.beginPath();
 				ctx.roundRect(
-					toBeCraftedArray[i].x,
-					toBeCraftedArray[i].y,
+					item.x,
+					item.y,
 					lootSize,
 					lootSize,
 					radiiSize);
 
-				ctx.strokeStyle = toBeCraftedArray[i].borderColor;
+				ctx.strokeStyle = item.borderColor;
 				ctx.lineWidth = lineThickness;
 				ctx.stroke();
 				ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
 				ctx.fillStyle = "black";
 
 				ctx.drawImage(
-					toBeCraftedArray[i].image,
-					toBeCraftedArray[i].x,
-					toBeCraftedArray[i].y,
+					item.image,
+					item.x,
+					item.y,
 					lootSize,
 					lootSize);
 
 				ctx.fillText(
-					toBeCraftedArray[i].amount + "x" + toBeCraftedArray[i].text + " " + toBeCraftedArray[i].level,
-					toBeCraftedArray[i].x,
-					toBeCraftedArray[i].y - (slotMargin / 4))
+					item.amount + "x" + item.text + " " + item.level,
+					item.x,
+					item.y - (slotMargin / 4))
 
 				ctx.closePath();
 			}
@@ -561,13 +565,14 @@ class Button {
 				textX = xDistance + (lootSize / 2) - (this.width / 4)
 				textY = yDistance + (lootSize / 2) + (this.height / 5);
 				this.color = "gray";
-				let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
-				let essenceIndex = toBeCraftedArray.findIndex(element => element.form == "essence");
-				if (pageIndex != -1 &&
-					essenceIndex != -1) {
-					if (toBeCraftedArray[pageIndex].amount >= toBeCraftedArray[pageIndex].pagesToCraft &&
-						toBeCraftedArray[essenceIndex].name == toBeCraftedArray[pageIndex].essenceName &&
-						toBeCraftedArray[essenceIndex].amount >= toBeCraftedArray[pageIndex].essenceToCraft) {
+
+				const page = toBeCraftedMap.get("page");
+				const essence = toBeCraftedMap.get("essence");
+
+				if (page && essence) {
+					if (page.amount >= page.pagesToCraft &&
+						essence.name === page.essenceName &&
+						essence.amount >= page.essenceToCraft) {
 						this.color = "green";
 					}
 				}
@@ -648,40 +653,40 @@ class Button {
 				let displayCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "displayCrafting");
 				if (displayCraftingButtonIndex !== -1) {
 					// removing the page slot properly
-					let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
-					if (pageIndex != -1) {
+					let page = toBeCraftedMap.get("page");
+					if (page) {
 						let pageSlotIndex = buttonsArray.findIndex(element => element.name == "pageSlot");
 
-						toBeCraftedArray[pageIndex].index = null;
-						toBeCraftedArray[pageIndex].location = null;
+						page.index = null;
+						page.location = null;
 						buttonsArray[pageSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[pageIndex]);
-						toBeCraftedArray.splice(pageIndex, 1);
+						inventoryArray.push(page);
+						toBeCraftedMap.delete("page");
 					}
 					// removing the essence slot properly
-					let essenceIndex = toBeCraftedArray.findIndex(element => element.form == "essence");
-					if (essenceIndex != -1) {
+					let essence = toBeCraftedMap.get("essence");
+					if (essence) {
 						let essenceSlotIndex = buttonsArray.findIndex(element => element.name == "essenceSlot");
 
-						toBeCraftedArray[essenceIndex].index = null;
-						toBeCraftedArray[essenceIndex].location = null;
+						essence.index = null;
+						essence.location = null;
 						buttonsArray[essenceSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[essenceIndex]);
-						toBeCraftedArray.splice(essenceIndex, 1);
+						inventoryArray.push(essence);
+						toBeCraftedMap.delete("essence");
 					}
 					// removing the craftedItemSlot properly
-					let spellBookIndex = toBeCraftedArray.findIndex(element => element.codeClass == "spellBook");
-					if (spellBookIndex != -1) {
+					let spellBook = toBeCraftedMap.get("spellBook");
+					if (spellBook) {
 						let craftedItemSlotIndex = buttonsArray.findIndex(element => element.name == "craftedItemSlot");
 
-						toBeCraftedArray[spellBookIndex].index = null;
-						toBeCraftedArray[spellBookIndex].location = null;
+						spellBook.index = null;
+						spellBook.location = null;
 						buttonsArray[craftedItemSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[spellBookIndex]);
-						toBeCraftedArray.splice(spellBookIndex, 1);
+						inventoryArray.push(spellBook);
+						toBeCraftedMap.delete("spellBook");
 					}
 					buttonsArray.splice(displayCraftingButtonIndex, 1);
 				}
@@ -715,40 +720,40 @@ class Button {
 				let displayCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "displayCrafting");
 				if (displayCraftingButtonIndex !== -1) {
 					// removing the page slot properly
-					let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
-					if (pageIndex != -1) {
+					let page = toBeCraftedMap.get("page");
+					if (page) {
 						let pageSlotIndex = buttonsArray.findIndex(element => element.name == "pageSlot");
 
-						toBeCraftedArray[pageIndex].index = null;
-						toBeCraftedArray[pageIndex].location = null;
+						page.index = null;
+						page.location = null;
 						buttonsArray[pageSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[pageIndex]);
-						toBeCraftedArray.splice(pageIndex, 1);
+						inventoryArray.push(page);
+						toBeCraftedMap.delete("page");
 					}
 					// removing the essence slot properly
-					let essenceIndex = toBeCraftedArray.findIndex(element => element.form == "essence");
-					if (essenceIndex != -1) {
+					let essence = toBeCraftedMap.get("essence");
+					if (essence) {
 						let essenceSlotIndex = buttonsArray.findIndex(element => element.name == "essenceSlot");
 
-						toBeCraftedArray[essenceIndex].index = null;
-						toBeCraftedArray[essenceIndex].location = null;
+						essence.index = null;
+						essence.location = null;
 						buttonsArray[essenceSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[essenceIndex]);
-						toBeCraftedArray.splice(essenceIndex, 1);
+						inventoryArray.push(essence);
+						toBeCraftedMap.delete("essence");
 					}
 					// removing the craftedItemSlot properly
-					let spellBookIndex = toBeCraftedArray.findIndex(element => element.codeClass == "spellBook");
-					if (spellBookIndex != -1) {
+					let spellBook = toBeCraftedMap.get("spellBook");
+					if (spellBook) {
 						let craftedItemSlotIndex = buttonsArray.findIndex(element => element.name == "craftedItemSlot");
 
-						toBeCraftedArray[spellBookIndex].index = null;
-						toBeCraftedArray[spellBookIndex].location = null;
+						spellBook.index = null;
+						spellBook.location = null;
 						buttonsArray[craftedItemSlotIndex].slotActive = false;
 
-						inventoryArray.push(toBeCraftedArray[spellBookIndex]);
-						toBeCraftedArray.splice(spellBookIndex, 1);
+						inventoryArray.push(spellBook);
+						toBeCraftedMap.delete("spellBook");
 					}
 					buttonsArray.splice(displayCraftingButtonIndex, 1);
 				}
@@ -799,7 +804,7 @@ class Button {
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
-					toBeCraftedArray.push(mouseHeldItem[0]);
+					toBeCraftedMap.set("page", mouseHeldItem[0]);
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
@@ -807,13 +812,13 @@ class Button {
 					inventoryArray.splice(lootIndex, 1);
 					mouseHeldItem.splice(0, 1);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
-					let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
-					toBeCraftedArray[pageIndex].index = null;
-					toBeCraftedArray[pageIndex].location = null;
+					let page = toBeCraftedMap.get("page");
+					page.index = null;
+					page.location = null;
 					this.slotActive = false;
 
-					inventoryArray.push(toBeCraftedArray[pageIndex]);
-					toBeCraftedArray.splice(pageIndex, 1);
+					inventoryArray.push(page);
+					toBeCraftedMap.delete("page");
 				}
 			}
 			if (this.name == "essenceSlot") {
@@ -821,7 +826,7 @@ class Button {
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
-					toBeCraftedArray.push(mouseHeldItem[0]);
+					toBeCraftedMap.set("essence", mouseHeldItem[0]);
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
@@ -830,55 +835,54 @@ class Button {
 					mouseHeldItem.splice(0, 1);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 
-					let essenceIndex = toBeCraftedArray.findIndex(element => element.form == "essence");
-					toBeCraftedArray[essenceIndex].index = null;
-					toBeCraftedArray[essenceIndex].location = null;
+					let essence = toBeCraftedMap.get("essence");
+					essence.index = null;
+					essence.location = null;
 					this.slotActive = false;
-					inventoryArray.push(toBeCraftedArray[essenceIndex]);
-					toBeCraftedArray.splice(essenceIndex, 1);
+					inventoryArray.push(essence);
+					toBeCraftedMap.delete("essence");
 				}
 			}
 			if (this.name == "activateCraft") {
-				let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
-				let essenceIndex = toBeCraftedArray.findIndex(element => element.form == "essence");
-				if (pageIndex != -1 &&
-					essenceIndex != -1) {
-					if (toBeCraftedArray[pageIndex].amount >= toBeCraftedArray[pageIndex].pagesToCraft &&
-						toBeCraftedArray[essenceIndex].name == toBeCraftedArray[pageIndex].essenceName &&
-						toBeCraftedArray[essenceIndex].amount >= toBeCraftedArray[pageIndex].essenceToCraft) {
+				let page = toBeCraftedMap.get("page");
+				let essence = toBeCraftedMap.get("essence");
+				if (page && essence) {
+					if (page.amount >= page.pagesToCraft &&
+						essence.name == page.essenceName &&
+						essence.amount >= page.essenceToCraft) {
 
-						toBeCraftedArray[pageIndex].amount -= toBeCraftedArray[pageIndex].pagesToCraft;
-						toBeCraftedArray[essenceIndex].amount -= toBeCraftedArray[pageIndex].essenceToCraft;
+						page.amount -= page.pagesToCraft;
+						essence.amount -= page.essenceToCraft;
 
 						let craftedItemSlotIndex = buttonsArray.findIndex(element => element.name == "craftedItemSlot");
 
 						// checks if there's an item at the craftedItemSlot
 						if (buttonsArray[craftedItemSlotIndex].slotActive) {
-							let spellBookIndex = toBeCraftedArray.findIndex(element => element.codeClass == "spellBook");
+							let spellBook = toBeCraftedMap.get("spellBook");
 
-							toBeCraftedArray[spellBookIndex].index = null;
-							toBeCraftedArray[spellBookIndex].location = null;
+							spellBook.index = null;
+							spellBook.location = null;
 
-							inventoryArray.push(toBeCraftedArray[spellBookIndex]);
-							toBeCraftedArray.splice(spellBookIndex, 1);
+							inventoryArray.push(spellBook);
+							toBeCraftedMap.delete("spellBook");
 
 							buttonsArray[craftedItemSlotIndex].slotActive = false;
 						}
 						// crafts a spell book
-						let spellBook = toBeCraftedArray[pageIndex].spellBookName;
+						let spellBook = page.spellBookName;
 						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text);
 
 						// places the spell book inside the crafted item slot 
 						craftedSpellBook.index = buttonsArray[craftedItemSlotIndex].index;
 						craftedSpellBook.location = buttonsArray[craftedItemSlotIndex].name;
-						toBeCraftedArray.push(craftedSpellBook);
+						toBeCraftedMap.set("spellBook", craftedSpellBook);
 						buttonsArray[craftedItemSlotIndex].slotActive = true;
 
-						if (toBeCraftedArray[pageIndex].amount == 0) {
-							toBeCraftedArray.splice(pageIndex, 1);
+						if (page.amount == 0) {
+							toBeCraftedMap.delete("page");
 						}
-						if (toBeCraftedArray[essenceIndex].amount == 0) {
-							toBeCraftedArray.splice(essenceIndex, 1);
+						if (essence.amount == 0) {
+							toBeCraftedMap.delete("essence");
 						}
 
 					}
@@ -887,14 +891,14 @@ class Button {
 			if (this.name == "craftedItemSlot") {
 				if (mouseHeldItem.length == 0 && this.slotActive) {
 
-					let spellBookIndex = toBeCraftedArray.findIndex(element => element.codeClass == "spellBook");
+					let spellBook = toBeCraftedMap.get("spellBook");
 
-					toBeCraftedArray[spellBookIndex].index = null;
-					toBeCraftedArray[spellBookIndex].location = null;
+					spellBook.index = null;
+					spellBook.location = null;
 					this.slotActive = false;
 
-					inventoryArray.push(toBeCraftedArray[spellBookIndex]);
-					toBeCraftedArray.splice(spellBookIndex, 1);
+					inventoryArray.push(spellBook);
+					toBeCraftedMap.delete("spellBook");
 				}
 			}
 		}

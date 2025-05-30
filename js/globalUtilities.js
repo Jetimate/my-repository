@@ -68,7 +68,7 @@ let buttonsArray = [];
 let spellBooksArray = [];
 let spellsArray = [];
 let mouseHeldItem = [];
-let toBeCraftedArray = [];
+let toBeCraftedMap = new Map();
 
 let maxExperience = 100;
 let manaBuildUp = 0;
