@@ -43,11 +43,13 @@ class SpellBook {
 				mouseClickX < slotSize + this.x &&
 				mouseClickY >= this.y &&
 				mouseClickY < slotSize + this.y
+				// activates when a spellBook is dragged away from a slot
 			if (distance && mouseHeldItem.length < 1) {
+				console.log("spellBook is getting dragged away from the slot right now");
 				this.held = true;
 				mouseHeldItem.push(this);
-				let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == this.index);
-				buttonsArray[slotIndex].slotActive = false;
+
+				buttonsMap.get(`spellBookSlot${this.index}`).slotActive = false;
 			}
 			if (this.held) {
 				console.log(this.from);
@@ -505,8 +507,8 @@ class SpellBook {
 			!(myGameCharacter.mana - manaBuildUp >= this.spell.manaCost)) {
 
 			keyPressedOnce[digitKey] = false;
-			let manaBarIndex = buttonsArray.findIndex(button => button.name == "manaBarButton");
-			 buttonsArray[manaBarIndex].startShaking("insufficientMana", 300, 5);
+
+			 buttonsMap.get("manaBar").startShaking("insufficientMana", 300, 5);
 			 shakeScreen();
 		}
 

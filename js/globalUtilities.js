@@ -64,7 +64,7 @@ let playerTargetY = null;
 let mobsArray = [];
 let lootsArray = [];
 let inventoryArray = [];
-let buttonsArray = [];
+let buttonsMap = new Map();
 let spellBooksArray = [];
 let spellsArray = [];
 let mouseHeldItem = [];
@@ -137,7 +137,7 @@ window.addEventListener('mousedown', (event) => {
 	worldMouseClickX = ((mouseClickX / camera.zoom) + camera.x) - biome1.x;
 	worldMouseClickY = ((mouseClickY / camera.zoom) + camera.y) - biome1.y;
 
-	buttonsArray.forEach(button => {
+	buttonsMap.forEach(button => {
 		button.clickButton();
 	});
 	spellBooksArray.forEach(spellBook => {
@@ -156,7 +156,7 @@ window.addEventListener('mouseup', (event) => {
 		rightClick = false;
 	}
 	// TODO: make it so that only spellSlots are called instead of the entire buttons existance
-	buttonsArray.forEach(button => {
+	buttonsMap.forEach(button => {
 		button.clickButton();
 	});
 });

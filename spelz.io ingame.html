@@ -68,7 +68,7 @@
 
 		function startGame() {
 			castSpellTimeout = [];
-			buttonsArray = [];
+			buttonsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
@@ -107,10 +107,10 @@
 			addButton(buttonLibrary.inventoryButton, null);
             addButton(buttonLibrary.settingsButton, null);
 
-            addButton(buttonLibrary.spellBookSlot, 1);
-            addButton(buttonLibrary.spellBookSlot, 2);
-            addButton(buttonLibrary.spellBookSlot, 3);
-            addButton(buttonLibrary.spellBookSlot, 4);
+            addButton(buttonLibrary.spellBookSlot1, 1);
+            addButton(buttonLibrary.spellBookSlot2, 2);
+            addButton(buttonLibrary.spellBookSlot3, 3);
+            addButton(buttonLibrary.spellBookSlot4, 4);
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
@@ -216,7 +216,7 @@
             shake.reset(ctx);     // Reset any screen shake transforms
             ctx.restore();        // Restore context state
 
-			buttonsArray.forEach(button => {
+            buttonsMap.forEach(button => {
                 if (button.isShaking) {
                     button.updateShake(performance.now());
                 }
@@ -362,7 +362,7 @@
 			alert("game over");
 			myGame.stop();
 			castSpellTimeout = [];
-			buttonsArray = [];
+			buttonsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
@@ -405,27 +405,27 @@
 					*/
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot, 5);
+                        addButton(buttonLibrary.spellBookSlot5, 5);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 6 && myGameCharacter.level >= 15) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot, 6);
+                        addButton(buttonLibrary.spellBookSlot6, 6);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 7 && myGameCharacter.level >= 30) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot, 7);
+                        addButton(buttonLibrary.spellBookSlot7, 7);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 8 && myGameCharacter.level >= 45) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot, 8);
+                        addButton(buttonLibrary.spellBookSlot8, 8);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot, 9);
+                        addButton(buttonLibrary.spellBookSlot9, 9);
 						// add new spellBookSlot
 					}
                     //console.log(myGameCharacter.spellBookSlotsUnlocked);
@@ -447,18 +447,23 @@
 
 		function addButton(button, index) {
             let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, index);
-			buttonsArray.push(newButton);
+            buttonsMap.set(button.name, newButton);
 		}
 		function addSpellBook(spellBook, index) {
             let newSpellBook = new SpellBook(spellBook.x, spellBook.y, index, spellBook.width, spellBook.height, spellBook.radii, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text)
-			let slotIndex = buttonsArray.findIndex(element => element.group === "spellBookSlot" && element.index == newSpellBook.index);
-			if (newSpellBook.index != null && !buttonsArray[slotIndex].slotActive) {
-				buttonsArray[slotIndex].slotActive = true;
-				newSpellBook.onSlot = true;
-				spellBooksArray.push(newSpellBook);
-			} else {
-				inventoryArray.push(newSpellBook);
-			}
+
+			if (index != null) {
+				let slot = buttonsMap.get(`spellBookSlot${index}`);
+               
+                console.log(slot);
+				if (!slot.slotActive) {
+					slot.slotActive = true;
+					newSpellBook.onSlot = true;
+					spellBooksArray.push(newSpellBook);
+				} 
+            } else {
+                inventoryArray.push(newSpellBook);
+            }
 		}
 		function dropLoot(loot) {
 			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellBookName, loot.rarity, loot.dropChance, loot.appearance, loot.form, loot.type, loot.essenceName, loot.pagesToCraft, loot.essenceToCraft, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
