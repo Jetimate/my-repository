@@ -727,7 +727,7 @@ class Button {
 			mouseClickY >= this.y &&
 			mouseClickY <= this.y + this.height
 		) {
-			//console.log("buttonCheck", mouseClickX, mouseClickY);
+			//console.log("buttonCheck", mouseClickX, mouseClickY); 
 			function properlyRemoveCraftSlots() {
 				let displayCraftingButton = buttonsMap.get("displayCrafting");
 				if (displayCraftingButton) {
