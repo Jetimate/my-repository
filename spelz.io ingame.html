@@ -465,33 +465,7 @@
 			lootsArray.push(newLoot);
 		}
 		function castSpell(spell) {
-			let newSpell = new Spell(
-				spell.x,
-				spell.y,
-				spell.radius,
-				spell.FOVRadius,
-				spell.name,
-				spell.spellBookID,
-				spell.caster,
-				spell.side,
-				spell.target,
-				spell.art,
-				spell.shape,
-				spell.appearance,
-				spell.castAmount,
-				spell.maxAmount,
-				spell.ignoreSpellCollision,
-				spell.ignoreMobCollision,
-				spell.positionIndex,
-				spell.health,
-				spell.defense,
-				spell.damage,
-				spell.speed,
-				spell.ability,
-				spell.manaCost,
-				spell.summonCost,
-				spell.respawnTime);
-			spellsArray.push(newSpell);
+            spellsArray.push(spell);
 		}
 		function spawnMobs() {
 			for (let i = 0; i < starterMobsArray.length; i++) {

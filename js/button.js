@@ -107,31 +107,31 @@ const buttonLibrary = {
 		text: "bug 101",
 		index: null
 	},
-	// show inventory
-	showInventory: {
+	// display inventory
+	displayInventory: {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
 		radii: 0,
 		color: "#e3a04d",
-		name: "showInventory",
+		name: "displayInventory",
 		group: null,
-		classification: "stable",
+		classification: "display",
 		text: "bug 101",
 		index: null
 	},
 	// crafting buttons
-	showCrafting: {
+	displayCrafting: {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
 		radii: 0,
 		color: "#3477eb",
-		name: "showCrafting",
+		name: "displayCrafting",
 		group: null,
-		classification: "stable",
+		classification: "display",
 		text: "bug 101",
 		index: null
 	},
@@ -187,16 +187,16 @@ const buttonLibrary = {
 		text: "crafted item:",
 		index: 4
 	},
-	showSettings: {
+	displaySettings: {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
 		radii: 0,
 		color: "#bab6bf",
-		name: "showSettings",
+		name: "displaySettings",
 		group: null,
-		classification: "stable",
+		classification: "display",
 		text: "bug 101",
 		index: null
 	},
@@ -327,7 +327,7 @@ class Button {
 			this.text = "settings";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
-		if (this.name == "showSettings") {
+		if (this.name == "displaySettings") {
 			let settingsButtonIndex = buttonsArray.findIndex(element => element.name === "settingsButton");
 			let totalMovementButtonsArray = buttonsArray.filter(element => element.group == "movementButtons");
 			this.width = window.innerWidth / 4;
@@ -348,9 +348,9 @@ class Button {
 			this.y = window.innerHeight - this.height - window.innerHeight / 20 - (slotMargin * 2);
 		}
 		if (this.group == "movementButtons") {
-			let showSettingsIndex = buttonsArray.findIndex(element => element.name == "showSettings");
-			let referenceX = buttonsArray[showSettingsIndex].x;
-			let referenceY = buttonsArray[showSettingsIndex].y;
+			let displaySettingsIndex = buttonsArray.findIndex(element => element.name == "displaySettings");
+			let referenceX = buttonsArray[displaySettingsIndex].x;
+			let referenceY = buttonsArray[displaySettingsIndex].y;
 
 			const xDistance = referenceX + buttonMargin;
 			const yDistance = referenceY + buttonMargin + ((miniButtonSize + buttonMargin) * this.index);
@@ -364,7 +364,6 @@ class Button {
 				let totalMovementButtonsArray = buttonsArray.filter(element => element.group == "movementButtons");
 
 				if (distance && this.name == "keyMovementButton" && !this.toggle) {
-
 					// shut off the other buttons
 					totalMovementButtonsArray.forEach(button => {
 						button.toggle = false;
@@ -414,7 +413,7 @@ class Button {
 				this.y + miniButtonSize / 2);
 		}
 		
-		if (this.name == "showInventory") {
+		if (this.name == "displayInventory") {
 			this.x = window.innerWidth / 64 + window.innerWidth / 8;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
 			let row = 0;
@@ -486,21 +485,21 @@ class Button {
 				ctx.closePath();
 			}
 		}
-		if (this.name == "showCrafting") {
+		if (this.name == "displayCrafting") {
 			let slotsPerRow = 5;
 			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
 			this.x = (window.innerWidth / 64 + window.innerWidth / 8) + referenceWidth;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
-			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3;
+			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3; 
 			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
 
 			for (let i = 0; i < toBeCraftedArray.length; i++) {
 
-				let showCraftingIndex = buttonsArray.findIndex(element => element.name == "showCrafting");
-				let referenceX = buttonsArray[showCraftingIndex].x;
-				let referenceY = buttonsArray[showCraftingIndex].y;
-				let referenceWidth = buttonsArray[showCraftingIndex].width;
-				let referenceHeight = buttonsArray[showCraftingIndex].height;
+				let displayCraftingIndex = buttonsArray.findIndex(element => element.name == "displayCrafting");
+				let referenceX = buttonsArray[displayCraftingIndex].x;
+				let referenceY = buttonsArray[displayCraftingIndex].y;
+				let referenceWidth = buttonsArray[displayCraftingIndex].width;
+				let referenceHeight = buttonsArray[displayCraftingIndex].height;
 
 				let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot").length;
 				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (toBeCraftedArray[i].index - 1) - slotMargin;
@@ -539,11 +538,11 @@ class Button {
 		
 		}
 		if (this.group == "craftSlot") {
-			let showCraftingIndex = buttonsArray.findIndex(element => element.name == "showCrafting");
-			let referenceX = buttonsArray[showCraftingIndex].x;
-			let referenceY = buttonsArray[showCraftingIndex].y;
-			let referenceWidth = buttonsArray[showCraftingIndex].width;
-			let referenceHeight = buttonsArray[showCraftingIndex].height;
+			let displayCraftingIndex = buttonsArray.findIndex(element => element.name == "displayCrafting");
+			let referenceX = buttonsArray[displayCraftingIndex].x;
+			let referenceY = buttonsArray[displayCraftingIndex].y;
+			let referenceWidth = buttonsArray[displayCraftingIndex].width;
+			let referenceHeight = buttonsArray[displayCraftingIndex].height;
 
 			let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot").length;
 			const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (this.index - 1) - slotMargin;
@@ -629,25 +628,25 @@ class Button {
 			if (this.name == "settingsButton" && !this.toggle) {
 				this.toggle = true;
 				// settings buttons
-				addButton(buttonLibrary.showSettings, null);
+				addButton(buttonLibrary.displaySettings, null);
 				addButton(buttonLibrary.keyMovementButton, 0);
 				addButton(buttonLibrary.mouseMovementButton, 1);
 				addButton(buttonLibrary.followMouseMovementButton, 2);
 			} else if (this.name == "settingsButton" && this.toggle) {
 				this.toggle = false;
-				deleteElement(buttonsArray, "showSettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
+				deleteElement(buttonsArray, "displaySettings", "keyMovementButton", "mouseMovementButton", "followMouseMovementButton");
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
 				addButton(buttonLibrary.craftButton, null);
-				addButton(buttonLibrary.showInventory, null);
-				//console.log(inventoryArray);
+				addButton(buttonLibrary.displayInventory, null);
+				//console.log(inventoryArray); 
 			} else if (this.name == "inventoryButton" && this.toggle) {
 				this.toggle = false;
-				deleteElement(buttonsArray, "showInventory", "craftButton");
+				deleteElement(buttonsArray, "displayInventory", "craftButton");
 
-				let showCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "showCrafting");
-				if (showCraftingButtonIndex !== -1) {
+				let displayCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "displayCrafting");
+				if (displayCraftingButtonIndex !== -1) {
 					// removing the page slot properly
 					let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
 					if (pageIndex != -1) {
@@ -684,7 +683,7 @@ class Button {
 						inventoryArray.push(toBeCraftedArray[spellBookIndex]);
 						toBeCraftedArray.splice(spellBookIndex, 1);
 					}
-					buttonsArray.splice(showCraftingButtonIndex, 1);
+					buttonsArray.splice(displayCraftingButtonIndex, 1);
 				}
 				let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot");
 				for (let i = 0; i < totalCraftSlotArray.length; i++) {
@@ -696,7 +695,7 @@ class Button {
 			}
 			if (this.name == "craftButton" && !this.toggle) {
 				this.toggle = true;
-				addButton(buttonLibrary.showCrafting, null);
+				addButton(buttonLibrary.displayCrafting, null);
 
 				addButton(buttonLibrary.pageSlot, 1);
 				addButton(buttonLibrary.essenceSlot, 2);
@@ -704,17 +703,17 @@ class Button {
 				addButton(buttonLibrary.craftedItemSlot, 4);
 
 				let arrayTransfer = [];
-				let showInventoryButtonIndex = buttonsArray.findIndex(element => element.name === "showInventory");
-				arrayTransfer.push(buttonsArray[showInventoryButtonIndex]);
-				buttonsArray.splice(showInventoryButtonIndex, 1);
+				let displayInventoryButtonIndex = buttonsArray.findIndex(element => element.name === "displayInventory");
+				arrayTransfer.push(buttonsArray[displayInventoryButtonIndex]);
+				buttonsArray.splice(displayInventoryButtonIndex, 1);
 				buttonsArray.push(arrayTransfer[0]);
 				arrayTransfer.splice(0, arrayTransfer.length);
 
 			} else if (this.name == "craftButton" && this.toggle) {
 				this.toggle = false;
 
-				let showCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "showCrafting");
-				if (showCraftingButtonIndex !== -1) {
+				let displayCraftingButtonIndex = buttonsArray.findIndex(element => element.name === "displayCrafting");
+				if (displayCraftingButtonIndex !== -1) {
 					// removing the page slot properly
 					let pageIndex = toBeCraftedArray.findIndex(element => element.form == "page");
 					if (pageIndex != -1) {
@@ -751,7 +750,7 @@ class Button {
 						inventoryArray.push(toBeCraftedArray[spellBookIndex]);
 						toBeCraftedArray.splice(spellBookIndex, 1);
 					}
-					buttonsArray.splice(showCraftingButtonIndex, 1);
+					buttonsArray.splice(displayCraftingButtonIndex, 1);
 				}
 				let totalCraftSlotArray = buttonsArray.filter(element => element.group == "craftSlot");
 				for (let i = 0; i < totalCraftSlotArray.length; i++) {
