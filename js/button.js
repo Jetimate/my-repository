@@ -720,7 +720,6 @@ class Button {
 	}
 	
 	clickButton() {
-		//console.log("i work");
 		if (leftClick &&
 			mouseClickX >= this.x &&
 			mouseClickX <= this.x + this.width &&
