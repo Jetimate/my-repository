@@ -214,17 +214,26 @@
 			camera.resetTransform(ctx);
 
             shake.reset(ctx);     // Reset any screen shake transforms
-            ctx.restore();        // Restore context state
+			ctx.restore();        // Restore context state
 
+            spellBooksArray.forEach(spellBook => {
+                spellBook.update();
+            });
             buttonsMap.forEach(button => {
                 if (button.isShaking) {
                     button.updateShake(performance.now());
-                }
-				button.draw(ctx);
+				}
 			});
-			spellBooksArray.forEach(spellBook => {
-				spellBook.update();
-			});
+            // Step 1: Get all buttons as an array
+            const buttonsArray = Array.from(buttonsMap.values());
+			
+            // Step 2: Sort by zIndex (lowest to highest)
+            buttonsArray.sort((a, b) => a.zIndex - b.zIndex);
+
+            // Step 3: Draw each button in order
+            for (const button of buttonsArray) {
+                button.draw(ctx);
+			}
 
 			// player and mob collision
 			playerCrashWith(myGameCharacter, mobsArray);
@@ -446,7 +455,7 @@
         }
 
 		function addButton(button, index) {
-            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, index);
+            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.zIndex, index);
             buttonsMap.set(button.name, newButton);
 		}
 		function addSpellBook(spellBook, index) {
@@ -455,7 +464,6 @@
 			if (index != null) {
 				let slot = buttonsMap.get(`spellBookSlot${index}`);
                
-                console.log(slot);
 				if (!slot.slotActive) {
 					slot.slotActive = true;
 					newSpellBook.onSlot = true;

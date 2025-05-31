@@ -1,6 +1,14 @@
 
 const buttonLibrary = {
 	// spell book slot
+	/*
+	z-index order:
+	1 bar
+	2 spellBookSlots
+	3 display crafting and settings
+	4 crafting slots and settings buttons
+	5 display inventory
+	*/
 	spellBookSlot1: {
 		x: 0,
 		y: 0,
@@ -12,6 +20,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot2: {
@@ -25,6 +34,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot3: {
@@ -38,6 +48,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot4: {
@@ -51,6 +62,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot5: {
@@ -64,6 +76,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot6: {
@@ -77,6 +90,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot7: {
@@ -90,6 +104,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot8: {
@@ -103,6 +118,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	spellBookSlot9: {
@@ -116,6 +132,7 @@ const buttonLibrary = {
 		group: "spellBookSlot",
 		classification: "slot",
 		text: "bug 101",
+		zIndex: 2,
 		index: 1
 	},
 	// stats bars
@@ -130,6 +147,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "bar",
 		text: "bug 101",
+		zIndex: 1,
 		index: 0
 	},
 	experienceBar: {
@@ -143,6 +161,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "bar",
 		text: "bug 101",
+		zIndex: 1,
 		index: 1
 	},
 	healthBar: {
@@ -156,6 +175,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "bar",
 		text: "bug 101",
+		zIndex: 1,
 		index: 2
 	},
 	manaBar: {
@@ -169,6 +189,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "bar",
 		text: "bug 101",
+		zIndex: 1,
 		index: 3
 	},
 	// clickable buttons
@@ -183,6 +204,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "clickable",
 		text: "inventory",
+		zIndex: 1,
 		index: null
 	},
 	craftButton: {
@@ -196,6 +218,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "clickable",
 		text: "craft",
+		zIndex: 1,
 		index: null
 	},
 	settingsButton: {
@@ -209,6 +232,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "clickable",
 		text: "settings",
+		zIndex: 1,
 		index: null
 	},
 	// display inventory
@@ -223,6 +247,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "display",
 		text: "bug 101",
+		zIndex: 5,
 		index: null
 	},
 	// crafting buttons
@@ -237,6 +262,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "display",
 		text: "bug 101",
+		zIndex: 3,
 		index: null
 	},
 	pageSlot: {
@@ -250,6 +276,7 @@ const buttonLibrary = {
 		group: "craftSlot",
 		classification: "slot",
 		text: "insert 5 pages",
+		zIndex: 4,
 		index: 1
 	},
 	essenceSlot: {
@@ -263,6 +290,7 @@ const buttonLibrary = {
 		group: "craftSlot",
 		classification: "slot",
 		text: "insert 15 essence",
+		zIndex: 4,
 		index: 2
 	},
 	activateCraft: {
@@ -276,6 +304,7 @@ const buttonLibrary = {
 		group: "craftSlot",
 		classification: "clickable",
 		text: "craft",
+		zIndex: 4,
 		index: 3
 	},
 	craftedItemSlot: {
@@ -289,6 +318,7 @@ const buttonLibrary = {
 		group: "craftSlot",
 		classification: "slot",
 		text: "crafted item:",
+		zIndex: 4,
 		index: 4
 	},
 	displaySettings: {
@@ -302,6 +332,7 @@ const buttonLibrary = {
 		group: null,
 		classification: "display",
 		text: "bug 101",
+		zIndex: 3,
 		index: null
 	},
 	keyMovementButton: {
@@ -315,6 +346,7 @@ const buttonLibrary = {
 		group: "movementButtons",
 		classification: "clickable",
 		text: "keyMovement",
+		zIndex: 4,
 		index: 0
 	},
 	mouseMovementButton: {
@@ -328,6 +360,7 @@ const buttonLibrary = {
 		group: "movementButtons",
 		classification: "clickable",
 		text: "mouseMovement",
+		zIndex: 4,
 		index: 1
 	},
 	followMouseMovementButton: {
@@ -341,11 +374,12 @@ const buttonLibrary = {
 		group: "movementButtons",
 		classification: "clickable",
 		text: "followMouseMovement",
+		zIndex: 4,
 		index: 2
 	}
 }
 class Button {
-	constructor(x, y, width, height, radii, color, name, group, classification, text, index) {
+	constructor(x, y, width, height, radii, color, name, group, classification, text, zIndex, index) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -356,6 +390,7 @@ class Button {
 		this.group = group;
 		this.classification = classification;
 		this.text = text;
+		this.zIndex = zIndex;
 		this.index = index;
 		this.toggle = false;
 		this.codeClass = "button";
@@ -517,7 +552,63 @@ class Button {
 				this.x + miniButtonSize + buttonMargin,
 				this.y + miniButtonSize / 2);
 		}
-		
+		if (this.name == "displayCrafting") {
+			let slotsPerRow = 5;
+			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
+			this.x = (window.innerWidth / 64 + window.innerWidth / 8) + referenceWidth;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
+			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3; 
+			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
+
+			const craftedItems = Array.from(toBeCraftedMap.values());
+
+			for (let i = 0; i < craftedItems.length; i++) {
+				let item = craftedItems[i];
+
+				let displayCrafting = buttonsMap.get("displayCrafting");
+				let referenceX = displayCrafting.x;
+				let referenceY = displayCrafting.y;
+				let referenceWidth = displayCrafting.width;
+				let referenceHeight = displayCrafting.height;
+
+				let totalCraftSlotArray = Array.from(buttonsMap.values())
+					.filter(element => element.group === "craftSlot")
+					.length;
+				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (item.index - 1) - slotMargin;
+				const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
+
+				item.x = xDistance;
+				item.y = yDistance;
+
+				ctx.beginPath();
+				ctx.roundRect(
+					item.x,
+					item.y,
+					lootSize,
+					lootSize,
+					radiiSize);
+
+				ctx.strokeStyle = item.borderColor;
+				ctx.lineWidth = lineThickness;
+				ctx.stroke();
+				ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
+				ctx.fillStyle = "black";
+
+				ctx.drawImage(
+					item.image,
+					item.x,
+					item.y,
+					lootSize,
+					lootSize);
+
+				ctx.fillText(
+					item.amount + "x" + item.text + " " + item.level,
+					item.x,
+					item.y - (slotMargin / 4))
+
+				ctx.closePath();
+			}
+		}
 		if (this.name == "displayInventory") {
 			this.x = window.innerWidth / 64 + window.innerWidth / 8;
 			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
@@ -589,64 +680,6 @@ class Button {
 
 				ctx.closePath();
 			}
-		}
-		if (this.name == "displayCrafting") {
-			let slotsPerRow = 5;
-			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
-			this.x = (window.innerWidth / 64 + window.innerWidth / 8) + referenceWidth;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
-			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3; 
-			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
-
-			const craftedItems = Array.from(toBeCraftedMap.values());
-
-			for (let i = 0; i < craftedItems.length; i++) {
-				let item = craftedItems[i];
-
-				let displayCrafting = buttonsMap.get("displayCrafting");
-				let referenceX = displayCrafting.x;
-				let referenceY = displayCrafting.y;
-				let referenceWidth = displayCrafting.width;
-				let referenceHeight = displayCrafting.height;
-
-				let totalCraftSlotArray = Array.from(buttonsMap.values())
-					.filter(element => element.group === "craftSlot")
-					.length;
-				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (item.index - 1) - slotMargin;
-				const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
-
-				item.x = xDistance;
-				item.y = yDistance;
-
-				ctx.beginPath();
-				ctx.roundRect(
-					item.x,
-					item.y,
-					lootSize,
-					lootSize,
-					radiiSize);
-
-				ctx.strokeStyle = item.borderColor;
-				ctx.lineWidth = lineThickness;
-				ctx.stroke();
-				ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
-				ctx.fillStyle = "black";
-
-				ctx.drawImage(
-					item.image,
-					item.x,
-					item.y,
-					lootSize,
-					lootSize);
-
-				ctx.fillText(
-					item.amount + "x" + item.text + " " + item.level,
-					item.x,
-					item.y - (slotMargin / 4))
-
-				ctx.closePath();
-			}
-		
 		}
 		if (this.group == "craftSlot") {
 			let displayCrafting = buttonsMap.get("displayCrafting");
